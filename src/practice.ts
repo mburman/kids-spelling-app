@@ -6,7 +6,6 @@ import { showCelebration } from './app';
 
 let words: string[] = [];
 let currentWordIndex = 0;
-let currentWord = '';
 
 export function initPractice(): void {
   // Camera button
@@ -53,7 +52,6 @@ export function startPractice(): void {
 }
 
 function loadWord(word: string): void {
-  currentWord = word;
   const practiceWordEl = document.getElementById('practice-word');
   if (practiceWordEl) {
     practiceWordEl.textContent = word;

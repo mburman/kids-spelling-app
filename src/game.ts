@@ -98,7 +98,7 @@ function handleLetterClick(button: HTMLElement): void {
     const slots = document.querySelectorAll('.letter-slot');
     const currentSlot = slots[currentLetterIndex];
     if (currentSlot) {
-      currentSlot.textContent = letter;
+      currentSlot.textContent = letter ?? '';
       currentSlot.classList.add('filled');
     }
 
