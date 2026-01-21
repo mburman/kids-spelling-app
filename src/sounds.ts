@@ -11,7 +11,8 @@ export type SoundName =
   | 'wrongLetter'
   | 'wordComplete'
   | 'gameComplete'
-  | 'practiceApproved';
+  | 'practiceApproved'
+  | 'hoot';
 
 // Initialize audio context (must be called after user gesture)
 export function initSounds(): void {
@@ -99,6 +100,11 @@ function playGameComplete(): void {
   playTone(1318.51, 0.5, 'triangle', 0.35, 0.5); // E6 (sparkle finish)
 }
 
+// Owl hoot: Single friendly hoot
+function playHoot(): void {
+  playTone(320, 0.3, 'sine', 0.35, 0);
+}
+
 // Master play function with settings check
 export function playSound(name: SoundName): void {
   if (!isSoundEnabled()) return;
@@ -126,6 +132,9 @@ export function playSound(name: SoundName): void {
       break;
     case 'gameComplete':
       playGameComplete();
+      break;
+    case 'hoot':
+      playHoot();
       break;
   }
 }

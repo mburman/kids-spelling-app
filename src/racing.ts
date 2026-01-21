@@ -46,6 +46,17 @@ export function initRacing(): void {
     movePlayer(1);
   });
 
+  // Tap on lanes to move directly there (iPad friendly)
+  document.querySelectorAll('.lane').forEach((lane) => {
+    lane.addEventListener('click', (e) => {
+      if (!gameActive) return;
+      const laneEl = e.currentTarget as HTMLElement;
+      const laneNum = parseInt(laneEl.dataset.lane ?? '1', 10);
+      playerLane = laneNum;
+      updatePlayerPosition();
+    });
+  });
+
   // Keyboard controls for testing
   document.addEventListener('keydown', (e) => {
     if (!gameActive) return;

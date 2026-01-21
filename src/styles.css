@@ -109,7 +109,19 @@ body {
 }
 
 .game-button .button-icon {
-    font-size: 2.5rem;
+    font-size: 4.5rem;
+    filter: drop-shadow(3px 5px 8px rgba(0,0,0,0.25));
+    transition: transform 0.3s ease;
+}
+
+.game-button:hover .button-icon {
+    transform: scale(1.15) rotate(-5deg);
+    animation: iconBounce 0.5s ease;
+}
+
+@keyframes iconBounce {
+    0%, 100% { transform: scale(1.15) rotate(-5deg); }
+    50% { transform: scale(1.25) rotate(5deg); }
 }
 
 .game-button .button-label {
@@ -746,6 +758,7 @@ body {
     left: 120px;
     z-index: 100;
     transition: transform 0.3s ease;
+    cursor: pointer;
 }
 
 .mascot.hidden {
@@ -945,6 +958,41 @@ body {
     0%, 100% { transform: translateY(0) rotate(0deg); }
     25% { transform: translateY(-15px) rotate(-10deg); }
     75% { transform: translateY(-15px) rotate(10deg); }
+}
+
+/* Hooting animation when clicked */
+.mascot.hooting .mascot-body {
+    animation: hootBounce 0.6s ease;
+}
+
+.mascot.hooting .mascot-eye {
+    transform: scale(1.3);
+    transition: transform 0.1s ease;
+}
+
+.mascot.hooting .mascot-wing.left {
+    animation: hootWingLeft 0.6s ease;
+}
+
+.mascot.hooting .mascot-wing.right {
+    animation: hootWingRight 0.6s ease;
+}
+
+@keyframes hootBounce {
+    0%, 100% { transform: scale(1); }
+    25% { transform: scale(1.1) translateY(-5px); }
+    50% { transform: scale(0.95); }
+    75% { transform: scale(1.05); }
+}
+
+@keyframes hootWingLeft {
+    0%, 100% { transform: rotate(-15deg); }
+    50% { transform: rotate(-60deg); }
+}
+
+@keyframes hootWingRight {
+    0%, 100% { transform: rotate(15deg); }
+    50% { transform: rotate(60deg); }
 }
 
 /* ==================== */
@@ -1154,6 +1202,12 @@ body {
     flex: 1;
     border-right: 3px dashed rgba(255,255,255,0.6);
     position: relative;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.lane:active {
+    background: rgba(255,255,255,0.15);
 }
 
 .lane:last-child {
@@ -1287,7 +1341,7 @@ body {
     }
 
     .game-button .button-icon {
-        font-size: 2rem;
+        font-size: 3.5rem;
     }
 
     .game-button .button-label {

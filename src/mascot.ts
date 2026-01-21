@@ -74,6 +74,9 @@ export function initMascot(): void {
   speechBubble = document.getElementById('mascot-speech');
   say('welcome');
   startIdleAnimation();
+
+  // Add click handler for hooting
+  mascotElement?.addEventListener('click', hoot);
 }
 
 export function say(category: MessageCategory, customMessage?: string): void {
@@ -106,6 +109,28 @@ export function hop(): void {
     mascotElement?.classList.remove('hop');
     isAnimating = false;
   }, 500);
+}
+
+const hootMessages = [
+  "Hoot!",
+  "Whooo?",
+  "I'm Ollie!",
+  "Hoo-ray!",
+];
+
+export function hoot(): void {
+  if (!mascotElement) return;
+
+  playSound('hoot');
+  mascotElement.classList.add('hooting');
+
+  // Show a random hoot message
+  const message = hootMessages[Math.floor(Math.random() * hootMessages.length)] ?? hootMessages[0] ?? '';
+  say('welcome', message);
+
+  setTimeout(() => {
+    mascotElement?.classList.remove('hooting');
+  }, 600);
 }
 
 export function celebrate(): void {
