@@ -81,16 +81,55 @@ function confirmSelection(): void {
 }
 
 export function updateCharacterButtonIcon(character: CharacterType): void {
-  const iconElement = document.getElementById('character-btn-icon');
-  if (!iconElement) return;
+  const previewElement = document.getElementById('character-btn-preview');
+  if (!previewElement) return;
 
-  const icons: Record<CharacterType, string> = {
-    owl: '🦉',
-    bunny: '🐰',
-    frog: '🐸',
-  };
+  previewElement.innerHTML = getButtonPreviewHTML(character);
+}
 
-  iconElement.textContent = icons[character];
+function getButtonPreviewHTML(character: CharacterType): string {
+  switch (character) {
+    case 'owl':
+      return `
+        <div class="btn-preview-owl">
+          <div class="btn-owl-face">
+            <div class="btn-owl-eyes">
+              <div class="btn-owl-eye"></div>
+              <div class="btn-owl-eye"></div>
+            </div>
+            <div class="btn-owl-beak"></div>
+          </div>
+        </div>
+      `;
+    case 'bunny':
+      return `
+        <div class="btn-preview-bunny">
+          <div class="btn-bunny-ears">
+            <div class="btn-bunny-ear left"></div>
+            <div class="btn-bunny-ear right"></div>
+          </div>
+          <div class="btn-bunny-face">
+            <div class="btn-bunny-eyes">
+              <div class="btn-bunny-eye"></div>
+              <div class="btn-bunny-eye"></div>
+            </div>
+            <div class="btn-bunny-nose"></div>
+          </div>
+        </div>
+      `;
+    case 'frog':
+      return `
+        <div class="btn-preview-frog">
+          <div class="btn-frog-eyes">
+            <div class="btn-frog-eye"></div>
+            <div class="btn-frog-eye"></div>
+          </div>
+          <div class="btn-frog-mouth"></div>
+        </div>
+      `;
+    default:
+      return '';
+  }
 }
 
 export function loadCharacterButtonIcon(): void {
