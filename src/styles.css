@@ -275,6 +275,345 @@ body {
     font-size: 1.4rem;
 }
 
+/* Character button on home screen */
+.character-button {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 3px solid rgba(255,255,255,0.5);
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    font-size: 0;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.character-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+}
+
+.character-button .character-icon {
+    font-size: 1.8rem;
+}
+
+/* Character Selection Screen */
+.character-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.character-header h2 {
+    color: white;
+    font-size: 1.8rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    margin: 0;
+}
+
+.character-cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.character-card {
+    width: 140px;
+    padding: 20px 15px;
+    background: white;
+    border-radius: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    border: 4px solid transparent;
+}
+
+.character-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+}
+
+.character-card.selected {
+    border-color: #FFD700;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.6), 0 8px 25px rgba(0,0,0,0.3);
+}
+
+.character-card.bounce {
+    animation: cardBounce 0.5s ease;
+}
+
+@keyframes cardBounce {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.character-preview {
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.character-name {
+    color: #764ba2;
+    font-size: 1rem;
+    margin: 5px 0;
+}
+
+.character-catchphrase {
+    color: #888;
+    font-size: 0.85rem;
+    font-style: italic;
+    margin: 0;
+}
+
+/* Preview Owl */
+.preview-owl .preview-body {
+    width: 50px;
+    height: 55px;
+    background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
+    border-radius: 25px 25px 20px 20px;
+    position: relative;
+}
+
+.preview-owl .preview-face {
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 38px;
+}
+
+.preview-owl .preview-eyes {
+    display: flex;
+    justify-content: space-between;
+}
+
+.preview-owl .preview-eye {
+    width: 14px;
+    height: 14px;
+    background: white;
+    border-radius: 50%;
+    position: relative;
+}
+
+.preview-owl .preview-eye::after {
+    content: '';
+    position: absolute;
+    width: 7px;
+    height: 7px;
+    background: #333;
+    border-radius: 50%;
+    top: 3px;
+    left: 3px;
+}
+
+.preview-owl .preview-beak {
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 10px solid #FFA500;
+    margin: 5px auto 0;
+}
+
+.preview-owl .preview-wings {
+    position: absolute;
+    top: 20px;
+    width: 100%;
+}
+
+.preview-owl .preview-wing {
+    width: 12px;
+    height: 22px;
+    background: linear-gradient(135deg, #A0522D 0%, #CD853F 100%);
+    position: absolute;
+    border-radius: 6px;
+}
+
+.preview-owl .preview-wing.left {
+    left: -5px;
+    transform: rotate(-15deg);
+}
+
+.preview-owl .preview-wing.right {
+    right: -5px;
+    transform: rotate(15deg);
+}
+
+/* Preview Bunny */
+.preview-bunny {
+    position: relative;
+}
+
+.preview-bunny .preview-ears {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: -5px;
+}
+
+.preview-bunny .preview-ear {
+    width: 14px;
+    height: 35px;
+    background: linear-gradient(135deg, #FFB6C1 0%, #FFC0CB 100%);
+    border-radius: 7px 7px 3px 3px;
+    position: relative;
+}
+
+.preview-bunny .preview-ear::after {
+    content: '';
+    position: absolute;
+    width: 6px;
+    height: 22px;
+    background: #FFEBEE;
+    border-radius: 3px;
+    top: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.preview-bunny .preview-ear.left {
+    transform: rotate(-8deg);
+}
+
+.preview-bunny .preview-ear.right {
+    transform: rotate(8deg);
+}
+
+.preview-bunny .preview-body {
+    width: 48px;
+    height: 52px;
+    background: linear-gradient(135deg, #FFB6C1 0%, #FFC0CB 100%);
+    border-radius: 24px 24px 20px 20px;
+    position: relative;
+}
+
+.preview-bunny .preview-face {
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 36px;
+}
+
+.preview-bunny .preview-eyes {
+    display: flex;
+    justify-content: space-between;
+}
+
+.preview-bunny .preview-eye {
+    width: 12px;
+    height: 12px;
+    background: white;
+    border-radius: 50%;
+    position: relative;
+}
+
+.preview-bunny .preview-eye::after {
+    content: '';
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: #333;
+    border-radius: 50%;
+    top: 3px;
+    left: 3px;
+}
+
+.preview-bunny .preview-nose {
+    width: 10px;
+    height: 7px;
+    background: #FF69B4;
+    border-radius: 50%;
+    margin: 8px auto 0;
+}
+
+/* Preview Frog */
+.preview-frog .preview-body {
+    width: 55px;
+    height: 45px;
+    background: linear-gradient(135deg, #32CD32 0%, #90EE90 100%);
+    border-radius: 50% 50% 40% 40%;
+    position: relative;
+}
+
+.preview-frog .preview-eyes {
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
+    top: -8px;
+    width: 100%;
+    padding: 0 5px;
+    box-sizing: border-box;
+}
+
+.preview-frog .preview-eye {
+    width: 20px;
+    height: 20px;
+    background: white;
+    border-radius: 50%;
+    position: relative;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.preview-frog .preview-eye::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 50%;
+    background: linear-gradient(135deg, #228B22 0%, #32CD32 100%);
+    border-radius: 20px 20px 0 0;
+    top: -4px;
+    left: 0;
+}
+
+.preview-frog .preview-eye::after {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: #333;
+    border-radius: 50%;
+    top: 5px;
+    left: 5px;
+}
+
+.preview-frog .preview-mouth {
+    width: 30px;
+    height: 8px;
+    background: #228B22;
+    border-radius: 0 0 15px 15px;
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+#select-character-btn {
+    margin-top: 20px;
+}
+
+#select-character-btn.celebrate-btn {
+    animation: celebrateBtn 0.5s ease;
+}
+
+@keyframes celebrateBtn {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); background: #FFD700; }
+}
+
 .back-button {
     padding: 12px 24px;
     font-size: 1.2rem;
@@ -1112,6 +1451,422 @@ body {
 }
 
 /* ==================== */
+/* BENNY THE BUNNY */
+/* ==================== */
+
+.mascot-bunny .mascot-body {
+    width: 75px;
+    height: 85px;
+    background: linear-gradient(135deg, #FFB6C1 0%, #FFC0CB 100%);
+    border-radius: 35px 35px 30px 30px;
+    position: relative;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+}
+
+.mascot-bunny .mascot-ears {
+    position: absolute;
+    top: -45px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.mascot-bunny .mascot-ear {
+    width: 20px;
+    height: 50px;
+    background: linear-gradient(135deg, #FFB6C1 0%, #FFC0CB 100%);
+    border-radius: 10px 10px 5px 5px;
+    position: relative;
+}
+
+.mascot-bunny .mascot-ear::after {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 35px;
+    background: #FFEBEE;
+    border-radius: 5px;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.mascot-bunny .mascot-ear.left {
+    transform: rotate(-10deg);
+    transform-origin: bottom center;
+}
+
+.mascot-bunny .mascot-ear.right {
+    transform: rotate(10deg);
+    transform-origin: bottom center;
+}
+
+.mascot-bunny .mascot-ear.wiggle {
+    animation: earWiggle 0.25s ease infinite alternate;
+}
+
+.mascot-bunny .mascot-ear.left.wiggle {
+    animation-name: earWiggleLeft;
+}
+
+.mascot-bunny .mascot-ear.right.wiggle {
+    animation-name: earWiggleRight;
+}
+
+@keyframes earWiggleLeft {
+    0% { transform: rotate(-10deg); }
+    100% { transform: rotate(-25deg); }
+}
+
+@keyframes earWiggleRight {
+    0% { transform: rotate(10deg); }
+    100% { transform: rotate(25deg); }
+}
+
+.mascot-bunny .mascot-face {
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 55px;
+    height: 45px;
+}
+
+.mascot-bunny .mascot-eyes {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 3px;
+}
+
+.mascot-bunny .mascot-eye {
+    width: 18px;
+    height: 18px;
+    background: white;
+    border-radius: 50%;
+    position: relative;
+}
+
+.mascot-bunny .mascot-eye::after {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: #333;
+    border-radius: 50%;
+    top: 4px;
+    left: 4px;
+}
+
+.mascot-bunny .mascot-nose {
+    width: 14px;
+    height: 10px;
+    background: #FF69B4;
+    border-radius: 50%;
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.mascot-bunny .mascot-nose.twitch {
+    animation: noseTwitch 0.1s ease infinite;
+}
+
+@keyframes noseTwitch {
+    0%, 100% { transform: translateX(-50%) scale(1); }
+    50% { transform: translateX(-50%) scale(1.2) translateY(-2px); }
+}
+
+.mascot-bunny .mascot-mouth {
+    width: 8px;
+    height: 4px;
+    border-bottom: 3px solid #FF69B4;
+    border-radius: 0 0 4px 4px;
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.mascot-bunny .mascot-cheeks {
+    position: absolute;
+    top: 22px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.mascot-bunny .mascot-cheek {
+    width: 10px;
+    height: 6px;
+    background: #FF91A4;
+    border-radius: 50%;
+    opacity: 0.8;
+}
+
+.mascot-bunny .mascot-paws {
+    position: absolute;
+    bottom: 5px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+}
+
+.mascot-bunny .mascot-paw {
+    width: 18px;
+    height: 22px;
+    background: #FFB6C1;
+    border-radius: 8px 8px 12px 12px;
+    position: relative;
+}
+
+.mascot-bunny .mascot-paw::after {
+    content: '';
+    position: absolute;
+    bottom: 3px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 12px;
+    height: 8px;
+    background: #FFEBEE;
+    border-radius: 6px;
+}
+
+/* Bunny hooting animation */
+.mascot-bunny.mascot.hooting .mascot-body {
+    animation: bunnyBounce 0.6s ease;
+}
+
+.mascot-bunny.mascot.hooting .mascot-ear {
+    animation: earWiggleBounce 0.6s ease;
+}
+
+@keyframes bunnyBounce {
+    0%, 100% { transform: scale(1); }
+    25% { transform: scale(1.15) translateY(-8px); }
+    50% { transform: scale(0.95); }
+    75% { transform: scale(1.08); }
+}
+
+@keyframes earWiggleBounce {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-20deg); }
+    50% { transform: rotate(20deg); }
+    75% { transform: rotate(-10deg); }
+}
+
+/* ==================== */
+/* FINN THE FROG */
+/* ==================== */
+
+.mascot-frog .mascot-body {
+    width: 80px;
+    height: 70px;
+    background: linear-gradient(135deg, #32CD32 0%, #90EE90 100%);
+    border-radius: 45% 45% 40% 40%;
+    position: relative;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+}
+
+.mascot-frog .mascot-face {
+    position: absolute;
+    top: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 70px;
+    height: 50px;
+}
+
+.mascot-frog .mascot-eyes {
+    display: flex;
+    justify-content: space-between;
+    padding: 0;
+    position: relative;
+    top: -15px;
+}
+
+.mascot-frog .mascot-eye {
+    width: 28px;
+    height: 28px;
+    background: white;
+    border-radius: 50%;
+    position: relative;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.mascot-frog .mascot-eye::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 50%;
+    background: linear-gradient(135deg, #228B22 0%, #32CD32 100%);
+    border-radius: 28px 28px 0 0;
+    top: -5px;
+    left: 0;
+}
+
+.mascot-frog .mascot-pupil {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    background: #333;
+    border-radius: 50%;
+    top: 8px;
+    left: 7px;
+}
+
+.mascot-frog .mascot-pupil::after {
+    content: '';
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: white;
+    border-radius: 50%;
+    top: 2px;
+    left: 2px;
+}
+
+.mascot-frog .mascot-mouth {
+    width: 50px;
+    height: 12px;
+    background: #228B22;
+    border-radius: 0 0 25px 25px;
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    overflow: hidden;
+}
+
+.mascot-frog .mascot-tongue {
+    width: 12px;
+    height: 0;
+    background: #FF6B6B;
+    border-radius: 0 0 6px 6px;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    transition: height 0.2s ease;
+}
+
+.mascot-frog .mascot-tongue.flick {
+    animation: tongueFlick 0.4s ease;
+}
+
+@keyframes tongueFlick {
+    0%, 100% { height: 0; }
+    50% { height: 30px; }
+}
+
+.mascot-frog .mascot-cheeks {
+    position: absolute;
+    top: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.mascot-frog .mascot-cheek {
+    width: 12px;
+    height: 8px;
+    background: #98FB98;
+    border-radius: 50%;
+    opacity: 0.7;
+}
+
+.mascot-frog .mascot-throat {
+    width: 35px;
+    height: 20px;
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    border-radius: 50%;
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    transition: transform 0.3s ease;
+}
+
+.mascot-frog .mascot-throat.puff {
+    animation: throatPuff 0.3s ease;
+}
+
+@keyframes throatPuff {
+    0%, 100% { transform: translateX(-50%) scale(1); }
+    50% { transform: translateX(-50%) scale(1.4, 1.6); }
+}
+
+.mascot-frog .mascot-legs {
+    position: absolute;
+    bottom: -5px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.mascot-frog .mascot-leg {
+    width: 22px;
+    height: 15px;
+    background: linear-gradient(135deg, #32CD32 0%, #228B22 100%);
+    border-radius: 0 0 10px 10px;
+    position: relative;
+}
+
+.mascot-frog .mascot-leg::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 28px;
+    height: 10px;
+    background: linear-gradient(135deg, #32CD32 0%, #228B22 100%);
+    border-radius: 50%;
+}
+
+.mascot-frog .mascot-leg.left {
+    margin-left: 5px;
+}
+
+.mascot-frog .mascot-leg.right {
+    margin-right: 5px;
+}
+
+/* Frog hooting (clicking) animation */
+.mascot-frog.mascot.hooting .mascot-body {
+    animation: frogJump 0.6s ease;
+}
+
+.mascot-frog.mascot.hooting .mascot-throat {
+    animation: throatPuffBig 0.6s ease;
+}
+
+.mascot-frog.mascot.hooting .mascot-tongue {
+    animation: tongueFlickLong 0.6s ease;
+}
+
+@keyframes frogJump {
+    0%, 100% { transform: scale(1); }
+    30% { transform: scale(1.1) translateY(-12px); }
+    50% { transform: scale(0.95) translateY(0); }
+    70% { transform: scale(1.05); }
+}
+
+@keyframes throatPuffBig {
+    0%, 100% { transform: translateX(-50%) scale(1); }
+    40% { transform: translateX(-50%) scale(1.5, 1.8); }
+    60% { transform: translateX(-50%) scale(1.2, 1.4); }
+}
+
+@keyframes tongueFlickLong {
+    0%, 100% { height: 0; }
+    30% { height: 40px; }
+    60% { height: 20px; }
+}
+
+/* ==================== */
 /* CONFETTI */
 /* ==================== */
 
@@ -1367,7 +2122,7 @@ body {
 .lane::after {
     content: '👆';
     position: absolute;
-    bottom: 100px;
+    bottom: 25%;
     left: 50%;
     transform: translateX(-50%);
     font-size: 1.8rem;
@@ -1535,7 +2290,6 @@ body {
     0%, 100% { transform: scale(1); }
     50% { transform: scale(0.6); }
 }
-}
 
 .player-owl.celebrate {
     animation: racingOwlCelebrate 0.5s ease infinite;
@@ -1628,6 +2382,288 @@ body {
 /* Make owl clickable */
 .player-owl {
     cursor: pointer;
+}
+
+/* ==================== */
+/* RACING BUNNY */
+/* ==================== */
+
+.racing-bunny-body {
+    width: 52px;
+    height: 58px;
+    background: linear-gradient(135deg, #FFB6C1 0%, #FFC0CB 100%);
+    border-radius: 26px 26px 22px 22px;
+    position: relative;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.25);
+}
+
+.racing-bunny-ears {
+    position: absolute;
+    top: -28px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.racing-bunny-ear {
+    width: 14px;
+    height: 32px;
+    background: linear-gradient(135deg, #FFB6C1 0%, #FFC0CB 100%);
+    border-radius: 7px 7px 4px 4px;
+    position: relative;
+}
+
+.racing-bunny-ear::after {
+    content: '';
+    position: absolute;
+    width: 7px;
+    height: 22px;
+    background: #FFEBEE;
+    border-radius: 4px;
+    top: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.racing-bunny-ear.left {
+    transform: rotate(-8deg);
+    transform-origin: bottom center;
+}
+
+.racing-bunny-ear.right {
+    transform: rotate(8deg);
+    transform-origin: bottom center;
+}
+
+.racing-bunny-face {
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 32px;
+}
+
+.racing-bunny-eyes {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 2px;
+}
+
+.racing-bunny-eye {
+    width: 13px;
+    height: 13px;
+    background: white;
+    border-radius: 50%;
+    position: relative;
+}
+
+.racing-bunny-eye::after {
+    content: '';
+    position: absolute;
+    width: 7px;
+    height: 7px;
+    background: #333;
+    border-radius: 50%;
+    top: 3px;
+    left: 3px;
+}
+
+.racing-bunny-nose {
+    width: 10px;
+    height: 7px;
+    background: #FF69B4;
+    border-radius: 50%;
+    position: absolute;
+    bottom: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* Racing bunny animations */
+.player-owl.racing-bunny.hop {
+    animation: racingBunnyHop 0.45s ease;
+}
+
+@keyframes racingBunnyHop {
+    0% { transform: translateY(0) scale(1); }
+    20% { transform: translateY(-25px) scale(1.12); }
+    40% { transform: translateY(-30px) scale(1.18); }
+    60% { transform: translateY(-18px) scale(1.1); }
+    80% { transform: translateY(-6px) scale(1.05); }
+    100% { transform: translateY(0) scale(1); }
+}
+
+.player-owl.racing-bunny.hop .racing-bunny-ear {
+    animation: racingEarFlop 0.45s ease;
+}
+
+@keyframes racingEarFlop {
+    0%, 100% { transform: rotate(0deg); }
+    30% { transform: rotate(-25deg) translateY(-5px); }
+    60% { transform: rotate(15deg); }
+}
+
+.player-owl.racing-bunny.celebrate {
+    animation: racingBunnyCelebrate 0.5s ease infinite;
+}
+
+@keyframes racingBunnyCelebrate {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+}
+
+.player-owl.racing-bunny.celebrate .racing-bunny-ear {
+    animation: racingEarWiggle 0.25s ease infinite alternate;
+}
+
+@keyframes racingEarWiggle {
+    0% { transform: rotate(-15deg); }
+    100% { transform: rotate(15deg); }
+}
+
+.player-owl.racing-bunny.hooting .racing-bunny-body {
+    animation: racingBunnySqueak 0.6s ease;
+}
+
+.player-owl.racing-bunny.hooting .racing-bunny-ear {
+    animation: racingEarBounce 0.6s ease;
+}
+
+@keyframes racingBunnySqueak {
+    0%, 100% { transform: scale(1); }
+    15% { transform: scale(1.18) translateY(-10px); }
+    30% { transform: scale(0.92); }
+    50% { transform: scale(1.12); }
+    70% { transform: scale(0.96); }
+}
+
+@keyframes racingEarBounce {
+    0%, 100% { transform: rotate(0); }
+    25% { transform: rotate(-25deg); }
+    50% { transform: rotate(25deg); }
+    75% { transform: rotate(-15deg); }
+}
+
+/* ==================== */
+/* RACING FROG */
+/* ==================== */
+
+.racing-frog-body {
+    width: 58px;
+    height: 50px;
+    background: linear-gradient(135deg, #32CD32 0%, #90EE90 100%);
+    border-radius: 50% 50% 40% 40%;
+    position: relative;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.25);
+}
+
+.racing-frog-eyes {
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
+    top: -10px;
+    width: 100%;
+    padding: 0 4px;
+    box-sizing: border-box;
+}
+
+.racing-frog-eye {
+    width: 20px;
+    height: 20px;
+    background: white;
+    border-radius: 50%;
+    position: relative;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.racing-frog-eye::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 50%;
+    background: linear-gradient(135deg, #228B22 0%, #32CD32 100%);
+    border-radius: 20px 20px 0 0;
+    top: -4px;
+    left: 0;
+}
+
+.racing-frog-eye::after {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: #333;
+    border-radius: 50%;
+    top: 5px;
+    left: 5px;
+}
+
+.racing-frog-mouth {
+    width: 35px;
+    height: 8px;
+    background: #228B22;
+    border-radius: 0 0 18px 18px;
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* Racing frog animations */
+.player-owl.racing-frog.hop {
+    animation: racingFrogJump 0.45s ease;
+}
+
+@keyframes racingFrogJump {
+    0% { transform: translateY(0) scale(1, 1); }
+    15% { transform: translateY(5px) scale(1.15, 0.85); }
+    30% { transform: translateY(-28px) scale(0.9, 1.2); }
+    50% { transform: translateY(-32px) scale(1, 1.1); }
+    70% { transform: translateY(-15px) scale(1.05, 0.95); }
+    100% { transform: translateY(0) scale(1, 1); }
+}
+
+.player-owl.racing-frog.hop .racing-frog-eye {
+    animation: frogEyeBulge 0.45s ease;
+}
+
+@keyframes frogEyeBulge {
+    0%, 100% { transform: scale(1); }
+    30% { transform: scale(1.3) translateY(-3px); }
+    60% { transform: scale(1.1); }
+}
+
+.player-owl.racing-frog.celebrate {
+    animation: racingFrogCelebrate 0.5s ease infinite;
+}
+
+@keyframes racingFrogCelebrate {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-18px) scale(1.1, 0.9); }
+}
+
+.player-owl.racing-frog.hooting .racing-frog-body {
+    animation: racingFrogRibbit 0.6s ease;
+}
+
+.player-owl.racing-frog.hooting .racing-frog-eye {
+    animation: frogEyePop 0.6s ease;
+}
+
+@keyframes racingFrogRibbit {
+    0%, 100% { transform: scale(1); }
+    20% { transform: scale(1.15, 0.9) translateY(3px); }
+    40% { transform: scale(0.95, 1.1) translateY(-8px); }
+    60% { transform: scale(1.08, 0.95); }
+    80% { transform: scale(0.98, 1.02); }
+}
+
+@keyframes frogEyePop {
+    0%, 100% { transform: scale(1); }
+    30% { transform: scale(1.4) translateY(-5px); }
+    60% { transform: scale(1.2); }
 }
 
 /* Falling letters */
@@ -1800,7 +2836,9 @@ body {
     }
 
     .racing-track {
-        height: 260px;
+        height: 55vh;
+        min-height: 300px;
+        max-height: 500px;
     }
 
     .racing-controls {
@@ -1917,7 +2955,9 @@ body {
     }
 
     .racing-track {
-        height: 240px;
+        height: 50vh;
+        min-height: 250px;
+        max-height: 400px;
     }
 
     .racing-controls {
