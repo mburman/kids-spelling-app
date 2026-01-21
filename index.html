@@ -53,6 +53,77 @@
             <span class="button-label">Practice Writing</span>
         </button>
         <button id="settings-btn" class="settings-button">Settings</button>
+        <button id="character-btn" class="character-button" title="Choose your friend!">
+            <span class="character-icon" id="character-btn-icon">🦉</span>
+        </button>
+    </div>
+
+    <!-- Character Selection Screen -->
+    <div id="character-screen" class="screen">
+        <div class="character-header">
+            <button id="character-home-btn" class="back-button">Home</button>
+            <h2>Choose Your Friend!</h2>
+        </div>
+        <div class="character-cards">
+            <div class="character-card" data-character="owl">
+                <div class="character-preview">
+                    <div class="preview-owl">
+                        <div class="preview-body">
+                            <div class="preview-face">
+                                <div class="preview-eyes">
+                                    <div class="preview-eye"></div>
+                                    <div class="preview-eye"></div>
+                                </div>
+                                <div class="preview-beak"></div>
+                            </div>
+                            <div class="preview-wings">
+                                <div class="preview-wing left"></div>
+                                <div class="preview-wing right"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <h3 class="character-name">Ollie the Owl</h3>
+                <p class="character-catchphrase">"Hoot hoot!"</p>
+            </div>
+            <div class="character-card" data-character="bunny">
+                <div class="character-preview">
+                    <div class="preview-bunny">
+                        <div class="preview-ears">
+                            <div class="preview-ear left"></div>
+                            <div class="preview-ear right"></div>
+                        </div>
+                        <div class="preview-body">
+                            <div class="preview-face">
+                                <div class="preview-eyes">
+                                    <div class="preview-eye"></div>
+                                    <div class="preview-eye"></div>
+                                </div>
+                                <div class="preview-nose"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <h3 class="character-name">Benny the Bunny</h3>
+                <p class="character-catchphrase">"Hop hop!"</p>
+            </div>
+            <div class="character-card" data-character="frog">
+                <div class="character-preview">
+                    <div class="preview-frog">
+                        <div class="preview-body">
+                            <div class="preview-eyes">
+                                <div class="preview-eye left"></div>
+                                <div class="preview-eye right"></div>
+                            </div>
+                            <div class="preview-mouth"></div>
+                        </div>
+                    </div>
+                </div>
+                <h3 class="character-name">Finn the Frog</h3>
+                <p class="character-catchphrase">"Ribbit!"</p>
+            </div>
+        </div>
+        <button id="select-character-btn" class="big-button green">Pick Me!</button>
     </div>
 
     <!-- Game Screen -->

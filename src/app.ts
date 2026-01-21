@@ -7,8 +7,9 @@ import { initGame, startGame } from './game';
 import { initPractice, startPractice } from './practice';
 import { initRacing, startRacing, stopRacing } from './racing';
 import { initSounds } from './sounds';
+import { initCharacterSelect, loadCharacterButtonIcon } from './character-select';
 
-type ScreenName = 'home' | 'game' | 'practice' | 'parent' | 'racing';
+type ScreenName = 'home' | 'game' | 'practice' | 'parent' | 'racing' | 'character';
 
 const screens: Record<ScreenName, HTMLElement | null> = {
   home: null,
@@ -16,6 +17,7 @@ const screens: Record<ScreenName, HTMLElement | null> = {
   practice: null,
   parent: null,
   racing: null,
+  character: null,
 };
 
 let currentScreen: ScreenName = 'home';
@@ -26,6 +28,7 @@ export function initApp(): void {
   screens.practice = document.getElementById('practice-screen');
   screens.parent = document.getElementById('parent-screen');
   screens.racing = document.getElementById('racing-screen');
+  screens.character = document.getElementById('character-screen');
 
   setupNavigation();
   updateWordPreview();
@@ -37,6 +40,10 @@ export function initApp(): void {
   initGame();
   initPractice();
   initRacing();
+  initCharacterSelect();
+
+  // Load character button icon
+  loadCharacterButtonIcon();
 
   // Initialize sound system on first click (required for AudioContext)
   document.addEventListener('click', () => {
@@ -78,6 +85,10 @@ function setupNavigation(): void {
     showParent();
   });
 
+  document.getElementById('character-btn')?.addEventListener('click', () => {
+    showScreen('character');
+  });
+
   // Back buttons
   document.getElementById('game-home-btn')?.addEventListener('click', () => {
     showScreen('home');
@@ -94,6 +105,10 @@ function setupNavigation(): void {
 
   document.getElementById('parent-home-btn')?.addEventListener('click', () => {
     hideParent();
+    showScreen('home');
+  });
+
+  document.getElementById('character-home-btn')?.addEventListener('click', () => {
     showScreen('home');
   });
 }

@@ -27,10 +27,20 @@ spelling-app/
 │   ├── main.ts             # Entry point
 │   ├── app.ts              # Navigation and main logic
 │   ├── game.ts             # Letter collection game
+│   ├── racing.ts           # Letter racing game
 │   ├── practice.ts         # Paper practice with camera
 │   ├── parent.ts           # Word management (PIN protected)
 │   ├── storage.ts          # LocalStorage helpers
-│   ├── mascot.ts           # Ollie the Owl + confetti
+│   ├── mascot.ts           # Character system + confetti
+│   ├── sounds.ts           # Sound effects (Web Audio API)
+│   ├── speech.ts           # Text-to-speech for words
+│   ├── character-select.ts # Character selection screen
+│   ├── characters/         # Character configurations
+│   │   ├── types.ts        # Character type definitions
+│   │   ├── index.ts        # Character registry
+│   │   ├── owl.ts          # Ollie the Owl config
+│   │   ├── bunny.ts        # Benny the Bunny config
+│   │   └── frog.ts         # Finn the Frog config
 │   ├── styles.css          # All styles + animations
 │   └── storage.test.ts     # Tests for storage module
 ├── package.json            # Dependencies and scripts
@@ -41,11 +51,28 @@ spelling-app/
 ## Key Features
 
 - **Letter Game**: Tap letters in order to spell words
+- **Letter Racing**: Mario Kart-style letter collection game
 - **Practice Mode**: Write on paper, take photo, parent verifies
 - **Parent Mode**: Add/remove spelling words (PIN: 1234)
 - **Local Storage**: Words saved in browser localStorage
-- **Ollie the Owl**: Friendly mascot that cheers and encourages
-- **Fun Animations**: Confetti, sparkles, bouncing letters
+- **3 Playable Characters**: Ollie the Owl, Benny the Bunny, Finn the Frog
+- **Character Selection**: Choose your friend from the home screen
+- **Fun Animations**: Confetti, sparkles, bouncing letters, character-specific animations
+
+## Characters
+
+The app features 3 playable characters, each with unique sounds, animations, and messages:
+
+| Character | Personality | Sound | Catchphrase |
+|-----------|-------------|-------|-------------|
+| **Ollie the Owl** (default) | Wise and encouraging | Hoot | "Hoot hoot!" |
+| **Benny the Bunny** | Bouncy and excitable | Squeak | "Hop hop!" |
+| **Finn the Frog** | Calm and cool | Ribbit | "Ribbit!" |
+
+To change characters:
+1. Tap the character face button (bottom-left on home screen)
+2. Tap a character card to preview their sound
+3. Tap "Pick Me!" to confirm selection
 
 ## Default PIN
 

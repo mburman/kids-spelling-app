@@ -1,88 +1,136 @@
-// Ollie the Owl - Friendly mascot for the spelling app
+// Mascot system - supports multiple characters (Ollie, Benny, Finn)
 
 import { playSound } from './sounds';
-
-type MessageCategory =
-  | 'welcome'
-  | 'encouragement'
-  | 'correct'
-  | 'wrong'
-  | 'wordComplete'
-  | 'practiceStart'
-  | 'practiceComplete';
-
-const messages: Record<MessageCategory, string[]> = {
-  welcome: [
-    "Hi! Let's learn to spell!",
-    "Ready to have fun?",
-    "Yay! Spelling time!",
-    "Hello, superstar!"
-  ],
-  encouragement: [
-    "You can do it!",
-    "Keep going!",
-    "You're doing great!",
-    "Almost there!",
-    "Fantastic!"
-  ],
-  correct: [
-    "Woohoo! Amazing!",
-    "You got it!",
-    "Super smart!",
-    "Brilliant!",
-    "High five!",
-    "You're a star!"
-  ],
-  wrong: [
-    "Try again!",
-    "Oops! One more time!",
-    "So close!",
-    "You've got this!"
-  ],
-  wordComplete: [
-    "WOW! You did it!",
-    "AMAZING SPELLING!",
-    "You're incredible!",
-    "Champion speller!",
-    "SO PROUD OF YOU!"
-  ],
-  practiceStart: [
-    "Time to write!",
-    "Grab your pencil!",
-    "Let's practice!",
-    "Writing is fun!"
-  ],
-  practiceComplete: [
-    "Beautiful writing!",
-    "Great job!",
-    "You wrote it!",
-    "Wonderful!"
-  ]
-};
+import { getCharacter } from './storage';
+import {
+  getCharacterConfig,
+  getRandomMessage,
+  getRandomClickMessage,
+  type CharacterConfig,
+  type CharacterType,
+  type MessageCategory
+} from './characters';
 
 let mascotElement: HTMLElement | null = null;
 let speechBubble: HTMLElement | null = null;
+let mascotBody: HTMLElement | null = null;
 let isAnimating = false;
-
-function getRandomMessage(category: MessageCategory): string {
-  const categoryMessages = messages[category];
-  return categoryMessages[Math.floor(Math.random() * categoryMessages.length)] ?? categoryMessages[0] ?? '';
-}
+let currentConfig: CharacterConfig;
+let idleIntervals: number[] = [];
 
 export function initMascot(): void {
   mascotElement = document.getElementById('mascot');
   speechBubble = document.getElementById('mascot-speech');
+  mascotBody = mascotElement?.querySelector('.mascot-body') as HTMLElement | null;
+
+  // Load selected character
+  const characterType = getCharacter();
+  currentConfig = getCharacterConfig(characterType);
+
+  // Apply character class and render
+  applyCharacter(characterType);
+
   say('welcome');
   startIdleAnimation();
 
-  // Add click handler for hooting
-  mascotElement?.addEventListener('click', hoot);
+  // Add click handler for character sound
+  mascotElement?.addEventListener('click', characterClick);
+}
+
+export function switchCharacter(type: CharacterType): void {
+  currentConfig = getCharacterConfig(type);
+  applyCharacter(type);
+  restartIdleAnimation();
+}
+
+function applyCharacter(type: CharacterType): void {
+  if (!mascotElement || !mascotBody) return;
+
+  // Remove existing character classes
+  mascotElement.classList.remove('mascot-owl', 'mascot-bunny', 'mascot-frog');
+  mascotElement.classList.add(`mascot-${type}`);
+
+  // Render character-specific HTML
+  mascotBody.innerHTML = getCharacterHTML(type);
+}
+
+function getCharacterHTML(type: CharacterType): string {
+  switch (type) {
+    case 'owl':
+      return `
+        <div class="mascot-face">
+          <div class="mascot-eyes">
+            <div class="mascot-eye left"></div>
+            <div class="mascot-eye right"></div>
+          </div>
+          <div class="mascot-beak"></div>
+          <div class="mascot-cheeks">
+            <div class="mascot-cheek left"></div>
+            <div class="mascot-cheek right"></div>
+          </div>
+        </div>
+        <div class="mascot-wings">
+          <div class="mascot-wing left"></div>
+          <div class="mascot-wing right"></div>
+        </div>
+      `;
+    case 'bunny':
+      return `
+        <div class="mascot-ears">
+          <div class="mascot-ear left"></div>
+          <div class="mascot-ear right"></div>
+        </div>
+        <div class="mascot-face">
+          <div class="mascot-eyes">
+            <div class="mascot-eye left"></div>
+            <div class="mascot-eye right"></div>
+          </div>
+          <div class="mascot-nose"></div>
+          <div class="mascot-mouth"></div>
+          <div class="mascot-cheeks">
+            <div class="mascot-cheek left"></div>
+            <div class="mascot-cheek right"></div>
+          </div>
+        </div>
+        <div class="mascot-paws">
+          <div class="mascot-paw left"></div>
+          <div class="mascot-paw right"></div>
+        </div>
+      `;
+    case 'frog':
+      return `
+        <div class="mascot-face">
+          <div class="mascot-eyes">
+            <div class="mascot-eye left">
+              <div class="mascot-pupil"></div>
+            </div>
+            <div class="mascot-eye right">
+              <div class="mascot-pupil"></div>
+            </div>
+          </div>
+          <div class="mascot-mouth">
+            <div class="mascot-tongue"></div>
+          </div>
+          <div class="mascot-cheeks">
+            <div class="mascot-cheek left"></div>
+            <div class="mascot-cheek right"></div>
+          </div>
+        </div>
+        <div class="mascot-throat"></div>
+        <div class="mascot-legs">
+          <div class="mascot-leg left"></div>
+          <div class="mascot-leg right"></div>
+        </div>
+      `;
+    default:
+      return '';
+  }
 }
 
 export function say(category: MessageCategory, customMessage?: string): void {
   if (!speechBubble) return;
 
-  const message = customMessage ?? getRandomMessage(category);
+  const message = customMessage ?? getRandomMessage(currentConfig, category);
   speechBubble.textContent = message;
   speechBubble.classList.add('pop-in');
 
@@ -111,21 +159,23 @@ export function hop(): void {
   }, 500);
 }
 
-const hootMessages = [
-  "Hoot!",
-  "Whooo?",
-  "I'm Ollie!",
-  "Hoo-ray!",
-];
-
-export function hoot(): void {
+export function characterClick(): void {
   if (!mascotElement) return;
 
-  playSound('hoot');
+  // Play character-specific sound
+  const characterType = currentConfig.id;
+  if (characterType === 'owl') {
+    playSound('hoot');
+  } else if (characterType === 'bunny') {
+    playSound('squeak');
+  } else if (characterType === 'frog') {
+    playSound('ribbit');
+  }
+
   mascotElement.classList.add('hooting');
 
-  // Show a random hoot message
-  const message = hootMessages[Math.floor(Math.random() * hootMessages.length)] ?? hootMessages[0] ?? '';
+  // Show a random click message
+  const message = getRandomClickMessage(currentConfig);
   say('welcome', message);
 
   setTimeout(() => {
@@ -144,23 +194,96 @@ export function celebrate(): void {
 }
 
 function startIdleAnimation(): void {
-  // Blink occasionally
-  setInterval(() => {
-    const eyes = document.querySelectorAll('.mascot-eye');
-    eyes.forEach(eye => eye.classList.add('blink'));
-    setTimeout(() => {
-      eyes.forEach(eye => eye.classList.remove('blink'));
-    }, 150);
-  }, 3000);
+  const characterType = currentConfig.id;
 
-  // Wave wings occasionally
-  setInterval(() => {
-    const wings = document.querySelectorAll('.mascot-wing');
-    wings.forEach(wing => wing.classList.add('wave'));
-    setTimeout(() => {
-      wings.forEach(wing => wing.classList.remove('wave'));
-    }, 600);
-  }, 5000);
+  // Clear any existing intervals
+  clearIdleIntervals();
+
+  // Primary idle animation (eyes/nose)
+  const primaryInterval = window.setInterval(() => {
+    runPrimaryIdleAnimation(characterType);
+  }, currentConfig.idleAnimations.primary.interval);
+  idleIntervals.push(primaryInterval);
+
+  // Secondary idle animation (wings/ears/tongue)
+  const secondaryInterval = window.setInterval(() => {
+    runSecondaryIdleAnimation(characterType);
+  }, currentConfig.idleAnimations.secondary.interval);
+  idleIntervals.push(secondaryInterval);
+}
+
+function runPrimaryIdleAnimation(type: CharacterType): void {
+  switch (type) {
+    case 'owl': {
+      // Blink
+      const eyes = document.querySelectorAll('.mascot-owl .mascot-eye');
+      eyes.forEach(eye => eye.classList.add('blink'));
+      setTimeout(() => {
+        eyes.forEach(eye => eye.classList.remove('blink'));
+      }, currentConfig.idleAnimations.primary.duration);
+      break;
+    }
+    case 'bunny': {
+      // Nose twitch
+      const nose = document.querySelector('.mascot-bunny .mascot-nose');
+      nose?.classList.add('twitch');
+      setTimeout(() => {
+        nose?.classList.remove('twitch');
+      }, currentConfig.idleAnimations.primary.duration);
+      break;
+    }
+    case 'frog': {
+      // Throat puff
+      const throat = document.querySelector('.mascot-frog .mascot-throat');
+      throat?.classList.add('puff');
+      setTimeout(() => {
+        throat?.classList.remove('puff');
+      }, currentConfig.idleAnimations.primary.duration);
+      break;
+    }
+  }
+}
+
+function runSecondaryIdleAnimation(type: CharacterType): void {
+  switch (type) {
+    case 'owl': {
+      // Wave wings
+      const wings = document.querySelectorAll('.mascot-owl .mascot-wing');
+      wings.forEach(wing => wing.classList.add('wave'));
+      setTimeout(() => {
+        wings.forEach(wing => wing.classList.remove('wave'));
+      }, currentConfig.idleAnimations.secondary.duration);
+      break;
+    }
+    case 'bunny': {
+      // Ear wiggle
+      const ears = document.querySelectorAll('.mascot-bunny .mascot-ear');
+      ears.forEach(ear => ear.classList.add('wiggle'));
+      setTimeout(() => {
+        ears.forEach(ear => ear.classList.remove('wiggle'));
+      }, currentConfig.idleAnimations.secondary.duration);
+      break;
+    }
+    case 'frog': {
+      // Tongue flick
+      const tongue = document.querySelector('.mascot-frog .mascot-tongue');
+      tongue?.classList.add('flick');
+      setTimeout(() => {
+        tongue?.classList.remove('flick');
+      }, currentConfig.idleAnimations.secondary.duration);
+      break;
+    }
+  }
+}
+
+function clearIdleIntervals(): void {
+  idleIntervals.forEach(interval => window.clearInterval(interval));
+  idleIntervals = [];
+}
+
+function restartIdleAnimation(): void {
+  clearIdleIntervals();
+  startIdleAnimation();
 }
 
 export function hideMascot(): void {
@@ -169,6 +292,10 @@ export function hideMascot(): void {
 
 export function showMascot(): void {
   mascotElement?.classList.remove('hidden');
+}
+
+export function getCurrentCharacter(): CharacterType {
+  return currentConfig.id;
 }
 
 // Confetti system

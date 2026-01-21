@@ -1,11 +1,14 @@
 // Letter Racing game - Mario Kart style letter collection
 
 import * as Storage from './storage';
-import type { DifficultyLevel } from './storage';
+import type { DifficultyLevel, CharacterType } from './storage';
 import { launchConfetti } from './mascot';
 import { playSound } from './sounds';
 import { showCelebration } from './app';
 import { speakWord } from './speech';
+
+// Current character for the racing player
+let currentCharacter: CharacterType = 'owl';
 
 interface FallingLetter {
   id: number;
@@ -94,13 +97,22 @@ function owlCelebrate(): void {
 }
 
 function owlHoot(): void {
-  const owl = document.getElementById('player-owl');
-  if (!owl || isOwlAnimating) return;
+  const player = document.getElementById('player-owl');
+  if (!player || isOwlAnimating) return;
   isOwlAnimating = true;
-  owl.classList.add('hooting');
-  playSound('hoot');
+  player.classList.add('hooting');
+
+  // Play character-specific sound
+  if (currentCharacter === 'owl') {
+    playSound('hoot');
+  } else if (currentCharacter === 'bunny') {
+    playSound('squeak');
+  } else if (currentCharacter === 'frog') {
+    playSound('ribbit');
+  }
+
   setTimeout(() => {
-    owl?.classList.remove('hooting');
+    player?.classList.remove('hooting');
     isOwlAnimating = false;
   }, 600);
 }
@@ -153,13 +165,78 @@ export function startRacing(): void {
   currentWordIndex = 0;
   score = Storage.getScore();
   currentDifficulty = Storage.getSettings().difficulty;
+  currentCharacter = Storage.getCharacter();
   updateScoreDisplay();
+
+  // Update racing player character
+  updateRacingCharacter();
 
   // Show tap icons only on first run of racing mode
   document.getElementById('racing-track')?.classList.remove('tapped');
 
   if (words.length > 0 && words[0]) {
     loadWord(words[0]);
+  }
+}
+
+function updateRacingCharacter(): void {
+  const player = document.getElementById('player-owl');
+  if (!player) return;
+
+  // Remove existing character classes
+  player.classList.remove('racing-owl', 'racing-bunny', 'racing-frog');
+  player.classList.add(`racing-${currentCharacter}`);
+
+  // Update the inner HTML based on character
+  player.innerHTML = getRacingCharacterHTML(currentCharacter);
+}
+
+function getRacingCharacterHTML(character: CharacterType): string {
+  switch (character) {
+    case 'owl':
+      return `
+        <div class="racing-owl-body">
+          <div class="racing-owl-face">
+            <div class="racing-owl-eyes">
+              <div class="racing-owl-eye left"></div>
+              <div class="racing-owl-eye right"></div>
+            </div>
+            <div class="racing-owl-beak"></div>
+          </div>
+          <div class="racing-owl-wings">
+            <div class="racing-owl-wing left"></div>
+            <div class="racing-owl-wing right"></div>
+          </div>
+        </div>
+      `;
+    case 'bunny':
+      return `
+        <div class="racing-bunny-body">
+          <div class="racing-bunny-ears">
+            <div class="racing-bunny-ear left"></div>
+            <div class="racing-bunny-ear right"></div>
+          </div>
+          <div class="racing-bunny-face">
+            <div class="racing-bunny-eyes">
+              <div class="racing-bunny-eye left"></div>
+              <div class="racing-bunny-eye right"></div>
+            </div>
+            <div class="racing-bunny-nose"></div>
+          </div>
+        </div>
+      `;
+    case 'frog':
+      return `
+        <div class="racing-frog-body">
+          <div class="racing-frog-eyes">
+            <div class="racing-frog-eye left"></div>
+            <div class="racing-frog-eye right"></div>
+          </div>
+          <div class="racing-frog-mouth"></div>
+        </div>
+      `;
+    default:
+      return '';
   }
 }
 

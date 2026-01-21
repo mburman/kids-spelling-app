@@ -16,6 +16,8 @@ export type SoundName =
   | 'gameComplete'
   | 'practiceApproved'
   | 'hoot'
+  | 'squeak'
+  | 'ribbit'
   | 'laneChange'
   | 'letterSpawn'
   | 'gameStart'
@@ -127,6 +129,56 @@ function playHoot(): void {
   }
 }
 
+// Bunny squeak: High-pitched cute squeaks
+function playSqueak(): void {
+  // Quick double squeak - high frequency with fast decay
+  playTone(1200, 0.08, 'sine', 0.25, 0);
+  playTone(1400, 0.1, 'sine', 0.3, 0.06);
+  playTone(1100, 0.06, 'sine', 0.2, 0.14);
+}
+
+// Frog ribbit: Low frequency croaking sound
+function playRibbit(): void {
+  if (!audioContext) return;
+
+  // Create a croaky "ribbit" sound with frequency modulation
+  const oscillator = audioContext.createOscillator();
+  const gainNode = audioContext.createGain();
+  const lfo = audioContext.createOscillator();
+  const lfoGain = audioContext.createGain();
+
+  // Main oscillator - low frequency for frog-like sound
+  oscillator.type = 'sine';
+  oscillator.frequency.setValueAtTime(180, audioContext.currentTime);
+  oscillator.frequency.linearRampToValueAtTime(120, audioContext.currentTime + 0.15);
+  oscillator.frequency.setValueAtTime(180, audioContext.currentTime + 0.18);
+  oscillator.frequency.linearRampToValueAtTime(100, audioContext.currentTime + 0.35);
+
+  // LFO for wobble effect
+  lfo.type = 'sine';
+  lfo.frequency.setValueAtTime(25, audioContext.currentTime);
+  lfoGain.gain.setValueAtTime(30, audioContext.currentTime);
+
+  // Volume envelope
+  gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+  gainNode.gain.linearRampToValueAtTime(0.35, audioContext.currentTime + 0.03);
+  gainNode.gain.setValueAtTime(0.3, audioContext.currentTime + 0.15);
+  gainNode.gain.linearRampToValueAtTime(0.35, audioContext.currentTime + 0.18);
+  gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.4);
+
+  // Connect LFO to main oscillator frequency
+  lfo.connect(lfoGain);
+  lfoGain.connect(oscillator.frequency);
+
+  oscillator.connect(gainNode);
+  gainNode.connect(audioContext.destination);
+
+  lfo.start(audioContext.currentTime);
+  oscillator.start(audioContext.currentTime);
+  lfo.stop(audioContext.currentTime + 0.4);
+  oscillator.stop(audioContext.currentTime + 0.4);
+}
+
 // Lane change: Soft tick sound
 function playLaneChange(): void {
   playTone(600, 0.04, 'sine', 0.08, 0);  // Very short, quiet tick
@@ -195,6 +247,12 @@ export function playSound(name: SoundName): void {
       break;
     case 'hoot':
       playHoot();
+      break;
+    case 'squeak':
+      playSqueak();
+      break;
+    case 'ribbit':
+      playRibbit();
       break;
     case 'laneChange':
       playLaneChange();
