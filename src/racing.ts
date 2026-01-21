@@ -1,7 +1,9 @@
 // Letter Racing game - Mario Kart style letter collection
 
 import * as Storage from './storage';
-import { say, celebrate, launchConfetti, hop } from './mascot';
+import type { DifficultyLevel } from './storage';
+import { launchConfetti } from './mascot';
+import { playSound } from './sounds';
 import { showCelebration } from './app';
 import { speakWord } from './speech';
 
@@ -16,12 +18,33 @@ interface FallingLetter {
   collected: boolean;
 }
 
-// Game constants
-const TRACK_HEIGHT = 400;
-const PLAYER_Y = TRACK_HEIGHT - 70;
-const LETTER_SPAWN_INTERVAL = 2000; // Slower spawn rate for children
-const BASE_SPEED = 0.8; // Much slower for children
-const COLLISION_THRESHOLD = 50;
+// Difficulty configuration for racing game
+const DIFFICULTY_CONFIG: Record<DifficultyLevel, {
+  spawnInterval: number;
+  baseSpeed: number;
+  minDistractors: number;
+  maxDistractors: number;
+  collisionThreshold: number;
+}> = {
+  easy: { spawnInterval: 3000, baseSpeed: 0.5, minDistractors: 0, maxDistractors: 1, collisionThreshold: 70 },
+  medium: { spawnInterval: 2000, baseSpeed: 0.8, minDistractors: 1, maxDistractors: 2, collisionThreshold: 60 },
+  hard: { spawnInterval: 1500, baseSpeed: 1.2, minDistractors: 2, maxDistractors: 3, collisionThreshold: 50 },
+};
+
+// Game constants - dynamically calculated
+function getTrackHeight(): number {
+  const track = document.getElementById('racing-track');
+  return track?.offsetHeight ?? 300;
+}
+
+function getPlayerY(): number {
+  // Player owl is positioned at bottom: 30px in CSS, owl is ~56px tall
+  // So center of owl is at trackHeight - 30 - 28 = trackHeight - 58
+  return getTrackHeight() - 55;
+}
+
+// Current difficulty (loaded at game start)
+let currentDifficulty: DifficultyLevel = 'medium';
 
 // Game state
 let words: string[] = [];
@@ -35,6 +58,52 @@ let gameActive = false;
 let animationId: number | null = null;
 let spawnIntervalId: number | null = null;
 let letterIdCounter = 0;
+let isOwlAnimating = false;
+
+// Player owl animation functions
+function owlHop(): void {
+  const owl = document.getElementById('player-owl');
+  if (!owl || isOwlAnimating) return;
+  isOwlAnimating = true;
+  owl.classList.add('hop');
+  playSound('correctLetter');
+  setTimeout(() => {
+    owl?.classList.remove('hop');
+    isOwlAnimating = false;
+  }, 400);
+}
+
+function owlShake(): void {
+  const owl = document.getElementById('player-owl');
+  if (!owl) return;
+  owl.classList.add('shake');
+  playSound('wrongLetter');
+  setTimeout(() => {
+    owl?.classList.remove('shake');
+  }, 300);
+}
+
+function owlCelebrate(): void {
+  const owl = document.getElementById('player-owl');
+  if (!owl) return;
+  owl.classList.add('celebrate');
+  playSound('wordComplete');
+  setTimeout(() => {
+    owl?.classList.remove('celebrate');
+  }, 2000);
+}
+
+function owlHoot(): void {
+  const owl = document.getElementById('player-owl');
+  if (!owl || isOwlAnimating) return;
+  isOwlAnimating = true;
+  owl.classList.add('hooting');
+  playSound('hoot');
+  setTimeout(() => {
+    owl?.classList.remove('hooting');
+    isOwlAnimating = false;
+  }, 600);
+}
 
 export function initRacing(): void {
   // Control buttons
@@ -44,6 +113,12 @@ export function initRacing(): void {
 
   document.getElementById('move-right')?.addEventListener('click', () => {
     movePlayer(1);
+  });
+
+  // Click on owl to make it hoot
+  document.getElementById('player-owl')?.addEventListener('click', (e) => {
+    e.stopPropagation(); // Don't trigger lane click
+    owlHoot();
   });
 
   // Tap on lanes to move directly there (iPad friendly)
@@ -81,9 +156,8 @@ export function startRacing(): void {
   words = shuffleArray([...Storage.getWords()]);
   currentWordIndex = 0;
   score = Storage.getScore();
+  currentDifficulty = Storage.getSettings().difficulty;
   updateScoreDisplay();
-
-  say('encouragement');
 
   if (words.length > 0 && words[0]) {
     loadWord(words[0]);
@@ -166,9 +240,10 @@ function renderWordProgress(): void {
 function startGame(): void {
   gameActive = true;
 
-  // Start spawning letters
+  // Start spawning letters with difficulty-based interval
+  const config = DIFFICULTY_CONFIG[currentDifficulty];
   spawnLetter();
-  spawnIntervalId = window.setInterval(spawnLetter, LETTER_SPAWN_INTERVAL);
+  spawnIntervalId = window.setInterval(spawnLetter, config.spawnInterval);
 
   // Start game loop
   gameLoop();
@@ -191,6 +266,8 @@ function stopGame(): void {
 function gameLoop(): void {
   if (!gameActive) return;
 
+  const config = DIFFICULTY_CONFIG[currentDifficulty];
+
   // Update each falling letter
   for (let i = fallingLetters.length - 1; i >= 0; i--) {
     const letter = fallingLetters[i];
@@ -199,15 +276,16 @@ function gameLoop(): void {
     letter.y += letter.speed;
     updateLetterPosition(letter);
 
-    // Check collision with player
-    if (!letter.collected && letter.y >= PLAYER_Y - COLLISION_THRESHOLD && letter.y <= PLAYER_Y + 30) {
+    // Check collision with player using difficulty-based threshold
+    const playerY = getPlayerY();
+    if (!letter.collected && letter.y >= playerY - config.collisionThreshold && letter.y <= playerY + 30) {
       if (letter.lane === playerLane) {
         collectLetter(letter);
       }
     }
 
     // Remove if off screen
-    if (letter.y > TRACK_HEIGHT + 50) {
+    if (letter.y > getTrackHeight() + 50) {
       removeLetter(letter);
     }
   }
@@ -225,8 +303,10 @@ function spawnLetter(): void {
   if (!expectedLetter) return;
 
   // Don't spawn if there's already a correct letter on screen that hasn't passed halfway
-  const existingCorrect = fallingLetters.find(l => l.isCorrect && !l.collected && l.y < TRACK_HEIGHT / 2);
+  const existingCorrect = fallingLetters.find(l => l.isCorrect && !l.collected && l.y < getTrackHeight() / 2);
   if (existingCorrect) return;
+
+  const config = DIFFICULTY_CONFIG[currentDifficulty];
 
   // Shuffle lanes [0, 1, 2] to randomly assign letters
   const lanes = shuffleArray([0, 1, 2]);
@@ -235,8 +315,8 @@ function spawnLetter(): void {
   const correctLane = lanes[0];
   createFallingLetter(track, expectedLetter, correctLane ?? 1, true);
 
-  // Spawn 1-2 distractors in other lanes
-  const numDistractors = Math.random() < 0.5 ? 1 : 2;
+  // Spawn distractors based on difficulty (random between min and max)
+  const numDistractors = config.minDistractors + Math.floor(Math.random() * (config.maxDistractors - config.minDistractors + 1));
   for (let i = 0; i < numDistractors; i++) {
     const distractorLane = lanes[i + 1];
     if (distractorLane !== undefined) {
@@ -253,12 +333,14 @@ function createFallingLetter(track: HTMLElement, letter: string, lane: number, i
   element.dataset.lane = String(lane);
   track.appendChild(element);
 
+  const config = DIFFICULTY_CONFIG[currentDifficulty];
+
   const fallingLetter: FallingLetter = {
     id: letterIdCounter++,
     letter,
     lane,
     y: -50,
-    speed: BASE_SPEED + Math.random() * 0.3, // Small speed variation
+    speed: config.baseSpeed + Math.random() * 0.3, // Small speed variation
     element,
     isCorrect,
     collected: false,
@@ -295,10 +377,9 @@ function collectLetter(letter: FallingLetter): void {
 
     currentLetterIndex++;
 
-    // Mascot celebrates
+    // Player owl celebrates
     if (currentLetterIndex < currentWord.length) {
-      say('correct');
-      hop();
+      owlHop();
     }
 
     // Check if word is complete
@@ -311,7 +392,7 @@ function collectLetter(letter: FallingLetter): void {
   } else {
     // Wrong letter
     letter.element.classList.add('shake');
-    say('wrong');
+    owlShake();
 
     // Remove after shake animation
     setTimeout(() => removeLetter(letter), 300);
@@ -350,30 +431,17 @@ function wordComplete(): void {
   // Launch confetti
   launchConfetti();
 
-  // Mascot celebrates
-  celebrate();
+  // Player owl celebrates
+  owlCelebrate();
 
-  // Show celebration
+  // Check if more words or all complete
+  const isLastWord = currentWordIndex >= words.length - 1;
+  const buttonText = isLastWord ? 'Play Again' : 'Next Word';
+
+  // Show celebration with Next Word button
   showCelebration(() => {
-    const nextBtn = document.getElementById('next-racing-btn');
-    const raceMessage = document.getElementById('racing-message');
-
-    if (currentWordIndex < words.length - 1) {
-      nextBtn?.classList.remove('hidden');
-      if (raceMessage) {
-        raceMessage.textContent = 'Great job! Ready for the next word?';
-      }
-      say('encouragement');
-    } else {
-      if (raceMessage) {
-        raceMessage.textContent = 'Amazing! You finished all the words!';
-      }
-      if (nextBtn) {
-        nextBtn.textContent = 'Play Again';
-        nextBtn.classList.remove('hidden');
-      }
-    }
-  });
+    nextWord();
+  }, buttonText);
 }
 
 function nextWord(): void {

@@ -1,7 +1,7 @@
 // Parent mode - word management with PIN protection
 
 import * as Storage from './storage';
-import type { WordPresentationMode, VoiceType } from './storage';
+import type { WordPresentationMode, VoiceType, DifficultyLevel } from './storage';
 import { speakWord } from './speech';
 import { playSound } from './sounds';
 
@@ -73,6 +73,22 @@ function setupEventListeners(): void {
   document.getElementById('test-sound-btn')?.addEventListener('click', () => {
     playSound('wordComplete');
   });
+
+  // Difficulty selection radio buttons
+  document.querySelectorAll('input[name="difficulty"]').forEach(radio => {
+    radio.addEventListener('change', (e) => {
+      const target = e.target as HTMLInputElement;
+      Storage.setDifficulty(target.value as DifficultyLevel);
+    });
+  });
+
+  // Reset stars button
+  document.getElementById('reset-stars-btn')?.addEventListener('click', () => {
+    if (confirm('Are you sure you want to reset all collected stars to 0?')) {
+      Storage.resetScore();
+      updateStarCountDisplay();
+    }
+  });
 }
 
 export function showParent(): void {
@@ -119,6 +135,14 @@ function showWordManagement(): void {
   document.getElementById('word-management')?.classList.remove('hidden');
   renderWordList();
   loadWordPresentationSetting();
+  updateStarCountDisplay();
+}
+
+function updateStarCountDisplay(): void {
+  const starCountEl = document.getElementById('star-count');
+  if (starCountEl) {
+    starCountEl.textContent = `Stars collected: ${Storage.getScore()}`;
+  }
 }
 
 function loadWordPresentationSetting(): void {
@@ -137,6 +161,11 @@ function loadWordPresentationSetting(): void {
   const soundsToggle = document.getElementById('sounds-toggle') as HTMLInputElement | null;
   if (soundsToggle) {
     soundsToggle.checked = settings.soundsEnabled;
+  }
+
+  const difficultyRadio = document.querySelector(`input[name="difficulty"][value="${settings.difficulty}"]`) as HTMLInputElement | null;
+  if (difficultyRadio) {
+    difficultyRadio.checked = true;
   }
 }
 

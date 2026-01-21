@@ -1,16 +1,29 @@
 // Letter collection game
 
 import * as Storage from './storage';
+import type { DifficultyLevel } from './storage';
 import { say, celebrate, launchConfetti } from './mascot';
 import { showCelebration } from './app';
 import { speakWord } from './speech';
 import { playSound } from './sounds';
+
+// Difficulty configuration
+const DIFFICULTY_CONFIG: Record<DifficultyLevel, {
+  minDistractors: number;
+  maxDistractors: number;
+  correctClass: string;
+}> = {
+  easy: { minDistractors: 2, maxDistractors: 4, correctClass: 'correct-easy' },
+  medium: { minDistractors: 4, maxDistractors: 8, correctClass: 'correct-medium' },
+  hard: { minDistractors: 6, maxDistractors: 12, correctClass: 'correct-hard' },
+};
 
 let words: string[] = [];
 let currentWordIndex = 0;
 let currentWord = '';
 let currentLetterIndex = 0;
 let score = 0;
+let currentDifficulty: DifficultyLevel = 'medium';
 
 export function initGame(): void {
   document.getElementById('next-word-btn')?.addEventListener('click', () => {
@@ -29,6 +42,7 @@ export function startGame(): void {
   words = shuffleArray([...Storage.getWords()]);
   currentWordIndex = 0;
   score = Storage.getScore();
+  currentDifficulty = Storage.getSettings().difficulty;
   updateScoreDisplay();
 
   // Mascot encouragement
@@ -101,9 +115,11 @@ function renderLetterGrid(): void {
   const container = document.getElementById('letter-grid');
   if (!container) return;
 
-  // Get letters from current word plus some random letters
+  // Get letters from current word plus random distractor letters based on difficulty
   const wordLetters = currentWord.split('');
-  const extraLetters = getRandomLetters(Math.max(8 - wordLetters.length, 4));
+  const config = DIFFICULTY_CONFIG[currentDifficulty];
+  const distractorCount = config.minDistractors + Math.floor(Math.random() * (config.maxDistractors - config.minDistractors + 1));
+  const extraLetters = getRandomLetters(distractorCount);
   const allLetters = shuffleArray([...wordLetters, ...extraLetters]);
 
   container.innerHTML = allLetters.map((letter, index) =>
@@ -125,8 +141,9 @@ function handleLetterClick(button: HTMLElement): void {
   const expectedLetter = currentWord[currentLetterIndex];
 
   if (letter === expectedLetter) {
-    // Correct letter
-    button.classList.add('correct', 'used');
+    // Correct letter - use difficulty-specific feedback class
+    const config = DIFFICULTY_CONFIG[currentDifficulty];
+    button.classList.add(config.correctClass, 'used');
 
     // Fill in the slot
     const slots = document.querySelectorAll('.letter-slot');
@@ -168,30 +185,19 @@ function wordComplete(): void {
   // Mascot celebrates
   celebrate();
 
-  // Show celebration
-  showCelebration(() => {
-    const nextWordBtn = document.getElementById('next-word-btn');
-    const gameMessage = document.getElementById('game-message');
+  // Check if more words or all complete
+  const isLastWord = currentWordIndex >= words.length - 1;
+  const buttonText = isLastWord ? 'Play Again' : 'Next Word';
 
-    // Check if more words
-    if (currentWordIndex < words.length - 1) {
-      nextWordBtn?.classList.remove('hidden');
-      if (gameMessage) {
-        gameMessage.textContent = 'Great job! Ready for the next word?';
-      }
-      say('encouragement');
-    } else {
-      // All words complete - play celebratory fanfare
-      playSound('gameComplete');
-      if (gameMessage) {
-        gameMessage.textContent = 'Amazing! You finished all the words!';
-      }
-      if (nextWordBtn) {
-        nextWordBtn.textContent = 'Play Again';
-        nextWordBtn.classList.remove('hidden');
-      }
-    }
-  });
+  if (isLastWord) {
+    playSound('gameComplete');
+  }
+
+  // Show celebration with Next Word button
+  showCelebration(() => {
+    say('encouragement');
+    nextWord();
+  }, buttonText);
 }
 
 function nextWord(): void {

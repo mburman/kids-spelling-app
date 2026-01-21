@@ -86,7 +86,21 @@
             <div class="lane" data-lane="0"></div>
             <div class="lane" data-lane="1"></div>
             <div class="lane" data-lane="2"></div>
-            <div id="player-owl" class="player-owl" data-lane="1">🦉</div>
+            <div id="player-owl" class="player-owl" data-lane="1">
+                <div class="racing-owl-body">
+                    <div class="racing-owl-face">
+                        <div class="racing-owl-eyes">
+                            <div class="racing-owl-eye left"></div>
+                            <div class="racing-owl-eye right"></div>
+                        </div>
+                        <div class="racing-owl-beak"></div>
+                    </div>
+                    <div class="racing-owl-wings">
+                        <div class="racing-owl-wing left"></div>
+                        <div class="racing-owl-wing right"></div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="racing-controls">
             <button id="move-left" class="control-btn">⬅️</button>
@@ -168,6 +182,21 @@
                 </label>
                 <button id="test-sound-btn" class="test-voice-button">Test Sound</button>
             </div>
+
+            <div class="settings-section">
+                <h3>Difficulty</h3>
+                <div class="radio-group">
+                    <label><input type="radio" name="difficulty" value="easy"> Easy</label>
+                    <label><input type="radio" name="difficulty" value="medium" checked> Medium</label>
+                    <label><input type="radio" name="difficulty" value="hard"> Hard</label>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h3>Progress</h3>
+                <p id="star-count" class="star-count">Stars collected: 0</p>
+                <button id="reset-stars-btn" class="clear-button">Reset Stars</button>
+            </div>
         </div>
     </div>
 
@@ -176,6 +205,7 @@
         <div class="celebration-content">
             <h1 class="rainbow-text">Great Job!</h1>
             <div class="stars bounce-stars">★ ★ ★</div>
+            <button id="celebration-next-btn" class="celebration-next-btn">Next Word</button>
             <div class="sparkles">
                 <div class="sparkle"></div>
                 <div class="sparkle"></div>

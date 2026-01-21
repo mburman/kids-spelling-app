@@ -6,6 +6,9 @@ import { getSettings } from './storage';
 // Singleton AudioContext (created on first user interaction)
 let audioContext: AudioContext | null = null;
 
+// Pre-loaded audio elements for sound files
+let hootAudio: HTMLAudioElement | null = null;
+
 export type SoundName =
   | 'correctLetter'
   | 'wrongLetter'
@@ -18,6 +21,12 @@ export type SoundName =
 export function initSounds(): void {
   if (!audioContext) {
     audioContext = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
+  }
+
+  // Preload owl hoot audio
+  if (!hootAudio) {
+    hootAudio = new Audio('/owl-hoot.mp3');
+    hootAudio.volume = 0.5;
   }
 }
 
@@ -100,9 +109,18 @@ function playGameComplete(): void {
   playTone(1318.51, 0.5, 'triangle', 0.35, 0.5); // E6 (sparkle finish)
 }
 
-// Owl hoot: Single friendly hoot
+// Owl hoot: Actual owl hoot sound
 function playHoot(): void {
-  playTone(320, 0.3, 'sine', 0.35, 0);
+  if (hootAudio) {
+    hootAudio.currentTime = 0;
+    hootAudio.play().catch(() => {
+      // Fallback to synthesized tone if audio fails
+      playTone(320, 0.3, 'sine', 0.35, 0);
+    });
+  } else {
+    // Fallback to synthesized tone
+    playTone(320, 0.3, 'sine', 0.35, 0);
+  }
 }
 
 // Master play function with settings check

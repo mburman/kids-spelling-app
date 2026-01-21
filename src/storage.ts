@@ -10,11 +10,13 @@ const STORAGE_KEYS = {
 
 export type WordPresentationMode = 'both' | 'visual' | 'audio';
 export type VoiceType = 'female-uk' | 'male-uk';
+export type DifficultyLevel = 'easy' | 'medium' | 'hard';
 
 interface AppSettings {
   wordPresentation: WordPresentationMode;
   voice: VoiceType;
   soundsEnabled: boolean;
+  difficulty: DifficultyLevel;
 }
 
 const DEFAULT_PIN = '1234';
@@ -97,6 +99,7 @@ const DEFAULT_SETTINGS: AppSettings = {
   wordPresentation: 'both',
   voice: 'female-uk',
   soundsEnabled: true,
+  difficulty: 'medium',
 };
 
 export function getSettings(): AppSettings {
@@ -126,5 +129,11 @@ export function setVoice(voice: VoiceType): void {
 export function setSoundsEnabled(enabled: boolean): void {
   const settings = getSettings();
   settings.soundsEnabled = enabled;
+  localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(settings));
+}
+
+export function setDifficulty(difficulty: DifficultyLevel): void {
+  const settings = getSettings();
+  settings.difficulty = difficulty;
   localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(settings));
 }

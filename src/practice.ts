@@ -132,26 +132,16 @@ function approveWriting(): void {
   // Mascot celebrates
   celebrate();
 
-  // Show celebration
-  showCelebration(() => {
-    const nextPracticeBtn = document.getElementById('next-practice-btn');
+  // Check if more words or all complete
+  const isLastWord = currentWordIndex >= words.length - 1;
+  const buttonText = isLastWord ? 'Start Over' : 'Next Word';
 
-    // Check if more words
-    if (currentWordIndex < words.length - 1) {
-      document.getElementById('photo-preview')?.classList.add('hidden');
-      nextPracticeBtn?.classList.remove('hidden');
-      if (nextPracticeBtn) {
-        nextPracticeBtn.textContent = 'Next Word';
-      }
-      say('practiceComplete');
-    } else {
-      document.getElementById('photo-preview')?.classList.add('hidden');
-      nextPracticeBtn?.classList.remove('hidden');
-      if (nextPracticeBtn) {
-        nextPracticeBtn.textContent = 'Start Over';
-      }
-    }
-  });
+  // Show celebration with Next Word button
+  showCelebration(() => {
+    document.getElementById('photo-preview')?.classList.add('hidden');
+    say('practiceComplete');
+    nextWord();
+  }, buttonText);
 }
 
 function retryWriting(): void {

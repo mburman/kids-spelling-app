@@ -117,13 +117,13 @@ export function showScreen(screenName: ScreenName): void {
     updateScore();
   }
 
-  // Hide mascot on parent screen
+  // Only show mascot on game screen (letter game)
   const mascot = document.getElementById('mascot');
   if (mascot) {
-    if (screenName === 'parent') {
-      mascot.classList.add('hidden');
-    } else {
+    if (screenName === 'game') {
       mascot.classList.remove('hidden');
+    } else {
+      mascot.classList.add('hidden');
     }
   }
 }
@@ -150,16 +150,21 @@ function updateScore(): void {
   }
 }
 
-export function showCelebration(callback?: () => void): void {
+export function showCelebration(callback?: () => void, buttonText: string = 'Next Word'): void {
   const celebration = document.getElementById('celebration');
-  if (!celebration) return;
+  const nextBtn = document.getElementById('celebration-next-btn');
+  if (!celebration || !nextBtn) return;
 
+  nextBtn.textContent = buttonText;
   celebration.classList.remove('hidden');
 
-  setTimeout(() => {
+  const handleClick = () => {
     celebration.classList.add('hidden');
+    nextBtn.removeEventListener('click', handleClick);
     if (callback) callback();
-  }, 2000);
+  };
+
+  nextBtn.addEventListener('click', handleClick);
 }
 
 export function getCurrentScreen(): ScreenName {

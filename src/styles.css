@@ -16,7 +16,7 @@ body {
 /* Screen management */
 .screen {
     display: none;
-    padding: 20px;
+    padding: 15px;
     min-height: 100vh;
     max-width: 600px;
     margin: 0 auto;
@@ -293,46 +293,46 @@ body {
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .score {
     background: #ffd700;
-    padding: 10px 20px;
+    padding: 8px 16px;
     border-radius: 15px;
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     font-weight: bold;
     color: #333;
 }
 
 .target-word {
-    font-size: 2.5rem;
+    font-size: 2.2rem;
     color: white;
     background: rgba(255,255,255,0.2);
-    padding: 20px 40px;
-    border-radius: 20px;
-    margin: 20px 0;
-    letter-spacing: 8px;
+    padding: 12px 25px;
+    border-radius: 15px;
+    margin: 8px 0;
+    letter-spacing: 6px;
     text-transform: uppercase;
 }
 
 .word-progress {
     display: flex;
-    gap: 10px;
-    margin: 20px 0;
+    gap: 8px;
+    margin: 10px 0;
     flex-wrap: wrap;
     justify-content: center;
 }
 
 .letter-slot {
-    width: 50px;
-    height: 60px;
+    width: 42px;
+    height: 50px;
     background: white;
     border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2rem;
+    font-size: 1.7rem;
     font-weight: bold;
     color: #764ba2;
     box-shadow: 0 4px 10px rgba(0,0,0,0.2);
@@ -346,20 +346,20 @@ body {
 .letter-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 15px;
-    margin: 30px 0;
+    gap: 10px;
+    margin: 15px 0;
     width: 100%;
-    max-width: 350px;
+    max-width: 320px;
 }
 
 .letter-button {
-    width: 70px;
-    height: 70px;
-    font-size: 2rem;
+    width: 60px;
+    height: 60px;
+    font-size: 1.7rem;
     font-family: inherit;
     font-weight: bold;
     border: none;
-    border-radius: 15px;
+    border-radius: 12px;
     background: white;
     color: #333;
     cursor: pointer;
@@ -379,6 +379,24 @@ body {
 .letter-button.correct {
     background: #56ab2f;
     color: white;
+    animation: pop 0.3s ease;
+}
+
+/* Difficulty-specific correct letter feedback */
+.letter-button.correct-easy {
+    background: #56ab2f;
+    color: white;
+    animation: pop 0.3s ease;
+}
+
+.letter-button.correct-medium {
+    background: #b0b0b0;
+    color: white;
+    animation: pop 0.3s ease;
+}
+
+.letter-button.correct-hard {
+    /* No color change, just mark as used */
     animation: pop 0.3s ease;
 }
 
@@ -406,11 +424,11 @@ body {
 }
 
 .game-message {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     color: white;
     text-align: center;
-    min-height: 40px;
-    margin: 10px 0;
+    min-height: 24px;
+    margin: 5px 0;
 }
 
 /* Practice Screen */
@@ -625,6 +643,13 @@ body {
     text-align: center;
 }
 
+.star-count {
+    font-size: 1.2rem;
+    color: #f39c12;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
 .radio-group {
     display: flex;
     flex-direction: column;
@@ -740,12 +765,12 @@ body {
 
 /* Hear Again Button */
 .hear-button {
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     border: none;
     background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     cursor: pointer;
     box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     transition: transform 0.2s, box-shadow 0.2s;
@@ -797,6 +822,31 @@ body {
     font-size: 5rem;
     color: #ffd700;
     animation: starPulse 0.5s ease infinite alternate;
+}
+
+.celebration-next-btn {
+    display: block;
+    margin: 30px auto 0;
+    padding: 20px 50px;
+    font-size: 2rem;
+    font-weight: bold;
+    background: linear-gradient(180deg, #4ade80 0%, #22c55e 100%);
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    box-shadow: 0 6px 0 #16a34a, 0 8px 20px rgba(0,0,0,0.3);
+    animation: celebrationBtnPulse 1s ease infinite;
+}
+
+.celebration-next-btn:active {
+    transform: translateY(4px);
+    box-shadow: 0 2px 0 #16a34a;
+}
+
+@keyframes celebrationBtnPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
 }
 
 @keyframes celebrate {
@@ -1255,8 +1305,8 @@ body {
     position: relative;
     width: 100%;
     max-width: 350px;
-    height: 400px;
-    margin: 1rem auto;
+    height: 300px;
+    margin: 0.5rem auto;
     background: linear-gradient(180deg, #87CEEB 0%, #98FB98 100%);
     border-radius: 1rem;
     overflow: hidden;
@@ -1300,23 +1350,213 @@ body {
 /* Player owl at bottom */
 .player-owl {
     position: absolute;
-    bottom: 30px;
-    font-size: 3.5rem;
+    bottom: 20px;
     transition: left 0.15s ease-out;
     z-index: 10;
     filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
 }
 
 .player-owl[data-lane="0"] {
-    left: calc(16.67% - 1.75rem);
+    left: calc(16.67% - 28px);
 }
 
 .player-owl[data-lane="1"] {
-    left: calc(50% - 1.75rem);
+    left: calc(50% - 28px);
 }
 
 .player-owl[data-lane="2"] {
-    left: calc(83.33% - 1.75rem);
+    left: calc(83.33% - 28px);
+}
+
+/* Racing owl body - smaller version of mascot */
+.racing-owl-body {
+    width: 56px;
+    height: 64px;
+    background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
+    border-radius: 28px 28px 25px 25px;
+    position: relative;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+}
+
+.racing-owl-face {
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 44px;
+    height: 36px;
+}
+
+.racing-owl-eyes {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 4px;
+}
+
+.racing-owl-eye {
+    width: 16px;
+    height: 16px;
+    background: white;
+    border-radius: 50%;
+    position: relative;
+}
+
+.racing-owl-eye::after {
+    content: '';
+    position: absolute;
+    width: 9px;
+    height: 9px;
+    background: #333;
+    border-radius: 50%;
+    top: 3px;
+    left: 3px;
+    transition: transform 0.1s;
+}
+
+.racing-owl-beak {
+    width: 0;
+    height: 0;
+    border-left: 9px solid transparent;
+    border-right: 9px solid transparent;
+    border-top: 12px solid #FFA500;
+    position: absolute;
+    bottom: 2px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.racing-owl-wings {
+    position: absolute;
+    top: 25px;
+    width: 100%;
+}
+
+.racing-owl-wing {
+    width: 14px;
+    height: 25px;
+    background: linear-gradient(135deg, #A0522D 0%, #CD853F 100%);
+    position: absolute;
+    border-radius: 7px;
+    transition: transform 0.3s ease;
+}
+
+.racing-owl-wing.left {
+    left: -5px;
+    transform: rotate(-15deg);
+    transform-origin: top right;
+}
+
+.racing-owl-wing.right {
+    right: -5px;
+    transform: rotate(15deg);
+    transform-origin: top left;
+}
+
+/* Racing owl animations */
+.player-owl.hop {
+    animation: racingOwlHop 0.4s ease;
+}
+
+@keyframes racingOwlHop {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+}
+
+.player-owl.hop .racing-owl-wing.left {
+    animation: racingWingLeft 0.4s ease;
+}
+
+.player-owl.hop .racing-owl-wing.right {
+    animation: racingWingRight 0.4s ease;
+}
+
+@keyframes racingWingLeft {
+    0%, 100% { transform: rotate(-15deg); }
+    50% { transform: rotate(-50deg); }
+}
+
+@keyframes racingWingRight {
+    0%, 100% { transform: rotate(15deg); }
+    50% { transform: rotate(50deg); }
+}
+
+.player-owl.celebrate {
+    animation: racingOwlCelebrate 0.5s ease infinite;
+}
+
+@keyframes racingOwlCelebrate {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    25% { transform: translateY(-12px) rotate(-8deg); }
+    75% { transform: translateY(-12px) rotate(8deg); }
+}
+
+.player-owl.celebrate .racing-owl-wing.left {
+    animation: racingWingLeft 0.3s ease infinite alternate;
+}
+
+.player-owl.celebrate .racing-owl-wing.right {
+    animation: racingWingRight 0.3s ease infinite alternate;
+}
+
+.player-owl.shake {
+    animation: racingOwlShake 0.3s ease;
+}
+
+@keyframes racingOwlShake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+/* Hooting animation when clicked */
+.player-owl.hooting {
+    cursor: pointer;
+}
+
+.player-owl.hooting .racing-owl-body {
+    animation: racingHootBounce 0.6s ease;
+}
+
+.player-owl.hooting .racing-owl-eye {
+    transform: scale(1.4);
+    transition: transform 0.1s ease;
+}
+
+.player-owl.hooting .racing-owl-wing.left {
+    animation: racingHootWingLeft 0.6s ease;
+}
+
+.player-owl.hooting .racing-owl-wing.right {
+    animation: racingHootWingRight 0.6s ease;
+}
+
+@keyframes racingHootBounce {
+    0%, 100% { transform: scale(1); }
+    15% { transform: scale(1.15) translateY(-8px); }
+    30% { transform: scale(0.9) translateY(0); }
+    45% { transform: scale(1.1) rotate(-5deg); }
+    60% { transform: scale(1.1) rotate(5deg); }
+    75% { transform: scale(1.05) rotate(-3deg); }
+    90% { transform: scale(1.02) rotate(0); }
+}
+
+@keyframes racingHootWingLeft {
+    0%, 100% { transform: rotate(-15deg); }
+    25% { transform: rotate(-70deg); }
+    50% { transform: rotate(-30deg); }
+    75% { transform: rotate(-60deg); }
+}
+
+@keyframes racingHootWingRight {
+    0%, 100% { transform: rotate(15deg); }
+    25% { transform: rotate(70deg); }
+    50% { transform: rotate(30deg); }
+    75% { transform: rotate(60deg); }
+}
+
+/* Make owl clickable */
+.player-owl {
+    cursor: pointer;
 }
 
 /* Falling letters */
@@ -1363,19 +1603,19 @@ body {
 .racing-controls {
     display: flex;
     justify-content: center;
-    gap: 3rem;
-    margin-top: 1.5rem;
+    gap: 2.5rem;
+    margin-top: 0.75rem;
 }
 
 .control-btn {
-    font-size: 2.5rem;
-    padding: 1rem 2rem;
+    font-size: 2rem;
+    padding: 0.75rem 1.5rem;
     border-radius: 1rem;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     border: none;
     cursor: pointer;
-    box-shadow: 0 6px 0 #4a3872, 0 8px 15px rgba(0,0,0,0.3);
+    box-shadow: 0 5px 0 #4a3872, 0 6px 12px rgba(0,0,0,0.3);
     transition: transform 0.1s, box-shadow 0.1s;
     -webkit-tap-highlight-color: transparent;
     user-select: none;
@@ -1393,6 +1633,10 @@ body {
 
 /* Responsive adjustments */
 @media (max-width: 400px) {
+    .screen {
+        padding: 10px;
+    }
+
     #home-screen h1 {
         font-size: 2.2rem;
     }
@@ -1428,18 +1672,25 @@ body {
     }
 
     .big-button {
-        padding: 20px 30px;
-        font-size: 1.4rem;
+        padding: 18px 25px;
+        font-size: 1.3rem;
     }
 
     .letter-button {
-        width: 55px;
-        height: 55px;
-        font-size: 1.5rem;
+        width: 52px;
+        height: 52px;
+        font-size: 1.4rem;
     }
 
     .letter-grid {
-        gap: 10px;
+        gap: 8px;
+        max-width: 280px;
+    }
+
+    .letter-slot {
+        width: 36px;
+        height: 44px;
+        font-size: 1.4rem;
     }
 
     .practice-word {
@@ -1450,6 +1701,146 @@ body {
 
     .target-word {
         font-size: 1.8rem;
-        letter-spacing: 5px;
+        padding: 10px 20px;
+        letter-spacing: 4px;
+    }
+
+    .game-header {
+        margin-bottom: 8px;
+    }
+
+    .score {
+        padding: 6px 12px;
+        font-size: 1rem;
+    }
+
+    .racing-track {
+        height: 260px;
+    }
+
+    .racing-controls {
+        margin-top: 0.5rem;
+        gap: 2rem;
+    }
+
+    .control-btn {
+        font-size: 1.7rem;
+        padding: 0.6rem 1.2rem;
+    }
+
+    .hear-button {
+        width: 44px;
+        height: 44px;
+        font-size: 1.3rem;
+    }
+
+    .player-owl {
+        bottom: 15px;
+    }
+
+    .racing-owl-body {
+        width: 48px;
+        height: 54px;
+    }
+
+    .racing-owl-face {
+        top: 6px;
+        width: 38px;
+        height: 30px;
+    }
+
+    .racing-owl-eye {
+        width: 14px;
+        height: 14px;
+    }
+
+    .racing-owl-eye::after {
+        width: 7px;
+        height: 7px;
+    }
+
+    .racing-owl-beak {
+        border-left-width: 7px;
+        border-right-width: 7px;
+        border-top-width: 10px;
+    }
+
+    .racing-owl-wing {
+        width: 12px;
+        height: 20px;
+    }
+
+    .player-owl[data-lane="0"] {
+        left: calc(16.67% - 24px);
+    }
+
+    .player-owl[data-lane="1"] {
+        left: calc(50% - 24px);
+    }
+
+    .player-owl[data-lane="2"] {
+        left: calc(83.33% - 24px);
+    }
+
+    .falling-letter {
+        width: 42px;
+        height: 42px;
+        font-size: 1.5rem;
+    }
+}
+
+/* Extra compact for short screens (landscape or small phones) */
+@media (max-height: 700px) {
+    .screen {
+        padding: 8px 15px;
+    }
+
+    .game-header {
+        margin-bottom: 5px;
+    }
+
+    .target-word {
+        font-size: 1.9rem;
+        padding: 8px 20px;
+        margin: 5px 0;
+    }
+
+    .word-progress {
+        margin: 6px 0;
+    }
+
+    .letter-slot {
+        width: 38px;
+        height: 45px;
+        font-size: 1.5rem;
+    }
+
+    .letter-grid {
+        margin: 10px 0;
+        gap: 8px;
+    }
+
+    .letter-button {
+        width: 55px;
+        height: 55px;
+        font-size: 1.5rem;
+    }
+
+    .game-message {
+        min-height: 20px;
+        margin: 3px 0;
+    }
+
+    .racing-track {
+        height: 240px;
+    }
+
+    .racing-controls {
+        margin-top: 0.4rem;
+    }
+
+    .hear-button {
+        width: 45px;
+        height: 45px;
     }
 }
