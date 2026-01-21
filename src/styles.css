@@ -83,6 +83,115 @@ body {
     max-width: 300px;
 }
 
+/* Home screen button grid */
+.button-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin: 20px 0 15px 0;
+    width: 100%;
+    max-width: 380px;
+}
+
+.game-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 20px 15px;
+    font-family: inherit;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    aspect-ratio: 1;
+}
+
+.game-button .button-icon {
+    font-size: 2.5rem;
+}
+
+.game-button .button-label {
+    font-size: 1rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: white;
+    text-align: center;
+}
+
+.game-button:hover {
+    transform: scale(1.05);
+}
+
+.game-button:active {
+    transform: scale(0.98);
+}
+
+.game-button.green {
+    background: linear-gradient(135deg, #56ab2f 0%, #a8e063 100%);
+    box-shadow: 0 6px 0 #3d7a1f, 0 10px 15px rgba(0,0,0,0.3);
+}
+
+.game-button.green:active {
+    box-shadow: 0 3px 0 #3d7a1f, 0 5px 8px rgba(0,0,0,0.3);
+}
+
+.game-button.purple {
+    background: linear-gradient(135deg, #9b59b6 0%, #e056fd 100%);
+    box-shadow: 0 6px 0 #6c3483, 0 10px 15px rgba(0,0,0,0.3);
+}
+
+.game-button.purple:active {
+    box-shadow: 0 3px 0 #6c3483, 0 5px 8px rgba(0,0,0,0.3);
+}
+
+.practice-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 18px 30px;
+    font-family: inherit;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    width: 100%;
+    max-width: 380px;
+    margin-bottom: 20px;
+}
+
+.practice-button .button-icon {
+    font-size: 1.8rem;
+}
+
+.practice-button .button-label {
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: white;
+}
+
+.practice-button:hover {
+    transform: scale(1.05);
+}
+
+.practice-button:active {
+    transform: scale(0.98);
+}
+
+.practice-button.blue {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    box-shadow: 0 6px 0 #2980b9, 0 10px 15px rgba(0,0,0,0.3);
+}
+
+.practice-button.blue:active {
+    box-shadow: 0 3px 0 #2980b9, 0 5px 8px rgba(0,0,0,0.3);
+}
+
 .big-button {
     padding: 25px 40px;
     font-size: 1.8rem;
@@ -134,19 +243,24 @@ body {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     border: none;
-    background: white;
+    background: rgba(255,255,255,0.25);
     font-size: 0;
     cursor: pointer;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    backdrop-filter: blur(10px);
+    transition: background 0.2s ease;
+}
+
+.settings-button:hover {
+    background: rgba(255,255,255,0.4);
 }
 
 .settings-button::before {
     content: "⚙️";
-    font-size: 1.5rem;
+    font-size: 1.4rem;
 }
 
 .back-button {
@@ -1161,6 +1275,36 @@ body {
 @media (max-width: 400px) {
     #home-screen h1 {
         font-size: 2.2rem;
+    }
+
+    .button-grid {
+        gap: 10px;
+        max-width: 320px;
+    }
+
+    .game-button {
+        padding: 15px 10px;
+    }
+
+    .game-button .button-icon {
+        font-size: 2rem;
+    }
+
+    .game-button .button-label {
+        font-size: 0.85rem;
+    }
+
+    .practice-button {
+        max-width: 320px;
+        padding: 15px 20px;
+    }
+
+    .practice-button .button-icon {
+        font-size: 1.5rem;
+    }
+
+    .practice-button .button-label {
+        font-size: 1rem;
     }
 
     .big-button {

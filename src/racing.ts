@@ -19,8 +19,8 @@ interface FallingLetter {
 // Game constants
 const TRACK_HEIGHT = 400;
 const PLAYER_Y = TRACK_HEIGHT - 70;
-const LETTER_SPAWN_INTERVAL = 1200;
-const BASE_SPEED = 2;
+const LETTER_SPAWN_INTERVAL = 2000; // Slower spawn rate for children
+const BASE_SPEED = 0.8; // Much slower for children
 const COLLISION_THRESHOLD = 50;
 
 // Game state
@@ -210,18 +210,32 @@ function spawnLetter(): void {
   const track = document.getElementById('racing-track');
   if (!track) return;
 
-  // Decide what letter to spawn
   const expectedLetter = currentWord[currentLetterIndex];
   if (!expectedLetter) return;
 
-  // 60% chance to spawn the correct letter, 40% chance for a distractor
-  const isCorrect = Math.random() < 0.6;
-  const letter = isCorrect ? expectedLetter : getRandomDistractor(expectedLetter);
+  // Don't spawn if there's already a correct letter on screen that hasn't passed halfway
+  const existingCorrect = fallingLetters.find(l => l.isCorrect && !l.collected && l.y < TRACK_HEIGHT / 2);
+  if (existingCorrect) return;
 
-  // Random lane
-  const lane = Math.floor(Math.random() * 3);
+  // Shuffle lanes [0, 1, 2] to randomly assign letters
+  const lanes = shuffleArray([0, 1, 2]);
 
-  // Create the element
+  // Always spawn the correct letter in one lane
+  const correctLane = lanes[0];
+  createFallingLetter(track, expectedLetter, correctLane ?? 1, true);
+
+  // Spawn 1-2 distractors in other lanes
+  const numDistractors = Math.random() < 0.5 ? 1 : 2;
+  for (let i = 0; i < numDistractors; i++) {
+    const distractorLane = lanes[i + 1];
+    if (distractorLane !== undefined) {
+      const distractorLetter = getRandomDistractor(expectedLetter);
+      createFallingLetter(track, distractorLetter, distractorLane, false);
+    }
+  }
+}
+
+function createFallingLetter(track: HTMLElement, letter: string, lane: number, isCorrect: boolean): void {
   const element = document.createElement('div');
   element.className = `falling-letter ${isCorrect ? 'correct-letter' : 'wrong-letter'}`;
   element.textContent = letter;
@@ -233,7 +247,7 @@ function spawnLetter(): void {
     letter,
     lane,
     y: -50,
-    speed: BASE_SPEED + Math.random() * 1,
+    speed: BASE_SPEED + Math.random() * 0.3, // Small speed variation
     element,
     isCorrect,
     collected: false,
