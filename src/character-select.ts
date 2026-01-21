@@ -3,6 +3,7 @@
 import { getCharacter, setCharacter, type CharacterType } from './storage';
 import { playSound } from './sounds';
 import { switchCharacter } from './mascot';
+import { showScreen } from './app';
 
 let selectedCharacter: CharacterType;
 let characterCards: NodeListOf<Element>;
@@ -73,11 +74,12 @@ function confirmSelection(): void {
   // Play celebration sound
   playSound('wordComplete');
 
-  // Add celebration animation
+  // Add celebration animation and go back to home
   selectButton?.classList.add('celebrate-btn');
   setTimeout(() => {
     selectButton?.classList.remove('celebrate-btn');
-  }, 500);
+    showScreen('home');
+  }, 400);
 }
 
 export function updateCharacterButtonIcon(character: CharacterType): void {
