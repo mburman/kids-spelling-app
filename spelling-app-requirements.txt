@@ -1,0 +1,7 @@
+
+"I want to create an app which is going to help my child with spellings. I’ve got a child who loves playing on touchscreens and things like that, obviously in a more controlled manner, but does not enjoy picking up a pen and pencil, which is quite a common issue, especially for boys.
+
+There needs to be a game element where he practices the words and spelling of the words, which I would input each week from the school syllabus that they’ve given us—so maybe five or six different words. There will be games—I’m thinking a bit like Mario Kart where you go left or right to collect the coins, in the same way you would go left or right to collect the right letters to spell the word. Maybe you collect the letters and then afterwards you spell them out on the app.
+
+There needs to be a paper element as well, though, to encourage my son to pick up a pen and paper and actually write out the word. So maybe you then take a picture and it marks it to be able to move on to the next letter, the next lesson, the next word, or something like that. It needs to be easy to use for four, five, and six-year-olds. It needs to be easy for parents to change the words each week or each day to make sure that the correct spellings are being covered. And I think that’s it."
+

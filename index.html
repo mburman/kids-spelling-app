@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Spelling Fun!</title>
+</head>
+<body>
+    <!-- Mascot -->
+    <div id="mascot" class="mascot">
+        <div class="mascot-body">
+            <div class="mascot-face">
+                <div class="mascot-eyes">
+                    <div class="mascot-eye left"></div>
+                    <div class="mascot-eye right"></div>
+                </div>
+                <div class="mascot-beak"></div>
+                <div class="mascot-cheeks">
+                    <div class="mascot-cheek left"></div>
+                    <div class="mascot-cheek right"></div>
+                </div>
+            </div>
+            <div class="mascot-wings">
+                <div class="mascot-wing left"></div>
+                <div class="mascot-wing right"></div>
+            </div>
+        </div>
+        <div id="mascot-speech" class="mascot-speech">Hi! Let's learn to spell!</div>
+    </div>
+
+    <!-- Confetti Container -->
+    <div id="confetti-container" class="confetti-container"></div>
+
+    <!-- Home Screen -->
+    <div id="home-screen" class="screen active">
+        <h1 class="bounce-in">Spelling Fun!</h1>
+        <div class="word-preview wiggle-hover">
+            <h3>This Week's Words:</h3>
+            <div id="word-list-preview"></div>
+        </div>
+        <div class="button-container">
+            <button id="play-btn" class="big-button green wiggle">Play Game</button>
+            <button id="practice-btn" class="big-button blue wiggle">Practice Writing</button>
+        </div>
+        <button id="settings-btn" class="settings-button">Settings</button>
+    </div>
+
+    <!-- Game Screen -->
+    <div id="game-screen" class="screen">
+        <div class="game-header">
+            <button id="game-home-btn" class="back-button">Home</button>
+            <div id="game-score" class="score">Stars: 0</div>
+        </div>
+        <div id="target-word" class="target-word"></div>
+        <div id="word-progress" class="word-progress"></div>
+        <div id="letter-grid" class="letter-grid"></div>
+        <div id="game-message" class="game-message"></div>
+        <button id="next-word-btn" class="big-button green hidden">Next Word</button>
+    </div>
+
+    <!-- Practice Screen -->
+    <div id="practice-screen" class="screen">
+        <div class="practice-header">
+            <button id="practice-home-btn" class="back-button">Home</button>
+        </div>
+        <h2>Write this word:</h2>
+        <div id="practice-word" class="practice-word"></div>
+        <p class="instruction">Write it on paper, then take a photo!</p>
+        <button id="camera-btn" class="big-button blue">I Wrote It! Take Photo</button>
+        <div id="photo-preview" class="photo-preview hidden">
+            <img id="captured-photo" src="" alt="Your writing">
+            <p>Ask a parent to check your writing!</p>
+            <div class="verify-buttons">
+                <button id="approve-btn" class="big-button green">Correct!</button>
+                <button id="retry-btn" class="big-button orange">Try Again</button>
+            </div>
+        </div>
+        <button id="next-practice-btn" class="big-button green hidden">Next Word</button>
+        <input type="file" id="camera-input" accept="image/*" capture="environment" class="hidden">
+    </div>
+
+    <!-- Parent Screen -->
+    <div id="parent-screen" class="screen">
+        <div class="parent-header">
+            <button id="parent-home-btn" class="back-button">Home</button>
+            <h2>Parent Settings</h2>
+        </div>
+        <div id="pin-entry" class="pin-entry">
+            <p>Enter PIN to access settings:</p>
+            <input type="password" id="pin-input" maxlength="4" pattern="[0-9]*" inputmode="numeric">
+            <button id="pin-submit" class="big-button blue">Enter</button>
+            <p id="pin-error" class="error hidden">Wrong PIN. Try again.</p>
+        </div>
+        <div id="word-management" class="word-management hidden">
+            <h3>Spelling Words</h3>
+            <div id="word-list" class="word-list"></div>
+            <div class="add-word">
+                <input type="text" id="new-word-input" placeholder="Add a new word...">
+                <button id="add-word-btn" class="add-button">Add</button>
+            </div>
+            <button id="clear-all-btn" class="clear-button">Clear All Words</button>
+        </div>
+    </div>
+
+    <!-- Celebration Overlay -->
+    <div id="celebration" class="celebration hidden">
+        <div class="celebration-content">
+            <h1 class="rainbow-text">Great Job!</h1>
+            <div class="stars bounce-stars">★ ★ ★</div>
+            <div class="sparkles">
+                <div class="sparkle"></div>
+                <div class="sparkle"></div>
+                <div class="sparkle"></div>
+                <div class="sparkle"></div>
+                <div class="sparkle"></div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="/src/main.ts"></script>
+</body>
+</html>
