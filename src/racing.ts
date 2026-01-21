@@ -106,15 +106,6 @@ function owlHoot(): void {
 }
 
 export function initRacing(): void {
-  // Control buttons
-  document.getElementById('move-left')?.addEventListener('click', () => {
-    movePlayer(-1);
-  });
-
-  document.getElementById('move-right')?.addEventListener('click', () => {
-    movePlayer(1);
-  });
-
   // Click on owl to make it hoot
   document.getElementById('player-owl')?.addEventListener('click', (e) => {
     e.stopPropagation(); // Don't trigger lane click
@@ -132,6 +123,8 @@ export function initRacing(): void {
         updatePlayerPosition();
         playSound('laneChange');
       }
+      // Hide tap icons after first lane tap
+      document.getElementById('racing-track')?.classList.add('tapped');
     });
   });
 
@@ -161,6 +154,9 @@ export function startRacing(): void {
   score = Storage.getScore();
   currentDifficulty = Storage.getSettings().difficulty;
   updateScoreDisplay();
+
+  // Show tap icons only on first run of racing mode
+  document.getElementById('racing-track')?.classList.remove('tapped');
 
   if (words.length > 0 && words[0]) {
     loadWord(words[0]);

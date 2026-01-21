@@ -1321,7 +1321,7 @@ body {
     position: relative;
     width: 100%;
     max-width: 350px;
-    height: 300px;
+    height: 400px;
     margin: 0.5rem auto;
     background: linear-gradient(180deg, #87CEEB 0%, #98FB98 100%);
     border-radius: 1rem;
@@ -1361,6 +1361,29 @@ body {
 @keyframes roadMove {
     0% { top: -20px; }
     100% { top: 100%; }
+}
+
+/* Tap icons to show lanes are tappable */
+.lane::after {
+    content: '👆';
+    position: absolute;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.8rem;
+    animation: tapBounce 1s ease-in-out infinite;
+    opacity: 0.6;
+    filter: grayscale(1) brightness(2);
+}
+
+@keyframes tapBounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(-8px); }
+}
+
+/* Hide tap icons after first tap */
+.racing-track.tapped .lane::after {
+    display: none;
 }
 
 /* Player owl at bottom */
@@ -1691,38 +1714,6 @@ body {
         transform: translateX(-50%) rotate(0deg) scale(0.8);
         opacity: 0;
     }
-}
-
-/* Racing controls */
-.racing-controls {
-    display: flex;
-    justify-content: center;
-    gap: 2.5rem;
-    margin-top: 0.75rem;
-}
-
-.control-btn {
-    font-size: 2rem;
-    padding: 0.75rem 1.5rem;
-    border-radius: 1rem;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    border: none;
-    cursor: pointer;
-    box-shadow: 0 5px 0 #4a3872, 0 6px 12px rgba(0,0,0,0.3);
-    transition: transform 0.1s, box-shadow 0.1s;
-    -webkit-tap-highlight-color: transparent;
-    user-select: none;
-}
-
-.control-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 0 #4a3872, 0 10px 20px rgba(0,0,0,0.3);
-}
-
-.control-btn:active {
-    transform: translateY(4px);
-    box-shadow: 0 2px 0 #4a3872, 0 4px 10px rgba(0,0,0,0.3);
 }
 
 /* Responsive adjustments */
