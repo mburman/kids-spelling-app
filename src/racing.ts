@@ -70,7 +70,7 @@ function owlHop(): void {
   setTimeout(() => {
     owl?.classList.remove('hop');
     isOwlAnimating = false;
-  }, 400);
+  }, 450);
 }
 
 function owlShake(): void {
@@ -80,7 +80,7 @@ function owlShake(): void {
   playSound('wrongLetter');
   setTimeout(() => {
     owl?.classList.remove('shake');
-  }, 300);
+  }, 400);
 }
 
 function owlCelebrate(): void {
@@ -127,8 +127,11 @@ export function initRacing(): void {
       if (!gameActive) return;
       const laneEl = e.currentTarget as HTMLElement;
       const laneNum = parseInt(laneEl.dataset.lane ?? '1', 10);
-      playerLane = laneNum;
-      updatePlayerPosition();
+      if (laneNum !== playerLane) {
+        playerLane = laneNum;
+        updatePlayerPosition();
+        playSound('laneChange');
+      }
     });
   });
 
@@ -240,6 +243,9 @@ function renderWordProgress(): void {
 function startGame(): void {
   gameActive = true;
 
+  // Play start sound
+  playSound('gameStart');
+
   // Start spawning letters with difficulty-based interval
   const config = DIFFICULTY_CONFIG[currentDifficulty];
   spawnLetter();
@@ -286,6 +292,10 @@ function gameLoop(): void {
 
     // Remove if off screen
     if (letter.y > getTrackHeight() + 50) {
+      // Play missed sound if this was the correct letter
+      if (letter.isCorrect && !letter.collected) {
+        playSound('letterMissed');
+      }
       removeLetter(letter);
     }
   }
@@ -314,6 +324,7 @@ function spawnLetter(): void {
   // Always spawn the correct letter in one lane
   const correctLane = lanes[0];
   createFallingLetter(track, expectedLetter, correctLane ?? 1, true);
+  playSound('letterSpawn');
 
   // Spawn distractors based on difficulty (random between min and max)
   const numDistractors = config.minDistractors + Math.floor(Math.random() * (config.maxDistractors - config.minDistractors + 1));
@@ -332,6 +343,17 @@ function createFallingLetter(track: HTMLElement, letter: string, lane: number, i
   element.textContent = letter;
   element.dataset.lane = String(lane);
   track.appendChild(element);
+
+  // Tap on letter to move owl to that lane
+  element.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (!gameActive) return;
+    if (lane !== playerLane) {
+      playerLane = lane;
+      updatePlayerPosition();
+      playSound('laneChange');
+    }
+  });
 
   const config = DIFFICULTY_CONFIG[currentDifficulty];
 
@@ -387,15 +409,15 @@ function collectLetter(letter: FallingLetter): void {
       wordComplete();
     }
 
-    // Remove the letter
-    setTimeout(() => removeLetter(letter), 200);
+    // Remove the letter after animation completes
+    setTimeout(() => removeLetter(letter), 400);
   } else {
     // Wrong letter
     letter.element.classList.add('shake');
     owlShake();
 
-    // Remove after shake animation
-    setTimeout(() => removeLetter(letter), 300);
+    // Remove after wobble animation completes
+    setTimeout(() => removeLetter(letter), 400);
   }
 }
 
@@ -411,6 +433,7 @@ function movePlayer(direction: number): void {
   if (newLane >= 0 && newLane <= 2) {
     playerLane = newLane;
     updatePlayerPosition();
+    playSound('laneChange');
   }
 }
 

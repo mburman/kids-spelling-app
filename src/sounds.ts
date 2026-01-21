@@ -15,7 +15,11 @@ export type SoundName =
   | 'wordComplete'
   | 'gameComplete'
   | 'practiceApproved'
-  | 'hoot';
+  | 'hoot'
+  | 'laneChange'
+  | 'letterSpawn'
+  | 'gameStart'
+  | 'letterMissed';
 
 // Initialize audio context (must be called after user gesture)
 export function initSounds(): void {
@@ -123,6 +127,44 @@ function playHoot(): void {
   }
 }
 
+// Lane change: Soft tick sound
+function playLaneChange(): void {
+  playTone(600, 0.04, 'sine', 0.08, 0);  // Very short, quiet tick
+}
+
+// Letter spawn: Soft pop sound
+function playLetterSpawn(): void {
+  playTone(880, 0.08, 'sine', 0.12, 0);  // Quick high note
+}
+
+// Game start: Ready-set-go style ascending tones
+function playGameStart(): void {
+  playTone(392, 0.2, 'sine', 0.2, 0);      // G4
+  playTone(392, 0.2, 'sine', 0.2, 0.3);    // G4
+  playTone(523.25, 0.4, 'triangle', 0.3, 0.6); // C5 (go!)
+}
+
+// Letter missed: Gentle "oops" sound (not harsh)
+function playLetterMissed(): void {
+  if (!audioContext) return;
+
+  const oscillator = audioContext.createOscillator();
+  const gainNode = audioContext.createGain();
+
+  oscillator.type = 'sine';
+  oscillator.frequency.setValueAtTime(440, audioContext.currentTime);
+  oscillator.frequency.linearRampToValueAtTime(330, audioContext.currentTime + 0.15);
+
+  gainNode.gain.setValueAtTime(0.12, audioContext.currentTime);
+  gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.2);
+
+  oscillator.connect(gainNode);
+  gainNode.connect(audioContext.destination);
+
+  oscillator.start();
+  oscillator.stop(audioContext.currentTime + 0.2);
+}
+
 // Master play function with settings check
 export function playSound(name: SoundName): void {
   if (!isSoundEnabled()) return;
@@ -153,6 +195,18 @@ export function playSound(name: SoundName): void {
       break;
     case 'hoot':
       playHoot();
+      break;
+    case 'laneChange':
+      playLaneChange();
+      break;
+    case 'letterSpawn':
+      playLetterSpawn();
+      break;
+    case 'gameStart':
+      playGameStart();
+      break;
+    case 'letterMissed':
+      playLetterMissed();
       break;
   }
 }
