@@ -1,5 +1,7 @@
 // Ollie the Owl - Friendly mascot for the spelling app
 
+import { playSound } from './sounds';
+
 type MessageCategory =
   | 'welcome'
   | 'encouragement'
@@ -81,6 +83,13 @@ export function say(category: MessageCategory, customMessage?: string): void {
   speechBubble.textContent = message;
   speechBubble.classList.add('pop-in');
 
+  // Play corresponding sound effect
+  if (category === 'correct') {
+    playSound('correctLetter');
+  } else if (category === 'wrong') {
+    playSound('wrongLetter');
+  }
+
   // Animate mascot when speaking
   hop();
 
@@ -102,6 +111,7 @@ export function hop(): void {
 export function celebrate(): void {
   if (!mascotElement) return;
   mascotElement.classList.add('celebrate');
+  playSound('wordComplete');
   say('wordComplete');
   setTimeout(() => {
     mascotElement?.classList.remove('celebrate');

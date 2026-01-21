@@ -14,6 +14,7 @@ export type VoiceType = 'female-uk' | 'male-uk';
 interface AppSettings {
   wordPresentation: WordPresentationMode;
   voice: VoiceType;
+  soundsEnabled: boolean;
 }
 
 const DEFAULT_PIN = '1234';
@@ -95,6 +96,7 @@ export function resetScore(): void {
 const DEFAULT_SETTINGS: AppSettings = {
   wordPresentation: 'both',
   voice: 'female-uk',
+  soundsEnabled: true,
 };
 
 export function getSettings(): AppSettings {
@@ -118,5 +120,11 @@ export function setWordPresentation(mode: WordPresentationMode): void {
 export function setVoice(voice: VoiceType): void {
   const settings = getSettings();
   settings.voice = voice;
+  localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(settings));
+}
+
+export function setSoundsEnabled(enabled: boolean): void {
+  const settings = getSettings();
+  settings.soundsEnabled = enabled;
   localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(settings));
 }

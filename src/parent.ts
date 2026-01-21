@@ -3,6 +3,7 @@
 import * as Storage from './storage';
 import type { WordPresentationMode, VoiceType } from './storage';
 import { speakWord } from './speech';
+import { playSound } from './sounds';
 
 let isAuthenticated = false;
 
@@ -60,6 +61,17 @@ function setupEventListeners(): void {
   // Test voice button
   document.getElementById('test-voice-btn')?.addEventListener('click', () => {
     speakWord('Hello, I will help you spell!');
+  });
+
+  // Sound effects toggle
+  document.getElementById('sounds-toggle')?.addEventListener('change', (e) => {
+    const target = e.target as HTMLInputElement;
+    Storage.setSoundsEnabled(target.checked);
+  });
+
+  // Test sound button
+  document.getElementById('test-sound-btn')?.addEventListener('click', () => {
+    playSound('wordComplete');
   });
 }
 
@@ -120,6 +132,11 @@ function loadWordPresentationSetting(): void {
   const voiceRadio = document.querySelector(`input[name="voice"][value="${settings.voice}"]`) as HTMLInputElement | null;
   if (voiceRadio) {
     voiceRadio.checked = true;
+  }
+
+  const soundsToggle = document.getElementById('sounds-toggle') as HTMLInputElement | null;
+  if (soundsToggle) {
+    soundsToggle.checked = settings.soundsEnabled;
   }
 }
 

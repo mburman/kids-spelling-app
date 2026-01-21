@@ -4,6 +4,7 @@ import * as Storage from './storage';
 import { say, celebrate, launchConfetti } from './mascot';
 import { showCelebration } from './app';
 import { speakWord } from './speech';
+import { playSound } from './sounds';
 
 let words: string[] = [];
 let currentWordIndex = 0;
@@ -180,6 +181,8 @@ function wordComplete(): void {
       }
       say('encouragement');
     } else {
+      // All words complete - play celebratory fanfare
+      playSound('gameComplete');
       if (gameMessage) {
         gameMessage.textContent = 'Amazing! You finished all the words!';
       }

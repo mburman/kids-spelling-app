@@ -5,14 +5,17 @@ import { initMascot } from './mascot';
 import { initParent, showParent, hideParent } from './parent';
 import { initGame, startGame } from './game';
 import { initPractice, startPractice } from './practice';
+import { initRacing, startRacing, stopRacing } from './racing';
+import { initSounds } from './sounds';
 
-type ScreenName = 'home' | 'game' | 'practice' | 'parent';
+type ScreenName = 'home' | 'game' | 'practice' | 'parent' | 'racing';
 
 const screens: Record<ScreenName, HTMLElement | null> = {
   home: null,
   game: null,
   practice: null,
   parent: null,
+  racing: null,
 };
 
 let currentScreen: ScreenName = 'home';
@@ -22,6 +25,7 @@ export function initApp(): void {
   screens.game = document.getElementById('game-screen');
   screens.practice = document.getElementById('practice-screen');
   screens.parent = document.getElementById('parent-screen');
+  screens.racing = document.getElementById('racing-screen');
 
   setupNavigation();
   updateWordPreview();
@@ -32,6 +36,12 @@ export function initApp(): void {
   initParent();
   initGame();
   initPractice();
+  initRacing();
+
+  // Initialize sound system on first click (required for AudioContext)
+  document.addEventListener('click', () => {
+    initSounds();
+  }, { once: true });
 }
 
 function setupNavigation(): void {
@@ -54,6 +64,15 @@ function setupNavigation(): void {
     startPractice();
   });
 
+  document.getElementById('racing-btn')?.addEventListener('click', () => {
+    if (Storage.getWords().length === 0) {
+      alert('No words to practice! Ask a parent to add some words first.');
+      return;
+    }
+    showScreen('racing');
+    startRacing();
+  });
+
   document.getElementById('settings-btn')?.addEventListener('click', () => {
     showScreen('parent');
     showParent();
@@ -65,6 +84,11 @@ function setupNavigation(): void {
   });
 
   document.getElementById('practice-home-btn')?.addEventListener('click', () => {
+    showScreen('home');
+  });
+
+  document.getElementById('racing-home-btn')?.addEventListener('click', () => {
+    stopRacing();
     showScreen('home');
   });
 

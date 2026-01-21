@@ -39,7 +39,8 @@
             <div id="word-list-preview"></div>
         </div>
         <div class="button-container">
-            <button id="play-btn" class="big-button green wiggle">Play Game</button>
+            <button id="play-btn" class="big-button green wiggle">Letter Game</button>
+            <button id="racing-btn" class="big-button purple wiggle">Letter Racing</button>
             <button id="practice-btn" class="big-button blue wiggle">Practice Writing</button>
         </div>
         <button id="settings-btn" class="settings-button">Settings</button>
@@ -59,6 +60,31 @@
         <div id="letter-grid" class="letter-grid"></div>
         <div id="game-message" class="game-message"></div>
         <button id="next-word-btn" class="big-button green hidden">Next Word</button>
+    </div>
+
+    <!-- Racing Screen -->
+    <div id="racing-screen" class="screen">
+        <div class="game-header">
+            <button id="racing-home-btn" class="back-button">Home</button>
+            <div id="racing-score" class="score">Stars: 0</div>
+        </div>
+        <div class="word-display-row">
+            <div id="racing-word" class="target-word"></div>
+            <button id="hear-racing-btn" class="hear-button hidden" title="Hear word again">🔊</button>
+        </div>
+        <div id="racing-progress" class="word-progress"></div>
+        <div id="racing-track" class="racing-track">
+            <div class="lane" data-lane="0"></div>
+            <div class="lane" data-lane="1"></div>
+            <div class="lane" data-lane="2"></div>
+            <div id="player-owl" class="player-owl" data-lane="1">🦉</div>
+        </div>
+        <div class="racing-controls">
+            <button id="move-left" class="control-btn">⬅️</button>
+            <button id="move-right" class="control-btn">➡️</button>
+        </div>
+        <div id="racing-message" class="game-message"></div>
+        <button id="next-racing-btn" class="big-button green hidden">Next Word</button>
     </div>
 
     <!-- Practice Screen -->
@@ -122,6 +148,14 @@
                     <label><input type="radio" name="voice" value="male-uk"> Male (British)</label>
                 </div>
                 <button id="test-voice-btn" class="test-voice-button">Test Voice</button>
+            </div>
+
+            <div class="settings-section">
+                <h3>Sound Effects</h3>
+                <div class="radio-group">
+                    <label><input type="checkbox" id="sounds-toggle" checked> Enable sound effects</label>
+                </div>
+                <button id="test-sound-btn" class="test-voice-button">Test Sound</button>
             </div>
         </div>
     </div>
