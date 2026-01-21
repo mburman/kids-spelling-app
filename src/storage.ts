@@ -5,7 +5,16 @@ const STORAGE_KEYS = {
   WORDS: 'spelling_app_words',
   PIN: 'spelling_app_pin',
   SCORE: 'spelling_app_score',
+  SETTINGS: 'spelling_app_settings',
 } as const;
+
+export type WordPresentationMode = 'both' | 'visual' | 'audio';
+export type VoiceType = 'female-uk' | 'male-uk';
+
+interface AppSettings {
+  wordPresentation: WordPresentationMode;
+  voice: VoiceType;
+}
 
 const DEFAULT_PIN = '1234';
 
@@ -80,4 +89,34 @@ export function addScore(points: number): number {
 
 export function resetScore(): void {
   localStorage.setItem(STORAGE_KEYS.SCORE, '0');
+}
+
+// Settings management
+const DEFAULT_SETTINGS: AppSettings = {
+  wordPresentation: 'both',
+  voice: 'female-uk',
+};
+
+export function getSettings(): AppSettings {
+  const stored = localStorage.getItem(STORAGE_KEYS.SETTINGS);
+  if (stored) {
+    try {
+      return { ...DEFAULT_SETTINGS, ...JSON.parse(stored) };
+    } catch {
+      return DEFAULT_SETTINGS;
+    }
+  }
+  return DEFAULT_SETTINGS;
+}
+
+export function setWordPresentation(mode: WordPresentationMode): void {
+  const settings = getSettings();
+  settings.wordPresentation = mode;
+  localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(settings));
+}
+
+export function setVoice(voice: VoiceType): void {
+  const settings = getSettings();
+  settings.voice = voice;
+  localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(settings));
 }

@@ -1,6 +1,8 @@
 // Parent mode - word management with PIN protection
 
 import * as Storage from './storage';
+import type { WordPresentationMode, VoiceType } from './storage';
+import { speakWord } from './speech';
 
 let isAuthenticated = false;
 
@@ -37,6 +39,27 @@ function setupEventListeners(): void {
       Storage.clearAllWords();
       renderWordList();
     }
+  });
+
+  // Word presentation mode radio buttons
+  document.querySelectorAll('input[name="word-mode"]').forEach(radio => {
+    radio.addEventListener('change', (e) => {
+      const target = e.target as HTMLInputElement;
+      Storage.setWordPresentation(target.value as WordPresentationMode);
+    });
+  });
+
+  // Voice selection radio buttons
+  document.querySelectorAll('input[name="voice"]').forEach(radio => {
+    radio.addEventListener('change', (e) => {
+      const target = e.target as HTMLInputElement;
+      Storage.setVoice(target.value as VoiceType);
+    });
+  });
+
+  // Test voice button
+  document.getElementById('test-voice-btn')?.addEventListener('click', () => {
+    speakWord('Hello, I will help you spell!');
   });
 }
 
@@ -83,6 +106,21 @@ function showWordManagement(): void {
   document.getElementById('pin-entry')?.classList.add('hidden');
   document.getElementById('word-management')?.classList.remove('hidden');
   renderWordList();
+  loadWordPresentationSetting();
+}
+
+function loadWordPresentationSetting(): void {
+  const settings = Storage.getSettings();
+
+  const modeRadio = document.querySelector(`input[name="word-mode"][value="${settings.wordPresentation}"]`) as HTMLInputElement | null;
+  if (modeRadio) {
+    modeRadio.checked = true;
+  }
+
+  const voiceRadio = document.querySelector(`input[name="voice"][value="${settings.voice}"]`) as HTMLInputElement | null;
+  if (voiceRadio) {
+    voiceRadio.checked = true;
+  }
 }
 
 function renderWordList(): void {

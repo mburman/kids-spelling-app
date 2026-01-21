@@ -475,6 +475,106 @@ body {
     cursor: pointer;
 }
 
+/* Settings Section */
+.settings-section {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 2px solid #eee;
+}
+
+.settings-section h3 {
+    color: #764ba2;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.radio-group label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.1rem;
+    color: #333;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 10px;
+    transition: background 0.2s;
+}
+
+.radio-group label:hover {
+    background: #f5f5f5;
+}
+
+.radio-group input[type="radio"] {
+    width: 20px;
+    height: 20px;
+    accent-color: #764ba2;
+}
+
+.test-voice-button {
+    margin-top: 15px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-family: inherit;
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: transform 0.2s;
+}
+
+.test-voice-button:hover {
+    transform: scale(1.05);
+}
+
+.test-voice-button:active {
+    transform: scale(0.98);
+}
+
+/* Word Display Row */
+.word-display-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+/* Hear Again Button */
+.hear-button {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: none;
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    font-size: 1.8rem;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    transition: transform 0.2s, box-shadow 0.2s;
+    flex-shrink: 0;
+}
+
+.hear-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+}
+
+.hear-button:active {
+    transform: scale(0.95);
+}
+
+/* Audio Only Mode */
+.audio-only {
+    color: rgba(255,255,255,0.6);
+    letter-spacing: 15px;
+}
+
 /* Celebration Overlay */
 .celebration {
     position: fixed;

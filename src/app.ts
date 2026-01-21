@@ -92,6 +92,16 @@ export function showScreen(screenName: ScreenName): void {
     updateWordPreview();
     updateScore();
   }
+
+  // Hide mascot on parent screen
+  const mascot = document.getElementById('mascot');
+  if (mascot) {
+    if (screenName === 'parent') {
+      mascot.classList.add('hidden');
+    } else {
+      mascot.classList.remove('hidden');
+    }
+  }
 }
 
 export function updateWordPreview(): void {

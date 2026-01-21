@@ -3,9 +3,12 @@
 import * as Storage from './storage';
 import { say, celebrate, launchConfetti } from './mascot';
 import { showCelebration } from './app';
+import { speakWord } from './speech';
 
 let words: string[] = [];
 let currentWordIndex = 0;
+
+let currentWord = '';
 
 export function initPractice(): void {
   // Camera button
@@ -32,6 +35,13 @@ export function initPractice(): void {
   document.getElementById('next-practice-btn')?.addEventListener('click', () => {
     nextWord();
   });
+
+  // Hear word again button
+  document.getElementById('hear-practice-btn')?.addEventListener('click', () => {
+    if (currentWord) {
+      speakWord(currentWord);
+    }
+  });
 }
 
 export function startPractice(): void {
@@ -52,9 +62,37 @@ export function startPractice(): void {
 }
 
 function loadWord(word: string): void {
+  currentWord = word.toLowerCase();
+
+  const settings = Storage.getSettings();
+  const mode = settings.wordPresentation;
+
+  // Display word based on settings
   const practiceWordEl = document.getElementById('practice-word');
   if (practiceWordEl) {
-    practiceWordEl.textContent = word;
+    if (mode === 'visual' || mode === 'both') {
+      practiceWordEl.textContent = word;
+      practiceWordEl.classList.remove('audio-only');
+    } else {
+      // Audio only - show placeholder
+      practiceWordEl.textContent = '?'.repeat(word.length);
+      practiceWordEl.classList.add('audio-only');
+    }
+  }
+
+  // Speak word based on settings
+  if (mode === 'audio' || mode === 'both') {
+    speakWord(word);
+  }
+
+  // Show/hide hear button based on settings
+  const hearBtn = document.getElementById('hear-practice-btn');
+  if (hearBtn) {
+    if (mode === 'audio' || mode === 'both') {
+      hearBtn.classList.remove('hidden');
+    } else {
+      hearBtn.classList.add('hidden');
+    }
   }
 
   // Reset UI for new word

@@ -3,6 +3,7 @@
 import * as Storage from './storage';
 import { say, celebrate, launchConfetti } from './mascot';
 import { showCelebration } from './app';
+import { speakWord } from './speech';
 
 let words: string[] = [];
 let currentWordIndex = 0;
@@ -13,6 +14,13 @@ let score = 0;
 export function initGame(): void {
   document.getElementById('next-word-btn')?.addEventListener('click', () => {
     nextWord();
+  });
+
+  // Hear word again button
+  document.getElementById('hear-word-btn')?.addEventListener('click', () => {
+    if (currentWord) {
+      speakWord(currentWord);
+    }
   });
 }
 
@@ -34,10 +42,35 @@ function loadWord(word: string): void {
   currentWord = word.toLowerCase();
   currentLetterIndex = 0;
 
-  // Display target word
+  const settings = Storage.getSettings();
+  const mode = settings.wordPresentation;
+
+  // Display target word based on settings
   const targetWordEl = document.getElementById('target-word');
   if (targetWordEl) {
-    targetWordEl.textContent = word;
+    if (mode === 'visual' || mode === 'both') {
+      targetWordEl.textContent = word;
+      targetWordEl.classList.remove('audio-only');
+    } else {
+      // Audio only - show placeholder
+      targetWordEl.textContent = '?'.repeat(word.length);
+      targetWordEl.classList.add('audio-only');
+    }
+  }
+
+  // Speak word based on settings
+  if (mode === 'audio' || mode === 'both') {
+    speakWord(word);
+  }
+
+  // Show/hide hear button based on settings
+  const hearBtn = document.getElementById('hear-word-btn');
+  if (hearBtn) {
+    if (mode === 'audio' || mode === 'both') {
+      hearBtn.classList.remove('hidden');
+    } else {
+      hearBtn.classList.add('hidden');
+    }
   }
 
   // Create letter slots

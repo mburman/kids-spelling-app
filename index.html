@@ -51,7 +51,10 @@
             <button id="game-home-btn" class="back-button">Home</button>
             <div id="game-score" class="score">Stars: 0</div>
         </div>
-        <div id="target-word" class="target-word"></div>
+        <div class="word-display-row">
+            <div id="target-word" class="target-word"></div>
+            <button id="hear-word-btn" class="hear-button hidden" title="Hear word again">🔊</button>
+        </div>
         <div id="word-progress" class="word-progress"></div>
         <div id="letter-grid" class="letter-grid"></div>
         <div id="game-message" class="game-message"></div>
@@ -64,7 +67,10 @@
             <button id="practice-home-btn" class="back-button">Home</button>
         </div>
         <h2>Write this word:</h2>
-        <div id="practice-word" class="practice-word"></div>
+        <div class="word-display-row">
+            <div id="practice-word" class="practice-word"></div>
+            <button id="hear-practice-btn" class="hear-button hidden" title="Hear word again">🔊</button>
+        </div>
         <p class="instruction">Write it on paper, then take a photo!</p>
         <button id="camera-btn" class="big-button blue">I Wrote It! Take Photo</button>
         <div id="photo-preview" class="photo-preview hidden">
@@ -99,6 +105,24 @@
                 <button id="add-word-btn" class="add-button">Add</button>
             </div>
             <button id="clear-all-btn" class="clear-button">Clear All Words</button>
+
+            <div class="settings-section">
+                <h3>Word Display</h3>
+                <div class="radio-group">
+                    <label><input type="radio" name="word-mode" value="both" checked> Show & Speak</label>
+                    <label><input type="radio" name="word-mode" value="visual"> Show Only</label>
+                    <label><input type="radio" name="word-mode" value="audio"> Speak Only</label>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h3>Voice</h3>
+                <div class="radio-group">
+                    <label><input type="radio" name="voice" value="female-uk" checked> Female (British)</label>
+                    <label><input type="radio" name="voice" value="male-uk"> Male (British)</label>
+                </div>
+                <button id="test-voice-btn" class="test-voice-button">Test Voice</button>
+            </div>
         </div>
     </div>
 
