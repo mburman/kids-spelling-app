@@ -46,7 +46,7 @@ On every push/PR to `main`:
 
 Once configured, the app will be available at:
 ```
-https://<username>.github.io/spelling-app/
+https://mburman.github.io/kids-spelling-app/
 ```
 
 ### Workflow Status
