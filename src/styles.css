@@ -189,13 +189,20 @@ body {
 }
 
 .home-mascot-body .mascot-body {
-    transform: scale(0.85);
+    transform: scale(0.85) translateY(18px);
     transform-origin: center center;
+}
+
+/* Hide elements that look odd at small scale on home mascot */
+.home-mascot-body .mascot-tail,
+.home-mascot-body .mascot-throat,
+.home-mascot-body .mascot-legs {
+    display: none;
 }
 
 .home-mascot-speech {
     position: absolute;
-    top: -5px;
+    top: -10px;
     left: 50%;
     transform: translateX(-50%);
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
