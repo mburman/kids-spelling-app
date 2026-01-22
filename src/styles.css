@@ -171,11 +171,11 @@ body {
     align-items: center;
     cursor: pointer;
     transition: transform 0.3s ease;
-    margin-bottom: 5px;
+    flex-shrink: 0;
 }
 
 .home-mascot:hover {
-    transform: scale(1.05);
+    transform: scale(1.1);
 }
 
 .home-mascot:active {
@@ -194,31 +194,35 @@ body {
 }
 
 .home-mascot-speech {
-    background: white;
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-size: 1rem;
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 5px 12px;
+    border-radius: 12px;
+    font-size: 0.75rem;
     font-weight: bold;
-    color: #764ba2;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    color: white;
+    white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
     animation: speechPulse 3s ease-in-out infinite;
-    position: relative;
 }
 
 .home-mascot-speech::before {
     content: '';
     position: absolute;
-    top: -8px;
+    bottom: -6px;
     left: 50%;
     transform: translateX(-50%);
-    border-left: 8px solid transparent;
-    border-right: 8px solid transparent;
-    border-bottom: 8px solid white;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid #764ba2;
 }
 
 @keyframes speechPulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.05); }
+    0%, 100% { transform: translateX(-50%) scale(1); }
+    50% { transform: translateX(-50%) scale(1.05); }
 }
 
 .home-mascot.hop {
@@ -227,21 +231,28 @@ body {
 
 @keyframes mascotHop {
     0%, 100% { transform: translateY(0) scale(1); }
-    30% { transform: translateY(-20px) scale(1.05, 0.95); }
-    50% { transform: translateY(-25px) scale(1); }
-    70% { transform: translateY(-10px) scale(0.95, 1.05); }
+    30% { transform: translateY(-15px) scale(1.05, 0.95); }
+    50% { transform: translateY(-20px) scale(1); }
+    70% { transform: translateY(-8px) scale(0.95, 1.05); }
 }
 
 .word-preview {
     background: white;
     border-radius: 20px;
-    padding: 20px;
-    margin: 15px 0;
+    padding: 20px 20px 20px 15px;
+    margin: 10px 0;
     width: 100%;
-    max-width: 400px;
+    max-width: 450px;
     box-shadow: 0 8px 20px rgba(0,0,0,0.2);
     position: relative;
     overflow: hidden;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border: 3px solid transparent;
+    background-image: linear-gradient(white, white), linear-gradient(90deg, #ff6b6b, #ffd93d, #6bcb77, #4d96ff, #9b59b6);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
 }
 
 .word-preview::after {
@@ -255,10 +266,17 @@ body {
     border-radius: 0 0 20px 20px;
 }
 
+.word-preview-content {
+    flex: 1;
+    min-width: 0;
+    padding: 5px 0;
+}
+
 .word-preview h3 {
     color: #764ba2;
-    margin-bottom: 15px;
-    font-size: 1.2rem;
+    margin-bottom: 12px;
+    font-size: 1.15rem;
+    text-align: center;
 }
 
 #word-list-preview {
@@ -1543,6 +1561,25 @@ body {
     width: 20px;
     height: 20px;
     accent-color: #764ba2;
+}
+
+.settings-hint {
+    font-size: 0.9rem;
+    color: #888;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.difficulty-options label {
+    flex-wrap: wrap;
+}
+
+.difficulty-desc {
+    width: 100%;
+    font-size: 0.85rem;
+    color: #888;
+    margin-left: 30px;
+    margin-top: 2px;
 }
 
 /* Fun Toggle Switch */
@@ -4112,5 +4149,176 @@ body {
     .hear-button {
         width: 45px;
         height: 45px;
+    }
+
+    /* Home screen compact styles */
+    #home-screen h1 {
+        font-size: 2rem;
+        margin-bottom: 5px;
+    }
+
+    .home-title {
+        gap: 2px;
+    }
+
+    .title-letter {
+        font-size: 2rem;
+    }
+
+    .word-preview {
+        padding: 10px;
+        margin: 6px 0;
+        gap: 8px;
+    }
+
+    .word-preview h3 {
+        margin-bottom: 6px;
+        font-size: 0.95rem;
+    }
+
+    .home-mascot-body {
+        width: 55px;
+        height: 65px;
+    }
+
+    .home-mascot-body .mascot-body {
+        transform: scale(0.55);
+    }
+
+    .home-mascot-speech {
+        font-size: 0.6rem;
+        padding: 3px 8px;
+    }
+
+    #word-list-preview {
+        gap: 6px;
+    }
+
+    .word-chip {
+        padding: 4px 10px;
+        font-size: 0.85rem;
+    }
+
+    .button-grid {
+        gap: 10px;
+        margin: 10px 0 8px 0;
+    }
+
+    .game-button {
+        padding: 12px 10px;
+        gap: 4px;
+    }
+
+    .game-button .button-icon {
+        font-size: 2.8rem;
+    }
+
+    .game-button .button-label {
+        font-size: 0.8rem;
+    }
+
+    .practice-button {
+        padding: 12px 20px;
+        gap: 8px;
+    }
+
+    .practice-button .button-icon {
+        font-size: 1.4rem;
+    }
+
+    .practice-button .button-label {
+        font-size: 0.95rem;
+    }
+}
+
+/* Extra compact for very short screens */
+@media (max-height: 600px) {
+    #home-screen h1 {
+        font-size: 1.6rem;
+        margin-bottom: 2px;
+    }
+
+    .title-letter {
+        font-size: 1.6rem;
+    }
+
+    .title-stars {
+        font-size: 1.2rem;
+    }
+
+    .word-preview {
+        padding: 8px;
+        margin: 4px 0;
+        gap: 6px;
+    }
+
+    .word-preview h3 {
+        margin-bottom: 4px;
+        font-size: 0.85rem;
+    }
+
+    .home-mascot-body {
+        width: 45px;
+        height: 55px;
+    }
+
+    .home-mascot-body .mascot-body {
+        transform: scale(0.45);
+    }
+
+    .home-mascot-speech {
+        font-size: 0.55rem;
+        padding: 2px 6px;
+        top: -6px;
+    }
+
+    .word-chip {
+        padding: 3px 8px;
+        font-size: 0.75rem;
+    }
+
+    .button-grid {
+        gap: 8px;
+        margin: 6px 0;
+    }
+
+    .game-button {
+        padding: 8px;
+        gap: 2px;
+        border-radius: 15px;
+    }
+
+    .game-button .button-icon {
+        font-size: 2.2rem;
+    }
+
+    .game-button .button-label {
+        font-size: 0.7rem;
+    }
+
+    .practice-button {
+        padding: 8px 15px;
+    }
+
+    .practice-button .button-icon {
+        font-size: 1.2rem;
+    }
+
+    .practice-button .button-label {
+        font-size: 0.85rem;
+    }
+
+    .settings-button {
+        width: 40px;
+        height: 40px;
+        bottom: 15px;
+        right: 15px;
+    }
+
+    .character-button {
+        width: 55px;
+        height: 55px;
+        bottom: 15px;
+        left: 15px;
     }
 }

@@ -28,10 +28,11 @@ const DIFFICULTY_CONFIG: Record<DifficultyLevel, {
   minDistractors: number;
   maxDistractors: number;
   collisionThreshold: number;
+  laneCount: number;
 }> = {
-  easy: { spawnInterval: 3000, baseSpeed: 0.5, minDistractors: 0, maxDistractors: 1, collisionThreshold: 70 },
-  medium: { spawnInterval: 2000, baseSpeed: 0.8, minDistractors: 1, maxDistractors: 2, collisionThreshold: 60 },
-  hard: { spawnInterval: 1500, baseSpeed: 1.2, minDistractors: 2, maxDistractors: 3, collisionThreshold: 50 },
+  easy: { spawnInterval: 3000, baseSpeed: 0.8, minDistractors: 0, maxDistractors: 1, collisionThreshold: 70, laneCount: 2 },
+  medium: { spawnInterval: 2000, baseSpeed: 0.8, minDistractors: 1, maxDistractors: 2, collisionThreshold: 60, laneCount: 3 },
+  hard: { spawnInterval: 1500, baseSpeed: 0.8, minDistractors: 2, maxDistractors: 3, collisionThreshold: 50, laneCount: 5 },
 };
 
 // Game constants - dynamically calculated
@@ -55,7 +56,8 @@ let currentWordIndex = 0;
 let currentWord = '';
 let currentLetterIndex = 0;
 let score = 0;
-let playerLane = 1; // 0=left, 1=center, 2=right
+let playerLane = 1; // starts at center
+let currentLaneCount = 3; // dynamic based on difficulty
 let fallingLetters: FallingLetter[] = [];
 let gameActive = false;
 let animationId: number | null = null;
@@ -64,6 +66,17 @@ let letterIdCounter = 0;
 let isOwlAnimating = false;
 let lastRacingInteraction = Date.now();
 let boredCheckInterval: number | null = null;
+
+// Calculate lane position as percentage for a given lane index
+function getLanePosition(laneIndex: number, laneCount: number): string {
+  // For n lanes evenly distributed: position = (100 / (2*n)) + (i * (100/n))
+  // e.g., 2 lanes: 25%, 75%
+  // e.g., 3 lanes: 16.67%, 50%, 83.33%
+  // e.g., 5 lanes: 10%, 30%, 50%, 70%, 90%
+  const width = 100 / laneCount;
+  const position = (width / 2) + (laneIndex * width);
+  return `${position}%`;
+}
 
 // Player owl animation functions
 function owlHop(): void {
@@ -294,9 +307,13 @@ function loadWord(word: string): void {
 
   currentWord = word.toLowerCase();
   currentLetterIndex = 0;
-  playerLane = 1;
   fallingLetters = [];
   letterIdCounter = 0;
+
+  // Set up lanes based on difficulty
+  const config = DIFFICULTY_CONFIG[currentDifficulty];
+  currentLaneCount = config.laneCount;
+  playerLane = Math.floor(currentLaneCount / 2); // Start at center lane
 
   const settings = Storage.getSettings();
   const mode = settings.wordPresentation;
@@ -331,10 +348,13 @@ function loadWord(word: string): void {
   // Render word progress
   renderWordProgress();
 
+  // Create lanes dynamically based on difficulty
+  setupLanes();
+
   // Update player position
   updatePlayerPosition();
 
-  // Clear track
+  // Clear track of falling letters
   const track = document.getElementById('racing-track');
   if (track) {
     const letters = track.querySelectorAll('.falling-letter');
@@ -350,6 +370,47 @@ function loadWord(word: string): void {
 
   // Start the game
   startGame();
+}
+
+function setupLanes(): void {
+  const track = document.getElementById('racing-track');
+  if (!track) return;
+
+  // Remove existing lanes
+  const existingLanes = track.querySelectorAll('.lane');
+  existingLanes.forEach(el => el.remove());
+
+  // Create new lanes based on current difficulty
+  for (let i = 0; i < currentLaneCount; i++) {
+    const lane = document.createElement('div');
+    lane.className = 'lane';
+    lane.dataset.lane = String(i);
+
+    // Set lane width dynamically (flex handles positioning)
+    lane.style.width = `${100 / currentLaneCount}%`;
+
+    // Add click handler for lane
+    lane.addEventListener('click', (e) => {
+      if (!gameActive) return;
+      resetRacingInteraction();
+      const laneNum = parseInt((e.currentTarget as HTMLElement).dataset.lane ?? '0', 10);
+      if (laneNum !== playerLane) {
+        playerLane = laneNum;
+        updatePlayerPosition();
+        playSound('laneChange');
+      }
+      // Hide tap icons after first lane tap
+      track.classList.add('tapped');
+    });
+
+    // Insert before player-owl
+    const player = track.querySelector('#player-owl');
+    if (player) {
+      track.insertBefore(lane, player);
+    } else {
+      track.appendChild(lane);
+    }
+  }
 }
 
 function renderWordProgress(): void {
@@ -445,12 +506,13 @@ function spawnLetter(): void {
 
   const config = DIFFICULTY_CONFIG[currentDifficulty];
 
-  // Shuffle lanes [0, 1, 2] to randomly assign letters
-  const lanes = shuffleArray([0, 1, 2]);
+  // Generate lane indices based on current lane count and shuffle
+  const laneIndices = Array.from({ length: currentLaneCount }, (_, i) => i);
+  const lanes = shuffleArray(laneIndices);
 
   // Always spawn the correct letter in one lane
   const correctLane = lanes[0];
-  createFallingLetter(track, expectedLetter, correctLane ?? 1, true);
+  createFallingLetter(track, expectedLetter, correctLane ?? 0, true);
   playSound('letterSpawn');
 
   // Spawn distractors based on difficulty (random between min and max)
@@ -500,9 +562,8 @@ function createFallingLetter(track: HTMLElement, letter: string, lane: number, i
 }
 
 function updateLetterPosition(letter: FallingLetter): void {
-  const lanePositions = ['16.67%', '50%', '83.33%'];
   letter.element.style.top = `${letter.y}px`;
-  letter.element.style.left = lanePositions[letter.lane] ?? '50%';
+  letter.element.style.left = getLanePosition(letter.lane, currentLaneCount);
   letter.element.style.transform = 'translateX(-50%)';
 }
 
@@ -557,7 +618,7 @@ function movePlayer(direction: number): void {
   if (!gameActive) return;
 
   const newLane = playerLane + direction;
-  if (newLane >= 0 && newLane <= 2) {
+  if (newLane >= 0 && newLane < currentLaneCount) {
     playerLane = newLane;
     updatePlayerPosition();
     playSound('laneChange');
@@ -569,6 +630,10 @@ function updatePlayerPosition(): void {
   const player = document.getElementById('player-owl');
   if (player) {
     player.dataset.lane = String(playerLane);
+    // Set position directly for dynamic lane counts
+    // Center the player in the lane (player is ~56px wide)
+    const position = getLanePosition(playerLane, currentLaneCount);
+    player.style.left = `calc(${position} - 28px)`;
   }
 }
 

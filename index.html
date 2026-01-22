@@ -64,14 +64,14 @@
             <span class="title-stars">✨</span>
         </h1>
 
-        <!-- Home Screen Mascot -->
-        <div id="home-mascot" class="home-mascot">
-            <div id="home-mascot-speech" class="home-mascot-speech">Let's spell!</div>
-        </div>
-
         <div class="word-preview wiggle-hover">
-            <h3>This Week's Words:</h3>
-            <div id="word-list-preview"></div>
+            <div id="home-mascot" class="home-mascot">
+                <div id="home-mascot-speech" class="home-mascot-speech">Let's spell!</div>
+            </div>
+            <div class="word-preview-content">
+                <h3>This Week's Words:</h3>
+                <div id="word-list-preview"></div>
+            </div>
         </div>
         <div class="button-grid">
             <button id="play-btn" class="game-button green wiggle">
@@ -305,10 +305,20 @@
 
             <div class="settings-section">
                 <h3>Difficulty</h3>
-                <div class="radio-group">
-                    <label><input type="radio" name="difficulty" value="easy"> Easy</label>
-                    <label><input type="radio" name="difficulty" value="medium" checked> Medium</label>
-                    <label><input type="radio" name="difficulty" value="hard"> Hard</label>
+                <p class="settings-hint">For Letter Racing game</p>
+                <div class="radio-group difficulty-options">
+                    <label>
+                        <input type="radio" name="difficulty" value="easy"> Easy
+                        <span class="difficulty-desc">2 lanes, fewer wrong letters</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="difficulty" value="medium" checked> Medium
+                        <span class="difficulty-desc">3 lanes, some wrong letters</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="difficulty" value="hard"> Hard
+                        <span class="difficulty-desc">5 lanes, more wrong letters</span>
+                    </label>
                 </div>
             </div>
 
