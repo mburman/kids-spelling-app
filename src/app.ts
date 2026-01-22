@@ -150,13 +150,16 @@ export function updateWordPreview(): void {
   if (!container) return;
 
   const words = Storage.getWords();
+  const settingsBtn = document.getElementById('settings-btn');
 
   if (words.length === 0) {
-    container.innerHTML = '<span class="no-words">No words yet. Add some in Settings!</span>';
+    container.innerHTML = '<span class="no-words">No words yet. Add some in Settings! (PIN: 1234)</span>';
+    settingsBtn?.classList.add('needs-attention');
   } else {
     container.innerHTML = words.map(word =>
       `<span class="word-chip">${word}</span>`
     ).join('');
+    settingsBtn?.classList.remove('needs-attention');
   }
 }
 
