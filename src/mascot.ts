@@ -17,6 +17,10 @@ let mascotBody: HTMLElement | null = null;
 let isAnimating = false;
 let currentConfig: CharacterConfig;
 let idleIntervals: number[] = [];
+let lastInteractionTime = Date.now();
+let boredTimeout: number | null = null;
+let isThinking = false;
+let isExcited = false;
 
 export function initMascot(): void {
   mascotElement = document.getElementById('mascot');
@@ -32,6 +36,7 @@ export function initMascot(): void {
 
   say('welcome');
   startIdleAnimation();
+  startBoredDetection();
 
   // Add click handler for character sound
   mascotElement?.addEventListener('click', characterClick);
@@ -60,8 +65,14 @@ function getCharacterHTML(type: CharacterType): string {
       return `
         <div class="mascot-face">
           <div class="mascot-eyes">
-            <div class="mascot-eye left"></div>
-            <div class="mascot-eye right"></div>
+            <div class="mascot-eye left">
+              <div class="eye-sparkle primary"></div>
+              <div class="eye-sparkle secondary"></div>
+            </div>
+            <div class="mascot-eye right">
+              <div class="eye-sparkle primary"></div>
+              <div class="eye-sparkle secondary"></div>
+            </div>
           </div>
           <div class="mascot-beak"></div>
           <div class="mascot-cheeks">
@@ -82,16 +93,29 @@ function getCharacterHTML(type: CharacterType): string {
         </div>
         <div class="mascot-face">
           <div class="mascot-eyes">
-            <div class="mascot-eye left"></div>
-            <div class="mascot-eye right"></div>
+            <div class="mascot-eye left">
+              <div class="eye-sparkle primary"></div>
+              <div class="eye-sparkle secondary"></div>
+            </div>
+            <div class="mascot-eye right">
+              <div class="eye-sparkle primary"></div>
+              <div class="eye-sparkle secondary"></div>
+            </div>
           </div>
           <div class="mascot-nose"></div>
+          <div class="mascot-whiskers">
+            <div class="mascot-whisker left top"></div>
+            <div class="mascot-whisker left bottom"></div>
+            <div class="mascot-whisker right top"></div>
+            <div class="mascot-whisker right bottom"></div>
+          </div>
           <div class="mascot-mouth"></div>
           <div class="mascot-cheeks">
             <div class="mascot-cheek left"></div>
             <div class="mascot-cheek right"></div>
           </div>
         </div>
+        <div class="mascot-tail"></div>
         <div class="mascot-paws">
           <div class="mascot-paw left"></div>
           <div class="mascot-paw right"></div>
@@ -99,13 +123,20 @@ function getCharacterHTML(type: CharacterType): string {
       `;
     case 'frog':
       return `
+        <div class="mascot-spots"></div>
         <div class="mascot-face">
           <div class="mascot-eyes">
             <div class="mascot-eye left">
-              <div class="mascot-pupil"></div>
+              <div class="mascot-pupil">
+                <div class="eye-sparkle primary"></div>
+                <div class="eye-sparkle secondary"></div>
+              </div>
             </div>
             <div class="mascot-eye right">
-              <div class="mascot-pupil"></div>
+              <div class="mascot-pupil">
+                <div class="eye-sparkle primary"></div>
+                <div class="eye-sparkle secondary"></div>
+              </div>
             </div>
           </div>
           <div class="mascot-mouth">
@@ -152,15 +183,17 @@ export function say(category: MessageCategory, customMessage?: string): void {
 export function hop(): void {
   if (isAnimating || !mascotElement) return;
   isAnimating = true;
+  resetInteractionTimer();
   mascotElement.classList.add('hop');
   setTimeout(() => {
     mascotElement?.classList.remove('hop');
     isAnimating = false;
-  }, 500);
+  }, 600);
 }
 
 export function characterClick(): void {
   if (!mascotElement) return;
+  resetInteractionTimer();
 
   // Play character-specific sound
   const characterType = currentConfig.id;
@@ -185,11 +218,15 @@ export function characterClick(): void {
 
 export function celebrate(): void {
   if (!mascotElement) return;
+  resetInteractionTimer();
   mascotElement.classList.add('celebrate');
+  mascotElement.classList.add('dancing');
   playSound('wordComplete');
   say('wordComplete');
+  spawnHearts();
   setTimeout(() => {
     mascotElement?.classList.remove('celebrate');
+    mascotElement?.classList.remove('dancing');
   }, 2000);
 }
 
@@ -296,6 +333,106 @@ export function showMascot(): void {
 
 export function getCurrentCharacter(): CharacterType {
   return currentConfig.id;
+}
+
+// ==================== NEW ANIMATION STATES ====================
+
+// Bored/Waiting Animation - plays when idle for too long
+function startBoredDetection(): void {
+  if (boredTimeout) {
+    window.clearInterval(boredTimeout);
+  }
+  boredTimeout = window.setInterval(() => {
+    const idleTime = Date.now() - lastInteractionTime;
+    if (idleTime > 4000 && !isAnimating && !isThinking && !isExcited) {
+      playBoredAnimation();
+    }
+  }, 3000);
+}
+
+function playBoredAnimation(): void {
+  if (!mascotElement || isAnimating) return;
+  isAnimating = true;
+  mascotElement.classList.add('bored');
+  setTimeout(() => {
+    mascotElement?.classList.remove('bored');
+    isAnimating = false;
+  }, 3000);
+}
+
+export function resetInteractionTimer(): void {
+  lastInteractionTime = Date.now();
+}
+
+// Thinking Animation - when showing new word
+export function setThinking(thinking: boolean): void {
+  if (!mascotElement) return;
+  isThinking = thinking;
+  resetInteractionTimer();
+
+  if (thinking) {
+    mascotElement.classList.add('thinking');
+  } else {
+    mascotElement.classList.remove('thinking');
+  }
+}
+
+// Excited Animation - for streaks
+export function setExcited(excited: boolean): void {
+  if (!mascotElement) return;
+  isExcited = excited;
+  resetInteractionTimer();
+
+  if (excited) {
+    mascotElement.classList.add('excited');
+    // Auto-disable after 2 seconds
+    setTimeout(() => {
+      mascotElement?.classList.remove('excited');
+      isExcited = false;
+    }, 2000);
+  } else {
+    mascotElement.classList.remove('excited');
+  }
+}
+
+// Dancing Animation - enhanced celebration
+export function dance(): void {
+  if (!mascotElement) return;
+  resetInteractionTimer();
+  mascotElement.classList.add('dancing');
+  spawnHearts();
+  setTimeout(() => {
+    mascotElement?.classList.remove('dancing');
+  }, 2000);
+}
+
+// Spawn floating hearts during celebrations
+export function spawnHearts(): void {
+  if (!mascotElement) return;
+
+  // Create hearts container if it doesn't exist
+  let heartsContainer = mascotElement.querySelector('.celebrate-hearts');
+  if (!heartsContainer) {
+    heartsContainer = document.createElement('div');
+    heartsContainer.className = 'celebrate-hearts';
+    mascotElement.appendChild(heartsContainer);
+  }
+
+  const heartEmojis = ['❤️', '💖', '💕', '✨', '⭐', '💫', '🌟'];
+
+  for (let i = 0; i < 6; i++) {
+    setTimeout(() => {
+      const heart = document.createElement('span');
+      heart.className = 'celebrate-heart';
+      heart.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)] ?? '❤️';
+      heart.style.left = `${Math.random() * 80 + 10}%`;
+      heart.style.bottom = '50%';
+      heartsContainer?.appendChild(heart);
+
+      // Remove after animation
+      setTimeout(() => heart.remove(), 1000);
+    }, i * 150);
+  }
 }
 
 // Confetti system

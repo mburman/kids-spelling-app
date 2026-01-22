@@ -2,7 +2,7 @@
 
 import * as Storage from './storage';
 import type { DifficultyLevel } from './storage';
-import { say, celebrate, launchConfetti } from './mascot';
+import { say, celebrate, launchConfetti, setThinking, setExcited, resetInteractionTimer } from './mascot';
 import { showCelebration } from './app';
 import { speakWord } from './speech';
 import { playSound } from './sounds';
@@ -24,6 +24,7 @@ let currentWord = '';
 let currentLetterIndex = 0;
 let score = 0;
 let currentDifficulty: DifficultyLevel = 'medium';
+let correctStreak = 0;
 
 export function initGame(): void {
   document.getElementById('next-word-btn')?.addEventListener('click', () => {
@@ -56,6 +57,10 @@ export function startGame(): void {
 function loadWord(word: string): void {
   currentWord = word.toLowerCase();
   currentLetterIndex = 0;
+  correctStreak = 0;
+
+  // Mascot looks thoughtful when new word is shown
+  setThinking(true);
 
   const settings = Storage.getSettings();
   const mode = settings.wordPresentation;
@@ -137,6 +142,9 @@ function renderLetterGrid(): void {
 function handleLetterClick(button: HTMLElement): void {
   if (button.classList.contains('used')) return;
 
+  resetInteractionTimer();
+  setThinking(false); // Stop thinking once player starts clicking
+
   const letter = button.dataset.letter;
   const expectedLetter = currentWord[currentLetterIndex];
 
@@ -154,6 +162,12 @@ function handleLetterClick(button: HTMLElement): void {
     }
 
     currentLetterIndex++;
+    correctStreak++;
+
+    // Get excited on a streak of 3+ correct letters!
+    if (correctStreak >= 3) {
+      setExcited(true);
+    }
 
     // Mascot celebrates correct letter
     if (currentLetterIndex < currentWord.length) {
@@ -165,7 +179,8 @@ function handleLetterClick(button: HTMLElement): void {
       wordComplete();
     }
   } else {
-    // Wrong letter
+    // Wrong letter - reset streak
+    correctStreak = 0;
     button.classList.add('wrong');
     say('wrong');
     setTimeout(() => {

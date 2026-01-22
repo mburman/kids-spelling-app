@@ -62,6 +62,8 @@ let animationId: number | null = null;
 let spawnIntervalId: number | null = null;
 let letterIdCounter = 0;
 let isOwlAnimating = false;
+let lastRacingInteraction = Date.now();
+let boredCheckInterval: number | null = null;
 
 // Player owl animation functions
 function owlHop(): void {
@@ -100,6 +102,7 @@ function owlHoot(): void {
   const player = document.getElementById('player-owl');
   if (!player || isOwlAnimating) return;
   isOwlAnimating = true;
+  resetRacingInteraction();
   player.classList.add('hooting');
 
   // Play character-specific sound
@@ -117,6 +120,43 @@ function owlHoot(): void {
   }, 600);
 }
 
+// Bored/idle animation for racing character
+function resetRacingInteraction(): void {
+  lastRacingInteraction = Date.now();
+  // Remove bored class if present
+  const player = document.getElementById('player-owl');
+  player?.classList.remove('bored');
+}
+
+function startBoredCheck(): void {
+  if (boredCheckInterval) {
+    clearInterval(boredCheckInterval);
+  }
+  boredCheckInterval = window.setInterval(() => {
+    if (!gameActive) return;
+    const idleTime = Date.now() - lastRacingInteraction;
+    if (idleTime > 4000 && !isOwlAnimating) {
+      playBoredAnimation();
+    }
+  }, 3000);
+}
+
+function stopBoredCheck(): void {
+  if (boredCheckInterval) {
+    clearInterval(boredCheckInterval);
+    boredCheckInterval = null;
+  }
+}
+
+function playBoredAnimation(): void {
+  const player = document.getElementById('player-owl');
+  if (!player || isOwlAnimating) return;
+  player.classList.add('bored');
+  setTimeout(() => {
+    player?.classList.remove('bored');
+  }, 2000);
+}
+
 export function initRacing(): void {
   // Click on owl to make it hoot
   document.getElementById('player-owl')?.addEventListener('click', (e) => {
@@ -128,6 +168,7 @@ export function initRacing(): void {
   document.querySelectorAll('.lane').forEach((lane) => {
     lane.addEventListener('click', (e) => {
       if (!gameActive) return;
+      resetRacingInteraction();
       const laneEl = e.currentTarget as HTMLElement;
       const laneNum = parseInt(laneEl.dataset.lane ?? '1', 10);
       if (laneNum !== playerLane) {
@@ -315,6 +356,7 @@ function renderWordProgress(): void {
 
 function startGame(): void {
   gameActive = true;
+  resetRacingInteraction();
 
   // Play start sound
   playSound('gameStart');
@@ -323,6 +365,9 @@ function startGame(): void {
   const config = DIFFICULTY_CONFIG[currentDifficulty];
   spawnLetter();
   spawnIntervalId = window.setInterval(spawnLetter, config.spawnInterval);
+
+  // Start bored detection
+  startBoredCheck();
 
   // Start game loop
   gameLoop();
@@ -340,6 +385,8 @@ function stopGame(): void {
     clearInterval(spawnIntervalId);
     spawnIntervalId = null;
   }
+
+  stopBoredCheck();
 }
 
 function gameLoop(): void {
@@ -507,6 +554,7 @@ function movePlayer(direction: number): void {
     playerLane = newLane;
     updatePlayerPosition();
     playSound('laneChange');
+    resetRacingInteraction();
   }
 }
 
