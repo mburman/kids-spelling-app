@@ -9,6 +9,7 @@ let audioContext: AudioContext | null = null;
 // Pre-loaded audio elements for sound files
 let hootAudio: HTMLAudioElement | null = null;
 let mooAudio: HTMLAudioElement | null = null;
+let ribbitAudio: HTMLAudioElement | null = null;
 
 export type SoundName =
   | 'correctLetter'
@@ -30,16 +31,25 @@ export function initSounds(): void {
     audioContext = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
   }
 
+  // Get the base URL for assets (handles GitHub Pages subdirectory deployment)
+  const base = import.meta.env.BASE_URL || '/';
+
   // Preload owl hoot audio
   if (!hootAudio) {
-    hootAudio = new Audio('/owl-hoot.mp3');
+    hootAudio = new Audio(`${base}owl-hoot.mp3`);
     hootAudio.volume = 0.5;
   }
 
   // Preload cow moo audio
   if (!mooAudio) {
-    mooAudio = new Audio('/cow-moo.mp3');
+    mooAudio = new Audio(`${base}cow-moo.mp3`);
     mooAudio.volume = 0.5;
+  }
+
+  // Preload frog ribbit audio
+  if (!ribbitAudio) {
+    ribbitAudio = new Audio(`${base}frog-ribbit.mp3`);
+    ribbitAudio.volume = 0.5;
   }
 }
 
@@ -189,8 +199,22 @@ function playSynthesizedMoo(): void {
   oscillator.stop(audioContext.currentTime + 0.6);
 }
 
-// Frog ribbit: Low frequency croaking sound
+// Frog ribbit: Actual ribbit sound
 function playRibbit(): void {
+  if (ribbitAudio) {
+    ribbitAudio.currentTime = 0;
+    ribbitAudio.play().catch(() => {
+      // Fallback to synthesized ribbit if audio fails
+      playSynthesizedRibbit();
+    });
+  } else {
+    // Fallback to synthesized ribbit
+    playSynthesizedRibbit();
+  }
+}
+
+// Synthesized ribbit fallback - low frequency croaking sound
+function playSynthesizedRibbit(): void {
   if (!audioContext) return;
 
   // Create a croaky "ribbit" sound with frequency modulation
