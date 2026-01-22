@@ -11,7 +11,7 @@ const STORAGE_KEYS = {
 export type WordPresentationMode = 'both' | 'visual' | 'audio';
 export type VoiceType = 'female-uk' | 'male-uk';
 export type DifficultyLevel = 'easy' | 'medium' | 'hard';
-export type CharacterType = 'owl' | 'bunny' | 'frog';
+export type CharacterType = 'owl' | 'cow' | 'frog';
 
 interface AppSettings {
   wordPresentation: WordPresentationMode;

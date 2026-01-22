@@ -1,4 +1,4 @@
-// Mascot system - supports multiple characters (Ollie, Benny, Finn)
+// Mascot system - supports multiple characters (Ollie, Bessie, Finn)
 
 import { playSound } from './sounds';
 import { getCharacter } from './storage';
@@ -52,14 +52,14 @@ function applyCharacter(type: CharacterType): void {
   if (!mascotElement || !mascotBody) return;
 
   // Remove existing character classes
-  mascotElement.classList.remove('mascot-owl', 'mascot-bunny', 'mascot-frog');
+  mascotElement.classList.remove('mascot-owl', 'mascot-cow', 'mascot-frog');
   mascotElement.classList.add(`mascot-${type}`);
 
   // Render character-specific HTML
   mascotBody.innerHTML = getCharacterHTML(type);
 }
 
-function getCharacterHTML(type: CharacterType): string {
+export function getCharacterHTML(type: CharacterType): string {
   switch (type) {
     case 'owl':
       return `
@@ -85,11 +85,20 @@ function getCharacterHTML(type: CharacterType): string {
           <div class="mascot-wing right"></div>
         </div>
       `;
-    case 'bunny':
+    case 'cow':
       return `
+        <div class="mascot-horns">
+          <div class="mascot-horn left"></div>
+          <div class="mascot-horn right"></div>
+        </div>
         <div class="mascot-ears">
           <div class="mascot-ear left"></div>
           <div class="mascot-ear right"></div>
+        </div>
+        <div class="mascot-spots">
+          <div class="mascot-spot spot1"></div>
+          <div class="mascot-spot spot2"></div>
+          <div class="mascot-spot spot3"></div>
         </div>
         <div class="mascot-face">
           <div class="mascot-eyes">
@@ -102,12 +111,9 @@ function getCharacterHTML(type: CharacterType): string {
               <div class="eye-sparkle secondary"></div>
             </div>
           </div>
-          <div class="mascot-nose"></div>
-          <div class="mascot-whiskers">
-            <div class="mascot-whisker left top"></div>
-            <div class="mascot-whisker left bottom"></div>
-            <div class="mascot-whisker right top"></div>
-            <div class="mascot-whisker right bottom"></div>
+          <div class="mascot-snout">
+            <div class="mascot-nostril left"></div>
+            <div class="mascot-nostril right"></div>
           </div>
           <div class="mascot-mouth"></div>
           <div class="mascot-cheeks">
@@ -116,10 +122,6 @@ function getCharacterHTML(type: CharacterType): string {
           </div>
         </div>
         <div class="mascot-tail"></div>
-        <div class="mascot-paws">
-          <div class="mascot-paw left"></div>
-          <div class="mascot-paw right"></div>
-        </div>
       `;
     case 'frog':
       return `
@@ -199,8 +201,8 @@ export function characterClick(): void {
   const characterType = currentConfig.id;
   if (characterType === 'owl') {
     playSound('hoot');
-  } else if (characterType === 'bunny') {
-    playSound('squeak');
+  } else if (characterType === 'cow') {
+    playSound('moo');
   } else if (characterType === 'frog') {
     playSound('ribbit');
   }
@@ -260,12 +262,12 @@ function runPrimaryIdleAnimation(type: CharacterType): void {
       }, currentConfig.idleAnimations.primary.duration);
       break;
     }
-    case 'bunny': {
-      // Nose twitch
-      const nose = document.querySelector('.mascot-bunny .mascot-nose');
-      nose?.classList.add('twitch');
+    case 'cow': {
+      // Ear flick
+      const ear = document.querySelector('.mascot-cow .mascot-ear.left');
+      ear?.classList.add('flick');
       setTimeout(() => {
-        nose?.classList.remove('twitch');
+        ear?.classList.remove('flick');
       }, currentConfig.idleAnimations.primary.duration);
       break;
     }
@@ -292,12 +294,12 @@ function runSecondaryIdleAnimation(type: CharacterType): void {
       }, currentConfig.idleAnimations.secondary.duration);
       break;
     }
-    case 'bunny': {
-      // Ear wiggle
-      const ears = document.querySelectorAll('.mascot-bunny .mascot-ear');
-      ears.forEach(ear => ear.classList.add('wiggle'));
+    case 'cow': {
+      // Tail swish
+      const tail = document.querySelector('.mascot-cow .mascot-tail');
+      tail?.classList.add('swish');
       setTimeout(() => {
-        ears.forEach(ear => ear.classList.remove('wiggle'));
+        tail?.classList.remove('swish');
       }, currentConfig.idleAnimations.secondary.duration);
       break;
     }
@@ -472,4 +474,79 @@ function createConfettiPiece(container: HTMLElement): void {
   }
 
   container.appendChild(piece);
+}
+
+// ==================== HOME SCREEN MASCOT ====================
+
+let homeMascotElement: HTMLElement | null = null;
+let homeSpeechBubble: HTMLElement | null = null;
+
+export function initHomeMascot(): void {
+  homeMascotElement = document.getElementById('home-mascot');
+  homeSpeechBubble = document.getElementById('home-mascot-speech');
+
+  if (!homeMascotElement) return;
+
+  // Render the selected character
+  updateHomeMascot();
+
+  // Add click handler
+  homeMascotElement.addEventListener('click', handleHomeMascotClick);
+}
+
+export function updateHomeMascot(): void {
+  if (!homeMascotElement) return;
+
+  const characterType = getCharacter();
+  const config = getCharacterConfig(characterType);
+
+  // Create mascot body if it doesn't exist
+  let body = homeMascotElement.querySelector('.home-mascot-body') as HTMLElement | null;
+  if (!body) {
+    body = document.createElement('div');
+    body.className = 'home-mascot-body';
+    homeMascotElement.insertBefore(body, homeMascotElement.firstChild);
+  }
+
+  // Remove old character classes and add new one
+  body.classList.remove('mascot-owl', 'mascot-cow', 'mascot-frog');
+  body.classList.add(`mascot-${characterType}`);
+
+  // Render character HTML (scaled down version)
+  body.innerHTML = `<div class="mascot-body">${getCharacterHTML(characterType)}</div>`;
+
+  // Update speech bubble with a greeting
+  if (homeSpeechBubble) {
+    const greetings = ["Let's spell!", "Ready to play?", "Hi friend!", config.clickMessages[0] ?? "Hello!"];
+    homeSpeechBubble.textContent = greetings[Math.floor(Math.random() * greetings.length)] ?? "Let's spell!";
+  }
+}
+
+function handleHomeMascotClick(): void {
+  if (!homeMascotElement) return;
+
+  const characterType = getCharacter();
+
+  // Play character sound
+  if (characterType === 'owl') {
+    playSound('hoot');
+  } else if (characterType === 'cow') {
+    playSound('moo');
+  } else if (characterType === 'frog') {
+    playSound('ribbit');
+  }
+
+  // Hop animation
+  homeMascotElement.classList.add('hop');
+  setTimeout(() => {
+    homeMascotElement?.classList.remove('hop');
+  }, 500);
+
+  // Change speech bubble
+  if (homeSpeechBubble) {
+    const config = getCharacterConfig(characterType);
+    const clickPhrase = config.clickMessages[0] ?? "Hello!";
+    const messages = [clickPhrase, "Pick a game!", "You can do it!", "Let's have fun!"];
+    homeSpeechBubble.textContent = messages[Math.floor(Math.random() * messages.length)] ?? clickPhrase;
+  }
 }

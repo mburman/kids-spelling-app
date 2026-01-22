@@ -36,8 +36,8 @@ function previewCharacter(character: CharacterType): void {
   // Play character sound
   if (character === 'owl') {
     playSound('hoot');
-  } else if (character === 'bunny') {
-    playSound('squeak');
+  } else if (character === 'cow') {
+    playSound('moo');
   } else if (character === 'frog') {
     playSound('ribbit');
   }
@@ -103,19 +103,23 @@ function getButtonPreviewHTML(character: CharacterType): string {
           </div>
         </div>
       `;
-    case 'bunny':
+    case 'cow':
       return `
-        <div class="btn-preview-bunny">
-          <div class="btn-bunny-ears">
-            <div class="btn-bunny-ear left"></div>
-            <div class="btn-bunny-ear right"></div>
+        <div class="btn-preview-cow">
+          <div class="btn-cow-horns">
+            <div class="btn-cow-horn left"></div>
+            <div class="btn-cow-horn right"></div>
           </div>
-          <div class="btn-bunny-face">
-            <div class="btn-bunny-eyes">
-              <div class="btn-bunny-eye"></div>
-              <div class="btn-bunny-eye"></div>
+          <div class="btn-cow-face">
+            <div class="btn-cow-spots">
+              <div class="btn-cow-spot spot1"></div>
+              <div class="btn-cow-spot spot2"></div>
             </div>
-            <div class="btn-bunny-nose"></div>
+            <div class="btn-cow-eyes">
+              <div class="btn-cow-eye"></div>
+              <div class="btn-cow-eye"></div>
+            </div>
+            <div class="btn-cow-snout"></div>
           </div>
         </div>
       `;
@@ -142,7 +146,7 @@ export function loadCharacterButtonIcon(): void {
 export function getCharacterEmoji(character: CharacterType): string {
   const icons: Record<CharacterType, string> = {
     owl: '🦉',
-    bunny: '🐰',
+    cow: '🐄',
     frog: '🐸',
   };
   return icons[character];

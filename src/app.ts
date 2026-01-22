@@ -1,7 +1,7 @@
 // Main app logic and navigation
 
 import * as Storage from './storage';
-import { initMascot } from './mascot';
+import { initMascot, initHomeMascot, updateHomeMascot } from './mascot';
 import { initParent, showParent, hideParent } from './parent';
 import { initGame, startGame } from './game';
 import { initPractice, startPractice } from './practice';
@@ -36,6 +36,7 @@ export function initApp(): void {
 
   // Initialize other modules
   initMascot();
+  initHomeMascot();
   initParent();
   initGame();
   initPractice();
@@ -126,10 +127,11 @@ export function showScreen(screenName: ScreenName): void {
     currentScreen = screenName;
   }
 
-  // Update word preview when returning to home
+  // Update word preview and mascot when returning to home
   if (screenName === 'home') {
     updateWordPreview();
     updateScore();
+    updateHomeMascot();
   }
 
   // Only show mascot on game screen (letter game)

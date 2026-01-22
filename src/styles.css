@@ -33,18 +33,226 @@ body {
     font-size: 3rem;
     color: white;
     text-shadow: 3px 3px 0 #ff6b6b, 6px 6px 0 #4ecdc4;
-    margin: 30px 0;
+    margin: 30px 0 10px 0;
     text-align: center;
+}
+
+/* Animated Title */
+.home-title {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2px;
+}
+
+.title-letter {
+    display: inline-block;
+    animation: letterBob 2s ease-in-out infinite;
+    animation-delay: calc(var(--i) * 0.1s);
+}
+
+@keyframes letterBob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+.title-space {
+    width: 12px;
+}
+
+.title-stars {
+    margin-left: 5px;
+    animation: starSpin 3s ease-in-out infinite;
+}
+
+@keyframes starSpin {
+    0%, 100% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(15deg) scale(1.3); }
+}
+
+/* Floating Background Decorations */
+.floating-decorations {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.floating-star {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: rgba(255, 215, 0, 0.7);
+    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+    left: var(--x);
+    animation: floatStar 10s ease-in-out infinite;
+    animation-delay: var(--delay);
+}
+
+@keyframes floatStar {
+    0% {
+        transform: translateY(100vh) rotate(0deg) scale(0.5);
+        opacity: 0;
+    }
+    10% { opacity: 0.9; }
+    90% { opacity: 0.9; }
+    100% {
+        transform: translateY(-50px) rotate(360deg) scale(1);
+        opacity: 0;
+    }
+}
+
+.floating-cloud {
+    position: absolute;
+    width: 60px;
+    height: 25px;
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 25px;
+    top: var(--y);
+    left: -80px;
+    animation: floatCloud 20s linear infinite;
+    animation-delay: var(--delay);
+}
+
+.floating-cloud::before,
+.floating-cloud::after {
+    content: '';
+    position: absolute;
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 50%;
+}
+
+.floating-cloud::before {
+    width: 25px;
+    height: 25px;
+    top: -10px;
+    left: 10px;
+}
+
+.floating-cloud::after {
+    width: 30px;
+    height: 30px;
+    top: -15px;
+    left: 25px;
+}
+
+@keyframes floatCloud {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(calc(100vw + 160px)); }
+}
+
+.floating-sparkle {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: white;
+    border-radius: 50%;
+    left: var(--x);
+    top: var(--y);
+    animation: twinkleSpark 2.5s ease-in-out infinite;
+    animation-delay: var(--delay);
+    box-shadow: 0 0 8px 2px rgba(255, 255, 255, 0.6);
+}
+
+@keyframes twinkleSpark {
+    0%, 100% { transform: scale(0); opacity: 0; }
+    50% { transform: scale(1.2); opacity: 1; }
+}
+
+/* Home Screen Mascot */
+.home-mascot {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    margin-bottom: 5px;
+}
+
+.home-mascot:hover {
+    transform: scale(1.05);
+}
+
+.home-mascot:active {
+    transform: scale(0.95);
+}
+
+.home-mascot-body {
+    width: 90px;
+    height: 100px;
+    position: relative;
+}
+
+.home-mascot-body .mascot-body {
+    transform: scale(0.85);
+    transform-origin: center center;
+}
+
+.home-mascot-speech {
+    background: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #764ba2;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    animation: speechPulse 3s ease-in-out infinite;
+    position: relative;
+}
+
+.home-mascot-speech::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 8px solid white;
+}
+
+@keyframes speechPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.home-mascot.hop {
+    animation: mascotHop 0.5s ease;
+}
+
+@keyframes mascotHop {
+    0%, 100% { transform: translateY(0) scale(1); }
+    30% { transform: translateY(-20px) scale(1.05, 0.95); }
+    50% { transform: translateY(-25px) scale(1); }
+    70% { transform: translateY(-10px) scale(0.95, 1.05); }
 }
 
 .word-preview {
     background: white;
     border-radius: 20px;
     padding: 20px;
-    margin: 20px 0;
+    margin: 15px 0;
     width: 100%;
     max-width: 400px;
     box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.word-preview::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #ff6b6b, #ffd93d, #6bcb77, #4d96ff, #9b59b6);
+    border-radius: 0 0 20px 20px;
 }
 
 .word-preview h3 {
@@ -66,6 +274,24 @@ body {
     padding: 8px 16px;
     border-radius: 20px;
     font-size: 1.1rem;
+    animation: chipBounce 0.5s ease backwards;
+    transition: transform 0.2s;
+}
+
+.word-chip:hover {
+    transform: scale(1.1) rotate(-2deg);
+}
+
+.word-chip:nth-child(1) { animation-delay: 0.1s; }
+.word-chip:nth-child(2) { animation-delay: 0.2s; }
+.word-chip:nth-child(3) { animation-delay: 0.3s; }
+.word-chip:nth-child(4) { animation-delay: 0.4s; }
+.word-chip:nth-child(5) { animation-delay: 0.5s; }
+
+@keyframes chipBounce {
+    0% { transform: scale(0) rotate(-10deg); opacity: 0; }
+    60% { transform: scale(1.1) rotate(3deg); }
+    100% { transform: scale(1) rotate(0deg); opacity: 1; }
 }
 
 .no-words {
@@ -106,12 +332,43 @@ body {
     cursor: pointer;
     transition: transform 0.2s, box-shadow 0.2s;
     aspect-ratio: 1;
+    position: relative;
+    z-index: 1;
+}
+
+/* Rainbow border glow on hover */
+.game-button::before {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 23px;
+    background: linear-gradient(90deg, #ff6b6b, #ffd93d, #6bcb77, #4d96ff, #9b59b6, #ff6b6b);
+    background-size: 200% auto;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.game-button:hover::before {
+    opacity: 1;
+    animation: rainbowBorder 1s linear infinite;
+}
+
+@keyframes rainbowBorder {
+    0% { background-position: 0% center; }
+    100% { background-position: 200% center; }
 }
 
 .game-button .button-icon {
     font-size: 4.5rem;
     filter: drop-shadow(3px 5px 8px rgba(0,0,0,0.25));
     transition: transform 0.3s ease;
+    animation: iconFloat 3s ease-in-out infinite;
+}
+
+@keyframes iconFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
 }
 
 .game-button:hover .button-icon {
@@ -280,10 +537,10 @@ body {
     position: fixed;
     bottom: 20px;
     left: 20px;
-    width: 60px;
-    height: 60px;
+    width: 70px;
+    height: 70px;
     border-radius: 50%;
-    border: 3px solid rgba(255,255,255,0.5);
+    border: 4px solid white;
     background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
     font-size: 0;
     cursor: pointer;
@@ -292,11 +549,22 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    animation: characterBtnPulse 2s ease-in-out infinite;
+}
+
+@keyframes characterBtnPulse {
+    0%, 100% {
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3), 0 0 0 0 rgba(255, 215, 0, 0.5);
+    }
+    50% {
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3), 0 0 0 8px rgba(255, 215, 0, 0);
+    }
 }
 
 .character-button:hover {
     transform: scale(1.1);
     box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+    animation: none;
 }
 
 .character-btn-preview {
@@ -314,6 +582,7 @@ body {
     background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
     border-radius: 16px 16px 14px 14px;
     position: relative;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
 .btn-owl-face {
@@ -357,74 +626,96 @@ body {
     margin: 3px auto 0;
 }
 
-/* Mini Bunny for button */
-.btn-preview-bunny {
+/* Mini Cow for button */
+.btn-preview-cow {
     position: relative;
-    width: 30px;
-    height: 40px;
+    width: 32px;
+    height: 38px;
 }
 
-.btn-bunny-ears {
+.btn-cow-horns {
     position: absolute;
     top: 0;
     width: 100%;
     display: flex;
     justify-content: center;
-    gap: 6px;
+    gap: 18px;
 }
 
-.btn-bunny-ear {
-    width: 8px;
-    height: 18px;
-    background: linear-gradient(135deg, #FFB6C1 0%, #FFC0CB 100%);
-    border-radius: 4px 4px 2px 2px;
+.btn-cow-horn {
+    width: 5px;
+    height: 10px;
+    background: linear-gradient(135deg, #F5DEB3 0%, #DEB887 100%);
+    border-radius: 3px 3px 2px 2px;
 }
 
-.btn-bunny-ear::after {
-    content: '';
-    position: absolute;
-    width: 4px;
-    height: 12px;
-    background: #FFEBEE;
-    border-radius: 2px;
-    top: 3px;
-    left: 2px;
+.btn-cow-horn.left {
+    transform: rotate(-15deg);
 }
 
-.btn-bunny-ear.left {
-    transform: rotate(-8deg);
+.btn-cow-horn.right {
+    transform: rotate(15deg);
 }
 
-.btn-bunny-ear.right {
-    transform: rotate(8deg);
-}
-
-.btn-bunny-face {
+.btn-cow-face {
     position: absolute;
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
     width: 28px;
     height: 28px;
-    background: linear-gradient(135deg, #FFB6C1 0%, #FFC0CB 100%);
+    background: linear-gradient(135deg, #FFFFFF 0%, #F5F5F5 100%);
     border-radius: 14px 14px 12px 12px;
+    position: relative;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
-.btn-bunny-eyes {
+.btn-cow-spots {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    overflow: hidden;
+}
+
+.btn-cow-spot {
+    position: absolute;
+    background: #333;
+    border-radius: 50%;
+}
+
+.btn-cow-spot.spot1 {
+    width: 8px;
+    height: 6px;
+    top: 3px;
+    left: 3px;
+}
+
+.btn-cow-spot.spot2 {
+    width: 6px;
+    height: 5px;
+    top: 12px;
+    right: 4px;
+}
+
+.btn-cow-eyes {
     display: flex;
     justify-content: space-between;
     padding: 6px 4px 0;
+    position: relative;
+    z-index: 1;
 }
 
-.btn-bunny-eye {
+.btn-cow-eye {
     width: 7px;
     height: 7px;
     background: white;
     border-radius: 50%;
     position: relative;
+    border: 1px solid #333;
 }
 
-.btn-bunny-eye::after {
+.btn-cow-eye::after {
     content: '';
     position: absolute;
     width: 4px;
@@ -435,12 +726,14 @@ body {
     left: 1px;
 }
 
-.btn-bunny-nose {
-    width: 6px;
-    height: 4px;
-    background: #FF69B4;
+.btn-cow-snout {
+    width: 14px;
+    height: 8px;
+    background: #FFB6C1;
     border-radius: 50%;
-    margin: 4px auto 0;
+    margin: 3px auto 0;
+    position: relative;
+    z-index: 1;
 }
 
 /* Mini Frog for button */
@@ -450,6 +743,7 @@ body {
     background: linear-gradient(135deg, #32CD32 0%, #90EE90 100%);
     border-radius: 50% 50% 40% 40%;
     position: relative;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
 .btn-frog-eyes {
@@ -586,6 +880,7 @@ body {
     background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
     border-radius: 25px 25px 20px 20px;
     position: relative;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.3);
 }
 
 .preview-owl .preview-face {
@@ -653,92 +948,123 @@ body {
     transform: rotate(15deg);
 }
 
-/* Preview Bunny */
-.preview-bunny {
+/* Preview Cow */
+.preview-cow {
     position: relative;
 }
 
-.preview-bunny .preview-ears {
+.preview-cow .preview-horns {
     display: flex;
     justify-content: center;
-    gap: 10px;
-    margin-bottom: -5px;
+    gap: 30px;
+    margin-bottom: -8px;
 }
 
-.preview-bunny .preview-ear {
-    width: 14px;
-    height: 35px;
-    background: linear-gradient(135deg, #FFB6C1 0%, #FFC0CB 100%);
-    border-radius: 7px 7px 3px 3px;
-    position: relative;
+.preview-cow .preview-horn {
+    width: 8px;
+    height: 18px;
+    background: linear-gradient(135deg, #F5DEB3 0%, #DEB887 100%);
+    border-radius: 4px 4px 2px 2px;
 }
 
-.preview-bunny .preview-ear::after {
-    content: '';
-    position: absolute;
-    width: 6px;
-    height: 22px;
-    background: #FFEBEE;
-    border-radius: 3px;
-    top: 6px;
-    left: 50%;
-    transform: translateX(-50%);
+.preview-cow .preview-horn.left {
+    transform: rotate(-18deg);
 }
 
-.preview-bunny .preview-ear.left {
-    transform: rotate(-8deg);
+.preview-cow .preview-horn.right {
+    transform: rotate(18deg);
 }
 
-.preview-bunny .preview-ear.right {
-    transform: rotate(8deg);
-}
-
-.preview-bunny .preview-body {
-    width: 48px;
+.preview-cow .preview-body {
+    width: 52px;
     height: 52px;
-    background: linear-gradient(135deg, #FFB6C1 0%, #FFC0CB 100%);
-    border-radius: 24px 24px 20px 20px;
+    background: linear-gradient(135deg, #FFFFFF 0%, #F5F5F5 100%);
+    border-radius: 26px 26px 22px 22px;
     position: relative;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.3);
 }
 
-.preview-bunny .preview-face {
+.preview-cow .preview-spots {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    overflow: hidden;
+}
+
+.preview-cow .preview-spot {
+    position: absolute;
+    background: #333;
+    border-radius: 50%;
+}
+
+.preview-cow .preview-spot.spot1 {
+    width: 14px;
+    height: 11px;
+    top: 6px;
+    left: 6px;
+    border-radius: 60% 40% 50% 50%;
+}
+
+.preview-cow .preview-spot.spot2 {
+    width: 10px;
+    height: 8px;
+    bottom: 12px;
+    right: 8px;
+    border-radius: 40% 60% 50% 50%;
+}
+
+.preview-cow .preview-face {
     position: absolute;
     top: 8px;
     left: 50%;
     transform: translateX(-50%);
-    width: 36px;
+    width: 40px;
+    z-index: 1;
 }
 
-.preview-bunny .preview-eyes {
+.preview-cow .preview-eyes {
     display: flex;
     justify-content: space-between;
 }
 
-.preview-bunny .preview-eye {
+.preview-cow .preview-eye {
     width: 12px;
     height: 12px;
     background: white;
     border-radius: 50%;
     position: relative;
+    border: 1px solid #333;
 }
 
-.preview-bunny .preview-eye::after {
+.preview-cow .preview-eye::after {
     content: '';
     position: absolute;
     width: 6px;
     height: 6px;
     background: #333;
     border-radius: 50%;
-    top: 3px;
-    left: 3px;
+    top: 2px;
+    left: 2px;
 }
 
-.preview-bunny .preview-nose {
-    width: 10px;
-    height: 7px;
-    background: #FF69B4;
+.preview-cow .preview-snout {
+    width: 24px;
+    height: 14px;
+    background: #FFB6C1;
     border-radius: 50%;
-    margin: 8px auto 0;
+    margin: 6px auto 0;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0 4px;
+}
+
+.preview-cow .preview-nostril {
+    width: 5px;
+    height: 6px;
+    background: #FF91A4;
+    border-radius: 50%;
 }
 
 /* Preview Frog */
@@ -748,6 +1074,7 @@ body {
     background: linear-gradient(135deg, #32CD32 0%, #90EE90 100%);
     border-radius: 50% 50% 40% 40%;
     position: relative;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.3);
 }
 
 .preview-frog .preview-eyes {
@@ -1727,145 +2054,220 @@ body {
 }
 
 /* ==================== */
-/* BENNY THE BUNNY */
+/* BESSIE THE COW */
 /* ==================== */
 
-.mascot-bunny .mascot-body {
-    width: 75px;
+.mascot-cow .mascot-body {
+    width: 80px;
     height: 85px;
-    background: linear-gradient(135deg, #FFB6C1 0%, #FFC0CB 100%);
-    border-radius: 35px 35px 30px 30px;
+    background: linear-gradient(135deg, #FFFFFF 0%, #F5F5F5 100%);
+    border-radius: 40px 40px 35px 35px;
     position: relative;
     box-shadow: 0 4px 15px rgba(0,0,0,0.25);
 }
 
-.mascot-bunny .mascot-ears {
+/* Cow horns */
+.mascot-cow .mascot-horns {
     position: absolute;
-    top: -45px;
+    top: -25px;
     width: 100%;
     display: flex;
     justify-content: center;
-    gap: 15px;
+    gap: 45px;
 }
 
-.mascot-bunny .mascot-ear {
-    width: 20px;
-    height: 50px;
-    background: linear-gradient(135deg, #FFB6C1 0%, #FFC0CB 100%);
-    border-radius: 10px 10px 5px 5px;
+.mascot-cow .mascot-horn {
+    width: 12px;
+    height: 28px;
+    background: linear-gradient(135deg, #F5DEB3 0%, #DEB887 50%, #D2B48C 100%);
+    border-radius: 6px 6px 3px 3px;
     position: relative;
 }
 
-.mascot-bunny .mascot-ear::after {
-    content: '';
-    position: absolute;
-    width: 10px;
-    height: 35px;
-    background: #FFEBEE;
-    border-radius: 5px;
-    top: 8px;
-    left: 50%;
-    transform: translateX(-50%);
-}
-
-.mascot-bunny .mascot-ear.left {
-    transform: rotate(-10deg);
+.mascot-cow .mascot-horn.left {
+    transform: rotate(-20deg);
     transform-origin: bottom center;
 }
 
-.mascot-bunny .mascot-ear.right {
-    transform: rotate(10deg);
+.mascot-cow .mascot-horn.right {
+    transform: rotate(20deg);
     transform-origin: bottom center;
 }
 
-.mascot-bunny .mascot-ear.wiggle {
-    animation: earWiggle 0.25s ease infinite alternate;
-}
-
-.mascot-bunny .mascot-ear.left.wiggle {
-    animation-name: earWiggleLeft;
-}
-
-.mascot-bunny .mascot-ear.right.wiggle {
-    animation-name: earWiggleRight;
-}
-
-@keyframes earWiggleLeft {
-    0% { transform: rotate(-10deg); }
-    100% { transform: rotate(-25deg); }
-}
-
-@keyframes earWiggleRight {
-    0% { transform: rotate(10deg); }
-    100% { transform: rotate(25deg); }
-}
-
-.mascot-bunny .mascot-face {
+/* Cow ears - floppy style */
+.mascot-cow .mascot-ears {
     position: absolute;
-    top: 12px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 55px;
-    height: 45px;
-}
-
-.mascot-bunny .mascot-eyes {
+    top: -8px;
+    width: 100%;
     display: flex;
     justify-content: space-between;
-    padding: 0 3px;
+    padding: 0 -5px;
 }
 
-.mascot-bunny .mascot-eye {
+.mascot-cow .mascot-ear {
+    width: 28px;
+    height: 18px;
+    background: linear-gradient(135deg, #FFFFFF 0%, #F0F0F0 100%);
+    border-radius: 50% 50% 40% 40%;
+    position: relative;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.mascot-cow .mascot-ear::after {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 10px;
+    background: #FFB6C1;
+    border-radius: 50%;
+    top: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.mascot-cow .mascot-ear.left {
+    transform: rotate(-25deg) translateX(-8px);
+    transform-origin: top right;
+}
+
+.mascot-cow .mascot-ear.right {
+    transform: rotate(25deg) translateX(8px);
+    transform-origin: top left;
+}
+
+/* Cow ear flick animation */
+.mascot-cow .mascot-ear.flick {
+    animation: cowEarFlick 0.3s ease;
+}
+
+@keyframes cowEarFlick {
+    0%, 100% { transform: rotate(-25deg) translateX(-8px); }
+    50% { transform: rotate(-35deg) translateX(-8px) translateY(-3px); }
+}
+
+.mascot-cow .mascot-ear.right.flick {
+    animation: cowEarFlickRight 0.3s ease;
+}
+
+@keyframes cowEarFlickRight {
+    0%, 100% { transform: rotate(25deg) translateX(8px); }
+    50% { transform: rotate(35deg) translateX(8px) translateY(-3px); }
+}
+
+/* Cow spots */
+.mascot-cow .mascot-spots {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    border-radius: inherit;
+    pointer-events: none;
+}
+
+.mascot-cow .mascot-spot {
+    position: absolute;
+    background: #333;
+    border-radius: 50%;
+}
+
+.mascot-cow .mascot-spot.spot1 {
+    width: 22px;
+    height: 18px;
+    top: 8px;
+    left: 8px;
+    border-radius: 60% 40% 50% 50%;
+    transform: rotate(-15deg);
+}
+
+.mascot-cow .mascot-spot.spot2 {
+    width: 18px;
+    height: 15px;
+    top: 45px;
+    right: 10px;
+    border-radius: 40% 60% 45% 55%;
+    transform: rotate(20deg);
+}
+
+.mascot-cow .mascot-spot.spot3 {
+    width: 14px;
+    height: 12px;
+    bottom: 20px;
+    left: 15px;
+    border-radius: 50% 50% 40% 60%;
+    transform: rotate(-10deg);
+}
+
+.mascot-cow .mascot-face {
+    position: absolute;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 50px;
+}
+
+.mascot-cow .mascot-eyes {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 5px;
+}
+
+.mascot-cow .mascot-eye {
     width: 18px;
     height: 18px;
     background: white;
     border-radius: 50%;
     position: relative;
+    border: 2px solid #333;
 }
 
-.mascot-bunny .mascot-eye::after {
+.mascot-cow .mascot-eye::after {
     content: '';
     position: absolute;
     width: 10px;
     height: 10px;
     background: #333;
     border-radius: 50%;
-    top: 4px;
-    left: 4px;
+    top: 3px;
+    left: 3px;
 }
 
-.mascot-bunny .mascot-nose {
-    width: 14px;
-    height: 10px;
-    background: #FF69B4;
+/* Cow snout */
+.mascot-cow .mascot-snout {
+    width: 38px;
+    height: 22px;
+    background: linear-gradient(135deg, #FFB6C1 0%, #FFC0CB 100%);
     border-radius: 50%;
     position: absolute;
-    bottom: 12px;
+    bottom: 2px;
     left: 50%;
     transform: translateX(-50%);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0 6px;
 }
 
-.mascot-bunny .mascot-nose.twitch {
-    animation: noseTwitch 0.1s ease infinite;
-}
-
-@keyframes noseTwitch {
-    0%, 100% { transform: translateX(-50%) scale(1); }
-    50% { transform: translateX(-50%) scale(1.2) translateY(-2px); }
-}
-
-.mascot-bunny .mascot-mouth {
+.mascot-cow .mascot-nostril {
     width: 8px;
+    height: 10px;
+    background: #FF91A4;
+    border-radius: 50%;
+}
+
+.mascot-cow .mascot-mouth {
+    width: 12px;
     height: 4px;
     border-bottom: 3px solid #FF69B4;
-    border-radius: 0 0 4px 4px;
+    border-radius: 0 0 6px 6px;
     position: absolute;
-    bottom: 5px;
+    bottom: -6px;
     left: 50%;
     transform: translateX(-50%);
 }
 
-.mascot-bunny .mascot-cheeks {
+.mascot-cow .mascot-cheeks {
     position: absolute;
     top: 22px;
     width: 100%;
@@ -1873,122 +2275,78 @@ body {
     justify-content: space-between;
 }
 
-.mascot-bunny .mascot-cheek {
+.mascot-cow .mascot-cheek {
     width: 10px;
     height: 6px;
-    background: #FF91A4;
-    border-radius: 50%;
-    opacity: 0.8;
-}
-
-.mascot-bunny .mascot-paws {
-    position: absolute;
-    bottom: 5px;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    gap: 30px;
-}
-
-.mascot-bunny .mascot-paw {
-    width: 18px;
-    height: 22px;
     background: #FFB6C1;
-    border-radius: 8px 8px 12px 12px;
-    position: relative;
+    border-radius: 50%;
+    opacity: 0.7;
 }
 
-.mascot-bunny .mascot-paw::after {
+/* Cow tail */
+.mascot-cow .mascot-tail {
+    position: absolute;
+    bottom: 25px;
+    right: -18px;
+    width: 6px;
+    height: 35px;
+    background: linear-gradient(to bottom, #F5F5F5 0%, #E0E0E0 100%);
+    border-radius: 3px;
+    transform-origin: top center;
+}
+
+.mascot-cow .mascot-tail::after {
     content: '';
     position: absolute;
-    bottom: 3px;
+    bottom: -8px;
     left: 50%;
     transform: translateX(-50%);
-    width: 12px;
-    height: 8px;
-    background: #FFEBEE;
-    border-radius: 6px;
+    width: 14px;
+    height: 12px;
+    background: #333;
+    border-radius: 40% 40% 50% 50%;
 }
 
-/* Bunny whiskers */
-.mascot-bunny .mascot-whiskers {
-    position: absolute;
-    bottom: 8px;
-    width: 100%;
-    height: 20px;
-    pointer-events: none;
+/* Tail swish animation */
+.mascot-cow .mascot-tail.swish {
+    animation: cowTailSwish 0.6s ease;
 }
 
-.mascot-bunny .mascot-whisker {
-    position: absolute;
-    width: 18px;
-    height: 2px;
-    background: linear-gradient(90deg, rgba(255,182,193,0.8) 0%, rgba(255,182,193,0) 100%);
-    border-radius: 1px;
-}
-
-.mascot-bunny .mascot-whisker.left {
-    left: -12px;
-    background: linear-gradient(90deg, rgba(255,182,193,0) 0%, rgba(255,182,193,0.8) 100%);
-}
-
-.mascot-bunny .mascot-whisker.right {
-    right: -12px;
-}
-
-.mascot-bunny .mascot-whisker.top {
-    top: 0;
-    transform: rotate(-8deg);
-}
-
-.mascot-bunny .mascot-whisker.bottom {
-    top: 8px;
-    transform: rotate(8deg);
-}
-
-.mascot-bunny .mascot-whisker.left.top { transform: rotate(8deg); }
-.mascot-bunny .mascot-whisker.left.bottom { transform: rotate(-8deg); }
-
-/* Cute fluffy bunny tail */
-.mascot-bunny .mascot-tail {
-    position: absolute;
-    bottom: 20px;
-    right: -12px;
-    width: 22px;
-    height: 20px;
-    background: radial-gradient(ellipse, #FFFFFF 0%, #FFC0CB 70%, #FFB6C1 100%);
-    border-radius: 50%;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.15), inset -2px -2px 4px rgba(255,182,193,0.5);
-    animation: tailWiggle 2.5s ease-in-out infinite;
-}
-
-@keyframes tailWiggle {
-    0%, 100% { transform: scale(1) rotate(0deg); }
-    25% { transform: scale(1.1) rotate(-8deg); }
-    75% { transform: scale(1.1) rotate(8deg); }
-}
-
-/* Bunny hooting animation */
-.mascot-bunny.mascot.hooting .mascot-body {
-    animation: bunnyBounce 0.6s ease;
-}
-
-.mascot-bunny.mascot.hooting .mascot-ear {
-    animation: earWiggleBounce 0.6s ease;
-}
-
-@keyframes bunnyBounce {
-    0%, 100% { transform: scale(1); }
-    25% { transform: scale(1.15) translateY(-8px); }
-    50% { transform: scale(0.95); }
-    75% { transform: scale(1.08); }
-}
-
-@keyframes earWiggleBounce {
+@keyframes cowTailSwish {
     0%, 100% { transform: rotate(0deg); }
-    25% { transform: rotate(-20deg); }
-    50% { transform: rotate(20deg); }
-    75% { transform: rotate(-10deg); }
+    25% { transform: rotate(15deg); }
+    75% { transform: rotate(-15deg); }
+}
+
+/* Cow moo animation (hooting) */
+.mascot-cow.mascot.hooting .mascot-body {
+    animation: cowMooBounce 0.6s ease;
+}
+
+.mascot-cow.mascot.hooting .mascot-ear {
+    animation: cowEarBounce 0.6s ease;
+}
+
+.mascot-cow.mascot.hooting .mascot-snout {
+    animation: cowSnoutPuff 0.6s ease;
+}
+
+@keyframes cowMooBounce {
+    0%, 100% { transform: scale(1); }
+    25% { transform: scale(1.12) translateY(-6px); }
+    50% { transform: scale(0.96); }
+    75% { transform: scale(1.06); }
+}
+
+@keyframes cowEarBounce {
+    0%, 100% { transform: rotate(-25deg) translateX(-8px); }
+    50% { transform: rotate(-15deg) translateX(-8px) translateY(-5px); }
+}
+
+@keyframes cowSnoutPuff {
+    0%, 100% { transform: translateX(-50%) scale(1); }
+    30% { transform: translateX(-50%) scale(1.15); }
+    60% { transform: translateX(-50%) scale(1.05); }
 }
 
 /* ==================== */
@@ -2245,23 +2603,24 @@ body {
     25%, 65% { height: 4px; }
 }
 
-/* Bunny bored - droopy ears */
-.mascot-bunny.bored .mascot-ear.left {
-    animation: boredEarLeft 3s ease;
+/* Cow bored - lazy tail and ear droops */
+.mascot-cow.bored .mascot-ear {
+    animation: cowBoredEar 3s ease;
 }
 
-.mascot-bunny.bored .mascot-ear.right {
-    animation: boredEarRight 3s ease;
+.mascot-cow.bored .mascot-tail {
+    animation: cowBoredTail 3s ease;
 }
 
-@keyframes boredEarLeft {
-    0%, 100% { transform: rotate(-10deg); }
-    50% { transform: rotate(5deg) translateY(5px); }
+@keyframes cowBoredEar {
+    0%, 100% { transform: rotate(-25deg) translateX(-8px); }
+    50% { transform: rotate(-35deg) translateX(-8px) translateY(3px); }
 }
 
-@keyframes boredEarRight {
-    0%, 100% { transform: rotate(10deg); }
-    50% { transform: rotate(-5deg) translateY(5px); }
+@keyframes cowBoredTail {
+    0%, 100% { transform: rotate(0deg); }
+    30% { transform: rotate(5deg); }
+    70% { transform: rotate(-5deg); }
 }
 
 /* Frog bored - slow throat breathing */
@@ -2325,14 +2684,23 @@ body {
     100% { transform: rotate(50deg); }
 }
 
-/* Bunny excited - rapid ear bouncing */
-.mascot-bunny.excited .mascot-ear {
-    animation: excitedEar 0.2s ease infinite alternate;
+/* Cow excited - tail wagging and ear perking */
+.mascot-cow.excited .mascot-ear {
+    animation: cowExcitedEar 0.2s ease infinite alternate;
 }
 
-@keyframes excitedEar {
-    0% { transform: translateY(0) rotate(0deg); }
-    100% { transform: translateY(-10px) rotate(15deg); }
+.mascot-cow.excited .mascot-tail {
+    animation: cowExcitedTail 0.15s ease infinite alternate;
+}
+
+@keyframes cowExcitedEar {
+    0% { transform: rotate(-25deg) translateX(-8px); }
+    100% { transform: rotate(-15deg) translateX(-8px) translateY(-5px); }
+}
+
+@keyframes cowExcitedTail {
+    0% { transform: rotate(-20deg); }
+    100% { transform: rotate(20deg); }
 }
 
 /* Frog excited - rapid tongue flicks */
@@ -2408,22 +2776,22 @@ body {
     100% { transform: rotate(45deg); }
 }
 
-.mascot-bunny.dancing .mascot-ear {
-    animation: danceEar 0.25s ease infinite alternate;
+.mascot-cow.dancing .mascot-ear {
+    animation: cowDanceEar 0.25s ease infinite alternate;
 }
 
-@keyframes danceEar {
-    0% { transform: rotate(-10deg); }
-    100% { transform: rotate(10deg); }
+@keyframes cowDanceEar {
+    0% { transform: rotate(-25deg) translateX(-8px); }
+    100% { transform: rotate(-15deg) translateX(-8px) translateY(-3px); }
 }
 
-.mascot-bunny.dancing .mascot-tail {
-    animation: danceTail 0.2s ease infinite alternate;
+.mascot-cow.dancing .mascot-tail {
+    animation: cowDanceTail 0.2s ease infinite alternate;
 }
 
-@keyframes danceTail {
-    0% { transform: scale(1) rotate(-15deg); }
-    100% { transform: scale(1.2) rotate(15deg); }
+@keyframes cowDanceTail {
+    0% { transform: rotate(-25deg); }
+    100% { transform: rotate(25deg); }
 }
 
 .mascot-frog.dancing .mascot-leg {
@@ -2744,26 +3112,45 @@ body {
     100% { transform: translateY(35px); }
 }
 
-/* Tap icons to show lanes are tappable */
-.lane::after {
-    content: '👆';
+/* Speech bubble hint from mascot */
+.tap-hint-bubble {
     position: absolute;
-    bottom: 25%;
+    bottom: 90px;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 1.8rem;
-    animation: tapBounce 1s ease-in-out infinite;
-    opacity: 0.6;
-    filter: grayscale(1) brightness(2);
+    background: white;
+    color: #333;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    white-space: nowrap;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    z-index: 15;
+    animation: hintBounce 1.5s ease-in-out infinite;
 }
 
-@keyframes tapBounce {
+/* Speech bubble tail pointing down to character */
+.tap-hint-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid white;
+}
+
+@keyframes hintBounce {
     0%, 100% { transform: translateX(-50%) translateY(0); }
-    50% { transform: translateX(-50%) translateY(-8px); }
+    50% { transform: translateX(-50%) translateY(-6px); }
 }
 
-/* Hide tap icons after first tap */
-.racing-track.tapped .lane::after {
+/* Hide hint after first tap */
+.racing-track.tapped .tap-hint-bubble {
     display: none;
 }
 
@@ -3042,204 +3429,210 @@ body {
 }
 
 /* ==================== */
-/* RACING BUNNY */
+/* RACING COW */
 /* ==================== */
 
-.racing-bunny-body {
-    width: 52px;
+.racing-cow-body {
+    width: 55px;
     height: 58px;
-    background: linear-gradient(135deg, #FFB6C1 0%, #FFC0CB 100%);
-    border-radius: 26px 26px 22px 22px;
+    background: linear-gradient(135deg, #FFFFFF 0%, #F5F5F5 100%);
+    border-radius: 28px 28px 24px 24px;
     position: relative;
     box-shadow: 0 3px 10px rgba(0,0,0,0.25);
 }
 
-.racing-bunny-ears {
+.racing-cow-horns {
     position: absolute;
-    top: -28px;
+    top: -16px;
     width: 100%;
     display: flex;
     justify-content: center;
-    gap: 10px;
+    gap: 32px;
 }
 
-.racing-bunny-ear {
+.racing-cow-horn {
+    width: 8px;
+    height: 18px;
+    background: linear-gradient(135deg, #F5DEB3 0%, #DEB887 100%);
+    border-radius: 4px 4px 2px 2px;
+}
+
+.racing-cow-horn.left {
+    transform: rotate(-18deg);
+}
+
+.racing-cow-horn.right {
+    transform: rotate(18deg);
+}
+
+.racing-cow-spots {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    overflow: hidden;
+}
+
+.racing-cow-spot {
+    position: absolute;
+    background: #333;
+    border-radius: 50%;
+}
+
+.racing-cow-spot.spot1 {
     width: 14px;
-    height: 32px;
-    background: linear-gradient(135deg, #FFB6C1 0%, #FFC0CB 100%);
-    border-radius: 7px 7px 4px 4px;
-    position: relative;
-}
-
-.racing-bunny-ear::after {
-    content: '';
-    position: absolute;
-    width: 7px;
-    height: 22px;
-    background: #FFEBEE;
-    border-radius: 4px;
+    height: 11px;
     top: 5px;
-    left: 50%;
-    transform: translateX(-50%);
+    left: 5px;
 }
 
-.racing-bunny-ear.left {
-    transform: rotate(-8deg);
-    transform-origin: bottom center;
+.racing-cow-spot.spot2 {
+    width: 10px;
+    height: 8px;
+    bottom: 15px;
+    right: 8px;
 }
 
-.racing-bunny-ear.right {
-    transform: rotate(8deg);
-    transform-origin: bottom center;
-}
-
-.racing-bunny-face {
+.racing-cow-face {
     position: absolute;
-    top: 8px;
+    top: 10px;
     left: 50%;
     transform: translateX(-50%);
-    width: 40px;
-    height: 32px;
+    width: 42px;
+    height: 36px;
+    z-index: 1;
 }
 
-.racing-bunny-eyes {
+.racing-cow-eyes {
     display: flex;
     justify-content: space-between;
     padding: 0 2px;
 }
 
-.racing-bunny-eye {
+.racing-cow-eye {
     width: 13px;
     height: 13px;
     background: white;
     border-radius: 50%;
     position: relative;
+    border: 1px solid #333;
 }
 
-.racing-bunny-eye::after {
+.racing-cow-eye::after {
     content: '';
     position: absolute;
     width: 7px;
     height: 7px;
     background: #333;
     border-radius: 50%;
-    top: 3px;
-    left: 3px;
+    top: 2px;
+    left: 2px;
 }
 
-.racing-bunny-nose {
-    width: 10px;
-    height: 7px;
-    background: #FF69B4;
+.racing-cow-snout {
+    width: 26px;
+    height: 14px;
+    background: #FFB6C1;
     border-radius: 50%;
     position: absolute;
-    bottom: 6px;
+    bottom: 2px;
     left: 50%;
     transform: translateX(-50%);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0 4px;
 }
 
-/* Racing bunny animations */
-.player-owl.racing-bunny.hop {
-    animation: racingBunnyHop 0.45s ease;
+.racing-cow-nostril {
+    width: 5px;
+    height: 6px;
+    background: #FF91A4;
+    border-radius: 50%;
 }
 
-@keyframes racingBunnyHop {
+/* Racing cow animations */
+.player-owl.racing-cow.hop {
+    animation: racingCowHop 0.45s ease;
+}
+
+@keyframes racingCowHop {
     0% { transform: translateY(0) scale(1); }
-    20% { transform: translateY(-25px) scale(1.12); }
-    40% { transform: translateY(-30px) scale(1.18); }
-    60% { transform: translateY(-18px) scale(1.1); }
-    80% { transform: translateY(-6px) scale(1.05); }
+    20% { transform: translateY(-20px) scale(1.1); }
+    40% { transform: translateY(-25px) scale(1.15); }
+    60% { transform: translateY(-15px) scale(1.08); }
+    80% { transform: translateY(-5px) scale(1.03); }
     100% { transform: translateY(0) scale(1); }
 }
 
-.player-owl.racing-bunny.hop .racing-bunny-ear {
-    animation: racingEarFlop 0.45s ease;
+.player-owl.racing-cow.hop .racing-cow-horn {
+    animation: racingHornBounce 0.45s ease;
 }
 
-@keyframes racingEarFlop {
-    0%, 100% { transform: rotate(0deg); }
-    30% { transform: rotate(-25deg) translateY(-5px); }
-    60% { transform: rotate(15deg); }
+@keyframes racingHornBounce {
+    0%, 100% { transform: rotate(-18deg); }
+    50% { transform: rotate(-25deg) translateY(-3px); }
 }
 
-.player-owl.racing-bunny.celebrate {
-    animation: racingBunnyCelebrate 0.5s ease infinite;
+.player-owl.racing-cow.celebrate {
+    animation: racingCowCelebrate 0.5s ease infinite;
 }
 
-@keyframes racingBunnyCelebrate {
+@keyframes racingCowCelebrate {
     0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-15px); }
+    50% { transform: translateY(-12px); }
 }
 
-.player-owl.racing-bunny.celebrate .racing-bunny-ear {
-    animation: racingEarWiggle 0.25s ease infinite alternate;
+.player-owl.racing-cow.celebrate .racing-cow-snout {
+    animation: racingSnoutWiggle 0.3s ease infinite alternate;
 }
 
-@keyframes racingEarWiggle {
-    0% { transform: rotate(-15deg); }
-    100% { transform: rotate(15deg); }
+@keyframes racingSnoutWiggle {
+    0% { transform: translateX(-50%) scale(1); }
+    100% { transform: translateX(-50%) scale(1.1); }
 }
 
-.player-owl.racing-bunny.hooting .racing-bunny-body {
-    animation: racingBunnySqueak 0.6s ease;
+.player-owl.racing-cow.hooting .racing-cow-body {
+    animation: racingCowMoo 0.6s ease;
 }
 
-.player-owl.racing-bunny.hooting .racing-bunny-ear {
-    animation: racingEarBounce 0.6s ease;
+.player-owl.racing-cow.hooting .racing-cow-snout {
+    animation: racingSnoutPuff 0.6s ease;
 }
 
-@keyframes racingBunnySqueak {
+@keyframes racingCowMoo {
     0%, 100% { transform: scale(1); }
-    15% { transform: scale(1.18) translateY(-10px); }
-    30% { transform: scale(0.92); }
-    50% { transform: scale(1.12); }
-    70% { transform: scale(0.96); }
+    15% { transform: scale(1.15) translateY(-8px); }
+    30% { transform: scale(0.94); }
+    50% { transform: scale(1.1); }
+    70% { transform: scale(0.97); }
 }
 
-@keyframes racingEarBounce {
-    0%, 100% { transform: rotate(0); }
-    25% { transform: rotate(-25deg); }
-    50% { transform: rotate(25deg); }
-    75% { transform: rotate(-15deg); }
+@keyframes racingSnoutPuff {
+    0%, 100% { transform: translateX(-50%) scale(1); }
+    30% { transform: translateX(-50%) scale(1.2); }
+    60% { transform: translateX(-50%) scale(1.1); }
 }
 
-/* Racing bunny bored animation */
-.player-owl.racing-bunny.bored {
-    animation: racingBunnyBored 2s ease;
+/* Racing cow bored animation */
+.player-owl.racing-cow.bored {
+    animation: racingCowBored 2s ease;
 }
 
-@keyframes racingBunnyBored {
+@keyframes racingCowBored {
     0%, 100% { transform: translateY(0); }
-    30% { transform: translateY(-5px); }
+    30% { transform: translateY(-4px); }
     50% { transform: translateY(0); }
-    70% { transform: translateY(-3px); }
+    70% { transform: translateY(-2px); }
 }
 
-.player-owl.racing-bunny.bored .racing-bunny-ear.left {
-    animation: racingBunnyBoredEarLeft 2s ease;
+.player-owl.racing-cow.bored .racing-cow-snout {
+    animation: racingCowBoredSnout 2s ease;
 }
 
-.player-owl.racing-bunny.bored .racing-bunny-ear.right {
-    animation: racingBunnyBoredEarRight 2s ease;
-}
-
-@keyframes racingBunnyBoredEarLeft {
-    0%, 100% { transform: rotate(-8deg); }
-    50% { transform: rotate(10deg) translateY(5px); }
-}
-
-@keyframes racingBunnyBoredEarRight {
-    0%, 100% { transform: rotate(8deg); }
-    50% { transform: rotate(-10deg) translateY(5px); }
-}
-
-.player-owl.racing-bunny.bored .racing-bunny-nose {
-    animation: racingBunnyBoredNose 2s ease;
-}
-
-@keyframes racingBunnyBoredNose {
+@keyframes racingCowBoredSnout {
     0%, 40%, 60%, 100% { transform: translateX(-50%) scale(1); }
-    45%, 55% { transform: translateX(-50%) scale(1.3); }
+    45%, 55% { transform: translateX(-50%) scale(1.15); }
 }
 
 /* ==================== */

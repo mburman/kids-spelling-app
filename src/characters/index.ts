@@ -2,14 +2,14 @@
 
 import type { CharacterConfig, CharacterType, MessageCategory } from './types';
 import { owlConfig } from './owl';
-import { bunnyConfig } from './bunny';
+import { cowConfig } from './cow';
 import { frogConfig } from './frog';
 
 export type { CharacterConfig, CharacterType, MessageCategory };
 
 const characters: Record<CharacterType, CharacterConfig> = {
   owl: owlConfig,
-  bunny: bunnyConfig,
+  cow: cowConfig,
   frog: frogConfig,
 };
 
@@ -31,4 +31,4 @@ export function getRandomClickMessage(config: CharacterConfig): string {
   return messages[Math.floor(Math.random() * messages.length)] ?? messages[0] ?? '';
 }
 
-export { owlConfig, bunnyConfig, frogConfig };
+export { owlConfig, cowConfig, frogConfig };

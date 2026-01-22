@@ -108,8 +108,8 @@ function owlHoot(): void {
   // Play character-specific sound
   if (currentCharacter === 'owl') {
     playSound('hoot');
-  } else if (currentCharacter === 'bunny') {
-    playSound('squeak');
+  } else if (currentCharacter === 'cow') {
+    playSound('moo');
   } else if (currentCharacter === 'frog') {
     playSound('ribbit');
   }
@@ -225,7 +225,7 @@ function updateRacingCharacter(): void {
   if (!player) return;
 
   // Remove existing character classes
-  player.classList.remove('racing-owl', 'racing-bunny', 'racing-frog');
+  player.classList.remove('racing-owl', 'racing-cow', 'racing-frog');
   player.classList.add(`racing-${currentCharacter}`);
 
   // Update the inner HTML based on character
@@ -250,19 +250,26 @@ function getRacingCharacterHTML(character: CharacterType): string {
           </div>
         </div>
       `;
-    case 'bunny':
+    case 'cow':
       return `
-        <div class="racing-bunny-body">
-          <div class="racing-bunny-ears">
-            <div class="racing-bunny-ear left"></div>
-            <div class="racing-bunny-ear right"></div>
+        <div class="racing-cow-body">
+          <div class="racing-cow-horns">
+            <div class="racing-cow-horn left"></div>
+            <div class="racing-cow-horn right"></div>
           </div>
-          <div class="racing-bunny-face">
-            <div class="racing-bunny-eyes">
-              <div class="racing-bunny-eye left"></div>
-              <div class="racing-bunny-eye right"></div>
+          <div class="racing-cow-spots">
+            <div class="racing-cow-spot spot1"></div>
+            <div class="racing-cow-spot spot2"></div>
+          </div>
+          <div class="racing-cow-face">
+            <div class="racing-cow-eyes">
+              <div class="racing-cow-eye left"></div>
+              <div class="racing-cow-eye right"></div>
             </div>
-            <div class="racing-bunny-nose"></div>
+            <div class="racing-cow-snout">
+              <div class="racing-cow-nostril"></div>
+              <div class="racing-cow-nostril"></div>
+            </div>
           </div>
         </div>
       `;

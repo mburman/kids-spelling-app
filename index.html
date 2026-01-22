@@ -6,6 +6,20 @@
     <title>Spelling Fun!</title>
 </head>
 <body>
+    <!-- Floating Background Decorations -->
+    <div class="floating-decorations">
+        <div class="floating-star" style="--delay: 0s; --x: 10%;"></div>
+        <div class="floating-star" style="--delay: 2.5s; --x: 85%;"></div>
+        <div class="floating-star" style="--delay: 5s; --x: 25%;"></div>
+        <div class="floating-star" style="--delay: 7.5s; --x: 60%;"></div>
+        <div class="floating-cloud" style="--delay: 0s; --y: 20%;"></div>
+        <div class="floating-cloud" style="--delay: 8s; --y: 70%;"></div>
+        <div class="floating-sparkle" style="--delay: 1s; --x: 15%; --y: 30%;"></div>
+        <div class="floating-sparkle" style="--delay: 3s; --x: 80%; --y: 50%;"></div>
+        <div class="floating-sparkle" style="--delay: 5s; --x: 50%; --y: 20%;"></div>
+        <div class="floating-sparkle" style="--delay: 7s; --x: 25%; --y: 70%;"></div>
+    </div>
+
     <!-- Mascot -->
     <div id="mascot" class="mascot">
         <div class="mascot-body">
@@ -33,7 +47,28 @@
 
     <!-- Home Screen -->
     <div id="home-screen" class="screen active">
-        <h1 class="bounce-in">Spelling Fun!</h1>
+        <h1 class="home-title bounce-in">
+            <span class="title-letter" style="--i: 0">S</span>
+            <span class="title-letter" style="--i: 1">p</span>
+            <span class="title-letter" style="--i: 2">e</span>
+            <span class="title-letter" style="--i: 3">l</span>
+            <span class="title-letter" style="--i: 4">l</span>
+            <span class="title-letter" style="--i: 5">i</span>
+            <span class="title-letter" style="--i: 6">n</span>
+            <span class="title-letter" style="--i: 7">g</span>
+            <span class="title-space"> </span>
+            <span class="title-letter" style="--i: 8">F</span>
+            <span class="title-letter" style="--i: 9">u</span>
+            <span class="title-letter" style="--i: 10">n</span>
+            <span class="title-letter" style="--i: 11">!</span>
+            <span class="title-stars">✨</span>
+        </h1>
+
+        <!-- Home Screen Mascot -->
+        <div id="home-mascot" class="home-mascot">
+            <div id="home-mascot-speech" class="home-mascot-speech">Let's spell!</div>
+        </div>
+
         <div class="word-preview wiggle-hover">
             <h3>This Week's Words:</h3>
             <div id="word-list-preview"></div>
@@ -96,26 +131,33 @@
                 <h3 class="character-name">Ollie the Owl</h3>
                 <p class="character-catchphrase">"Hoot hoot!"</p>
             </div>
-            <div class="character-card" data-character="bunny">
+            <div class="character-card" data-character="cow">
                 <div class="character-preview">
-                    <div class="preview-bunny">
-                        <div class="preview-ears">
-                            <div class="preview-ear left"></div>
-                            <div class="preview-ear right"></div>
+                    <div class="preview-cow">
+                        <div class="preview-horns">
+                            <div class="preview-horn left"></div>
+                            <div class="preview-horn right"></div>
                         </div>
                         <div class="preview-body">
+                            <div class="preview-spots">
+                                <div class="preview-spot spot1"></div>
+                                <div class="preview-spot spot2"></div>
+                            </div>
                             <div class="preview-face">
                                 <div class="preview-eyes">
                                     <div class="preview-eye"></div>
                                     <div class="preview-eye"></div>
                                 </div>
-                                <div class="preview-nose"></div>
+                                <div class="preview-snout">
+                                    <div class="preview-nostril"></div>
+                                    <div class="preview-nostril"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <h3 class="character-name">Benny the Bunny</h3>
-                <p class="character-catchphrase">"Hop hop!"</p>
+                <h3 class="character-name">Bessie the Cow</h3>
+                <p class="character-catchphrase">"Moo moo!"</p>
             </div>
             <div class="character-card" data-character="frog">
                 <div class="character-preview">
@@ -182,6 +224,7 @@
                     </div>
                 </div>
             </div>
+            <div id="tap-hint" class="tap-hint-bubble">Tap a lane to move me!</div>
         </div>
         <div id="racing-message" class="game-message"></div>
         <button id="next-racing-btn" class="big-button green hidden">Next Word</button>

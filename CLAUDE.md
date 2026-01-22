@@ -39,7 +39,7 @@ spelling-app/
 │   │   ├── types.ts        # Character type definitions
 │   │   ├── index.ts        # Character registry
 │   │   ├── owl.ts          # Ollie the Owl config
-│   │   ├── bunny.ts        # Benny the Bunny config
+│   │   ├── cow.ts          # Bessie the Cow config
 │   │   └── frog.ts         # Finn the Frog config
 │   ├── styles.css          # All styles + animations
 │   └── storage.test.ts     # Tests for storage module
@@ -55,7 +55,7 @@ spelling-app/
 - **Practice Mode**: Write on paper, take photo, parent verifies
 - **Parent Mode**: Add/remove spelling words (PIN: 1234)
 - **Local Storage**: Words saved in browser localStorage
-- **3 Playable Characters**: Ollie the Owl, Benny the Bunny, Finn the Frog
+- **3 Playable Characters**: Ollie the Owl, Bessie the Cow, Finn the Frog
 - **Character Selection**: Choose your friend from the home screen
 - **Fun Animations**: Confetti, sparkles, bouncing letters, character-specific animations
 
@@ -66,7 +66,7 @@ The app features 3 playable characters, each with unique sounds, animations, and
 | Character | Personality | Sound | Catchphrase |
 |-----------|-------------|-------|-------------|
 | **Ollie the Owl** (default) | Wise and encouraging | Hoot | "Hoot hoot!" |
-| **Benny the Bunny** | Bouncy and excitable | Squeak | "Hop hop!" |
+| **Bessie the Cow** | Gentle and cheerful | Moo | "Moo moo!" |
 | **Finn the Frog** | Calm and cool | Ribbit | "Ribbit!" |
 
 To change characters:

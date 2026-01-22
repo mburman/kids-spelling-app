@@ -8,6 +8,7 @@ let audioContext: AudioContext | null = null;
 
 // Pre-loaded audio elements for sound files
 let hootAudio: HTMLAudioElement | null = null;
+let mooAudio: HTMLAudioElement | null = null;
 
 export type SoundName =
   | 'correctLetter'
@@ -16,7 +17,7 @@ export type SoundName =
   | 'gameComplete'
   | 'practiceApproved'
   | 'hoot'
-  | 'squeak'
+  | 'moo'
   | 'ribbit'
   | 'laneChange'
   | 'letterSpawn'
@@ -33,6 +34,12 @@ export function initSounds(): void {
   if (!hootAudio) {
     hootAudio = new Audio('/owl-hoot.mp3');
     hootAudio.volume = 0.5;
+  }
+
+  // Preload cow moo audio
+  if (!mooAudio) {
+    mooAudio = new Audio('/cow-moo.mp3');
+    mooAudio.volume = 0.5;
   }
 }
 
@@ -129,12 +136,57 @@ function playHoot(): void {
   }
 }
 
-// Bunny squeak: High-pitched cute squeaks
-function playSqueak(): void {
-  // Quick double squeak - high frequency with fast decay
-  playTone(1200, 0.08, 'sine', 0.25, 0);
-  playTone(1400, 0.1, 'sine', 0.3, 0.06);
-  playTone(1100, 0.06, 'sine', 0.2, 0.14);
+// Cow moo: Deep, friendly moo sound
+function playMoo(): void {
+  if (mooAudio) {
+    mooAudio.currentTime = 0;
+    mooAudio.play().catch(() => {
+      // Fallback to synthesized moo if audio fails
+      playSynthesizedMoo();
+    });
+  } else {
+    // Fallback to synthesized moo
+    playSynthesizedMoo();
+  }
+}
+
+// Synthesized moo fallback - low frequency with vibrato
+function playSynthesizedMoo(): void {
+  if (!audioContext) return;
+
+  const oscillator = audioContext.createOscillator();
+  const gainNode = audioContext.createGain();
+  const lfo = audioContext.createOscillator();
+  const lfoGain = audioContext.createGain();
+
+  // Main oscillator - low frequency for moo sound
+  oscillator.type = 'sine';
+  oscillator.frequency.setValueAtTime(150, audioContext.currentTime);
+  oscillator.frequency.linearRampToValueAtTime(120, audioContext.currentTime + 0.2);
+  oscillator.frequency.linearRampToValueAtTime(100, audioContext.currentTime + 0.5);
+
+  // LFO for gentle vibrato
+  lfo.type = 'sine';
+  lfo.frequency.setValueAtTime(5, audioContext.currentTime);
+  lfoGain.gain.setValueAtTime(8, audioContext.currentTime);
+
+  // Volume envelope - slow attack, sustain, decay
+  gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+  gainNode.gain.linearRampToValueAtTime(0.3, audioContext.currentTime + 0.1);
+  gainNode.gain.setValueAtTime(0.3, audioContext.currentTime + 0.35);
+  gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.6);
+
+  // Connect LFO to main oscillator frequency
+  lfo.connect(lfoGain);
+  lfoGain.connect(oscillator.frequency);
+
+  oscillator.connect(gainNode);
+  gainNode.connect(audioContext.destination);
+
+  lfo.start(audioContext.currentTime);
+  oscillator.start(audioContext.currentTime);
+  lfo.stop(audioContext.currentTime + 0.6);
+  oscillator.stop(audioContext.currentTime + 0.6);
 }
 
 // Frog ribbit: Low frequency croaking sound
@@ -248,8 +300,8 @@ export function playSound(name: SoundName): void {
     case 'hoot':
       playHoot();
       break;
-    case 'squeak':
-      playSqueak();
+    case 'moo':
+      playMoo();
       break;
     case 'ribbit':
       playRibbit();
