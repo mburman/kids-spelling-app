@@ -1433,6 +1433,13 @@ body {
     margin-top: 10px;
 }
 
+.pin-hint {
+    color: #999;
+    font-size: 0.95rem;
+    margin-top: 15px;
+    margin-bottom: 0;
+}
+
 .word-management {
     background: white;
     border-radius: 20px;

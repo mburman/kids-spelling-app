@@ -153,7 +153,7 @@ export function updateWordPreview(): void {
   const settingsBtn = document.getElementById('settings-btn');
 
   if (words.length === 0) {
-    container.innerHTML = '<span class="no-words">No words yet. Add some in Settings! (PIN: 1234)</span>';
+    container.innerHTML = '<span class="no-words">No words yet. Add some in Settings!</span>';
     settingsBtn?.classList.add('needs-attention');
   } else {
     container.innerHTML = words.map(word =>
