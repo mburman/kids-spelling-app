@@ -315,6 +315,9 @@ body {
 .no-words {
     color: #999;
     font-style: italic;
+    text-align: center;
+    padding: 10px 5px;
+    line-height: 1.4;
 }
 
 /* Buttons */
@@ -538,8 +541,17 @@ body {
     transition: transform 0.2s ease;
 }
 
+.settings-button {
+    animation: settingsRotate 8s linear infinite;
+}
+
 .settings-button.needs-attention {
     animation: settingsBounce 1.5s ease-in-out infinite;
+}
+
+@keyframes settingsRotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 }
 
 @keyframes settingsBounce {
@@ -2119,6 +2131,11 @@ body {
     box-shadow: 0 4px 15px rgba(0,0,0,0.25);
 }
 
+/* Hide owl wings for cow */
+.mascot-cow .mascot-wings {
+    display: none;
+}
+
 /* Cow horns */
 .mascot-cow .mascot-horns {
     position: absolute;
@@ -2413,6 +2430,11 @@ body {
     border-radius: 45% 45% 40% 40%;
     position: relative;
     box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+}
+
+/* Hide owl wings for frog */
+.mascot-frog .mascot-wings {
+    display: none;
 }
 
 /* Cute frog spots */
@@ -4208,6 +4230,11 @@ body {
 
     #word-list-preview {
         gap: 6px;
+    }
+
+    .no-words {
+        font-size: 0.85rem;
+        padding: 8px 0;
     }
 
     .word-chip {
