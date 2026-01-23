@@ -6,6 +6,7 @@ const STORAGE_KEYS = {
   PIN: 'spelling_app_pin',
   SCORE: 'spelling_app_score',
   SETTINGS: 'spelling_app_settings',
+  WORD_STATS: 'spelling_app_word_stats',
 } as const;
 
 export type WordPresentationMode = 'both' | 'visual' | 'audio';
@@ -149,4 +150,48 @@ export function setCharacter(character: CharacterType): void {
   const settings = getSettings();
   settings.selectedCharacter = character;
   localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(settings));
+}
+
+// Word stats tracking for progressive difficulty
+export interface WordStats {
+  attempts: number;
+  successes: number;
+}
+
+export function getWordStats(): Record<string, WordStats> {
+  const stored = localStorage.getItem(STORAGE_KEYS.WORD_STATS);
+  if (stored) {
+    try {
+      return JSON.parse(stored) as Record<string, WordStats>;
+    } catch {
+      return {};
+    }
+  }
+  return {};
+}
+
+export function getWordAttempts(word: string): number {
+  const stats = getWordStats();
+  const wordLower = word.toLowerCase();
+  return stats[wordLower]?.attempts ?? 0;
+}
+
+export function recordWordAttempt(word: string, success: boolean): void {
+  const stats = getWordStats();
+  const wordLower = word.toLowerCase();
+
+  if (!stats[wordLower]) {
+    stats[wordLower] = { attempts: 0, successes: 0 };
+  }
+
+  stats[wordLower].attempts++;
+  if (success) {
+    stats[wordLower].successes++;
+  }
+
+  localStorage.setItem(STORAGE_KEYS.WORD_STATS, JSON.stringify(stats));
+}
+
+export function resetWordStats(): void {
+  localStorage.removeItem(STORAGE_KEYS.WORD_STATS);
 }

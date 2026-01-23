@@ -531,9 +531,9 @@ body {
 }
 
 .big-button.orange {
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
     color: white;
-    box-shadow: 0 8px 0 #c0392b, 0 12px 20px rgba(0,0,0,0.3);
+    box-shadow: 0 8px 0 #d35400, 0 12px 20px rgba(0,0,0,0.3);
 }
 
 .settings-button {
@@ -1226,7 +1226,6 @@ body {
     border-radius: 15px;
     margin: 8px 0;
     letter-spacing: 6px;
-    text-transform: uppercase;
 }
 
 .word-progress {
@@ -1278,7 +1277,6 @@ body {
     cursor: pointer;
     transition: transform 0.1s, background 0.2s;
     box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    text-transform: uppercase;
 }
 
 .letter-button:hover {
@@ -1363,7 +1361,6 @@ body {
     padding: 30px 50px;
     border-radius: 25px;
     margin: 20px 0;
-    text-transform: uppercase;
     letter-spacing: 10px;
 }
 
@@ -3880,7 +3877,6 @@ body {
     border-radius: 50%;
     background: white;
     box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    text-transform: uppercase;
     z-index: 5;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;

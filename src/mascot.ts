@@ -2,6 +2,28 @@
 
 import { playSound } from './sounds';
 import { getCharacter } from './storage';
+import { speakPhrase } from './speech';
+
+// Spoken encouragement phrases (TTS-friendly, no character-specific sounds)
+const SPOKEN_SUCCESS_PHRASES = [
+  "You're amazing!",
+  "Well done!",
+  "Fantastic!",
+  "Brilliant spelling!",
+  "You did it!",
+  "Superstar!",
+  "I knew you could do it!",
+];
+
+const SPOKEN_ENCOURAGEMENT_PHRASES = [
+  "Try again!",
+  "I'm so proud of you!",
+  "Keep going, you've got this!",
+  "Look how far you've come!",
+  "All your effort is paying off!",
+  "You're doing great!",
+  "Don't give up!",
+];
 import {
   getCharacterConfig,
   getRandomMessage,
@@ -172,6 +194,21 @@ export function say(category: MessageCategory, customMessage?: string): void {
     playSound('correctLetter');
   } else if (category === 'wrong') {
     playSound('wrongLetter');
+  }
+
+  // Speak encouragement phrases aloud for key moments
+  if (category === 'wordComplete') {
+    // Speak success phrase after a short delay (let sound effect play first)
+    const phrase = SPOKEN_SUCCESS_PHRASES[Math.floor(Math.random() * SPOKEN_SUCCESS_PHRASES.length)];
+    if (phrase) {
+      setTimeout(() => speakPhrase(phrase), 400);
+    }
+  } else if (category === 'wrong') {
+    // Speak encouraging phrase after wrong answer
+    const phrase = SPOKEN_ENCOURAGEMENT_PHRASES[Math.floor(Math.random() * SPOKEN_ENCOURAGEMENT_PHRASES.length)];
+    if (phrase) {
+      setTimeout(() => speakPhrase(phrase), 300);
+    }
   }
 
   // Animate mascot when speaking

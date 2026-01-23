@@ -2,6 +2,8 @@
 
 import * as Storage from './storage';
 import type { DifficultyLevel } from './storage';
+
+type HintLevel = 'full' | 'partial' | 'audio';
 import { say, celebrate, launchConfetti, setThinking, setExcited, resetInteractionTimer } from './mascot';
 import { showCelebration } from './app';
 import { speakWord } from './speech';
@@ -54,6 +56,19 @@ export function startGame(): void {
   }
 }
 
+function getHintLevel(word: string): HintLevel {
+  const attempts = Storage.getWordAttempts(word);
+  if (attempts === 0) return 'full';      // 1st time: show full word
+  if (attempts === 1) return 'partial';   // 2nd time: show first letter only
+  return 'audio';                          // 3rd+ time: audio only
+}
+
+function getPartialHint(word: string): string {
+  // Show first letter + question marks for rest
+  if (word.length <= 1) return word;
+  return word[0] + '?'.repeat(word.length - 1);
+}
+
 function loadWord(word: string): void {
   currentWord = word.toLowerCase();
   currentLetterIndex = 0;
@@ -64,29 +79,40 @@ function loadWord(word: string): void {
 
   const settings = Storage.getSettings();
   const mode = settings.wordPresentation;
+  const hintLevel = getHintLevel(currentWord);
 
-  // Display target word based on settings
+  // Display target word based on settings and hint level
   const targetWordEl = document.getElementById('target-word');
   if (targetWordEl) {
-    if (mode === 'visual' || mode === 'both') {
+    if (mode === 'audio') {
+      // User explicitly chose audio-only mode - always hide
+      targetWordEl.textContent = '?'.repeat(word.length);
+      targetWordEl.classList.add('audio-only');
+    } else if (hintLevel === 'full') {
+      // First attempt: show full word
       targetWordEl.textContent = word;
       targetWordEl.classList.remove('audio-only');
+    } else if (hintLevel === 'partial') {
+      // Second attempt: show first letter + question marks
+      targetWordEl.textContent = getPartialHint(word);
+      targetWordEl.classList.remove('audio-only');
     } else {
-      // Audio only - show placeholder
+      // Third+ attempt: audio only (progressive difficulty)
       targetWordEl.textContent = '?'.repeat(word.length);
       targetWordEl.classList.add('audio-only');
     }
   }
 
-  // Speak word based on settings
-  if (mode === 'audio' || mode === 'both') {
+  // Speak word for audio/both modes OR when hint level requires it
+  const shouldSpeak = mode === 'audio' || mode === 'both' || hintLevel === 'audio' || hintLevel === 'partial';
+  if (shouldSpeak) {
     speakWord(word);
   }
 
-  // Show/hide hear button based on settings
+  // Show hear button when audio is needed
   const hearBtn = document.getElementById('hear-word-btn');
   if (hearBtn) {
-    if (mode === 'audio' || mode === 'both') {
+    if (shouldSpeak) {
       hearBtn.classList.remove('hidden');
     } else {
       hearBtn.classList.add('hidden');
@@ -190,6 +216,9 @@ function handleLetterClick(button: HTMLElement): void {
 }
 
 function wordComplete(): void {
+  // Record successful attempt for progressive difficulty
+  Storage.recordWordAttempt(currentWord, true);
+
   // Add score
   score = Storage.addScore(1);
   updateScoreDisplay();

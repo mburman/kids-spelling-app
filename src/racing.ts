@@ -10,6 +10,20 @@ import { speakWord } from './speech';
 // Current character for the racing player
 let currentCharacter: CharacterType = 'owl';
 
+type HintLevel = 'full' | 'partial' | 'audio';
+
+function getHintLevel(word: string): HintLevel {
+  const attempts = Storage.getWordAttempts(word);
+  if (attempts === 0) return 'full';      // 1st time: show full word
+  if (attempts === 1) return 'partial';   // 2nd time: show first letter only
+  return 'audio';                          // 3rd+ time: audio only
+}
+
+function getPartialHint(word: string): string {
+  if (word.length <= 1) return word;
+  return word[0] + '?'.repeat(word.length - 1);
+}
+
 interface FallingLetter {
   id: number;
   letter: string;
@@ -30,9 +44,9 @@ const DIFFICULTY_CONFIG: Record<DifficultyLevel, {
   collisionThreshold: number;
   laneCount: number;
 }> = {
-  easy: { spawnInterval: 3000, baseSpeed: 0.8, minDistractors: 0, maxDistractors: 1, collisionThreshold: 70, laneCount: 2 },
-  medium: { spawnInterval: 2000, baseSpeed: 0.8, minDistractors: 1, maxDistractors: 2, collisionThreshold: 60, laneCount: 3 },
-  hard: { spawnInterval: 1500, baseSpeed: 0.8, minDistractors: 2, maxDistractors: 3, collisionThreshold: 50, laneCount: 5 },
+  easy: { spawnInterval: 3000, baseSpeed: 1.2, minDistractors: 0, maxDistractors: 1, collisionThreshold: 70, laneCount: 2 },
+  medium: { spawnInterval: 2000, baseSpeed: 1.2, minDistractors: 1, maxDistractors: 2, collisionThreshold: 60, laneCount: 3 },
+  hard: { spawnInterval: 1500, baseSpeed: 1.2, minDistractors: 2, maxDistractors: 3, collisionThreshold: 50, laneCount: 5 },
 };
 
 // Game constants - dynamically calculated
@@ -317,28 +331,40 @@ function loadWord(word: string): void {
 
   const settings = Storage.getSettings();
   const mode = settings.wordPresentation;
+  const hintLevel = getHintLevel(currentWord);
 
-  // Display target word
+  // Display target word based on settings and hint level
   const targetWordEl = document.getElementById('racing-word');
   if (targetWordEl) {
-    if (mode === 'visual' || mode === 'both') {
+    if (mode === 'audio') {
+      // User explicitly chose audio-only mode - always hide
+      targetWordEl.textContent = '?'.repeat(word.length);
+      targetWordEl.classList.add('audio-only');
+    } else if (hintLevel === 'full') {
+      // First attempt: show full word
       targetWordEl.textContent = word;
       targetWordEl.classList.remove('audio-only');
+    } else if (hintLevel === 'partial') {
+      // Second attempt: show first letter + question marks
+      targetWordEl.textContent = getPartialHint(word);
+      targetWordEl.classList.remove('audio-only');
     } else {
+      // Third+ attempt: audio only (progressive difficulty)
       targetWordEl.textContent = '?'.repeat(word.length);
       targetWordEl.classList.add('audio-only');
     }
   }
 
-  // Speak word
-  if (mode === 'audio' || mode === 'both') {
+  // Speak word for audio/both modes OR when hint level requires it
+  const shouldSpeak = mode === 'audio' || mode === 'both' || hintLevel === 'audio' || hintLevel === 'partial';
+  if (shouldSpeak) {
     speakWord(word);
   }
 
-  // Show/hide hear button
+  // Show hear button when audio is needed
   const hearBtn = document.getElementById('hear-racing-btn');
   if (hearBtn) {
-    if (mode === 'audio' || mode === 'both') {
+    if (shouldSpeak) {
       hearBtn.classList.remove('hidden');
     } else {
       hearBtn.classList.add('hidden');
@@ -500,33 +526,29 @@ function spawnLetter(): void {
   const expectedLetter = currentWord[currentLetterIndex];
   if (!expectedLetter) return;
 
-  // Don't spawn if there's already a correct letter on screen that hasn't passed halfway
-  const existingCorrect = fallingLetters.find(l => l.isCorrect && !l.collected && l.y < getTrackHeight() / 2);
-  if (existingCorrect) return;
+  // Check if there are any letters on screen and if correct letter exists
+  const hasAnyLetters = fallingLetters.some(l => !l.collected);
+  const existingCorrect = fallingLetters.find(l =>
+    l.letter === expectedLetter && !l.collected
+  );
 
-  const config = DIFFICULTY_CONFIG[currentDifficulty];
+  // Pick a random lane
+  const lane = Math.floor(Math.random() * currentLaneCount);
 
-  // Generate lane indices based on current lane count and shuffle
-  const laneIndices = Array.from({ length: currentLaneCount }, (_, i) => i);
-  const lanes = shuffleArray(laneIndices);
-
-  // Always spawn the correct letter in one lane
-  const correctLane = lanes[0];
-  createFallingLetter(track, expectedLetter, correctLane ?? 0, true);
-  playSound('letterSpawn');
-
-  // Spawn distractors based on difficulty (random between min and max)
-  const numDistractors = config.minDistractors + Math.floor(Math.random() * (config.maxDistractors - config.minDistractors + 1));
-  for (let i = 0; i < numDistractors; i++) {
-    const distractorLane = lanes[i + 1];
-    if (distractorLane !== undefined) {
-      const distractorLetter = getRandomDistractor(expectedLetter);
-      createFallingLetter(track, distractorLetter, distractorLane, false);
-    }
+  // Spawn only ONE letter at a time
+  // Never spawn correct letter first - always start with a distractor
+  if (!hasAnyLetters || existingCorrect) {
+    // No letters yet OR correct letter already exists - spawn a distractor
+    const distractorLetter = getRandomDistractor(expectedLetter);
+    createFallingLetter(track, distractorLetter, lane, false, 0);
+  } else {
+    // Letters exist but no correct letter - spawn the correct letter
+    createFallingLetter(track, expectedLetter, lane, true, 0);
+    playSound('letterSpawn');
   }
 }
 
-function createFallingLetter(track: HTMLElement, letter: string, lane: number, isCorrect: boolean): void {
+function createFallingLetter(track: HTMLElement, letter: string, lane: number, isCorrect: boolean, yOffset: number = 0): void {
   const element = document.createElement('div');
   element.className = `falling-letter ${isCorrect ? 'correct-letter' : 'wrong-letter'}`;
   element.textContent = letter;
@@ -550,8 +572,8 @@ function createFallingLetter(track: HTMLElement, letter: string, lane: number, i
     id: letterIdCounter++,
     letter,
     lane,
-    y: -50,
-    speed: config.baseSpeed + Math.random() * 0.3, // Small speed variation
+    y: -50 + yOffset,  // Apply vertical stagger offset
+    speed: config.baseSpeed,
     element,
     isCorrect,
     collected: false,
@@ -639,6 +661,9 @@ function updatePlayerPosition(): void {
 
 function wordComplete(): void {
   stopGame();
+
+  // Record successful attempt for progressive difficulty
+  Storage.recordWordAttempt(currentWord, true);
 
   // Add score
   score = Storage.addScore(1);

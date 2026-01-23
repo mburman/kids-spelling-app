@@ -56,6 +56,26 @@ export function speakWord(word: string): void {
   window.speechSynthesis.speak(utterance);
 }
 
+export function speakPhrase(phrase: string): void {
+  // Cancel any ongoing speech
+  window.speechSynthesis.cancel();
+
+  const settings = getSettings();
+  const utterance = new SpeechSynthesisUtterance(phrase);
+  utterance.rate = 1.0;   // Normal speed for phrases
+  utterance.pitch = 1.1;  // Slightly higher pitch for enthusiasm
+  utterance.volume = 0.9;
+  utterance.lang = 'en-GB';
+
+  // Try to set the preferred voice
+  const voice = findBritishVoice(settings.voice);
+  if (voice) {
+    utterance.voice = voice;
+  }
+
+  window.speechSynthesis.speak(utterance);
+}
+
 // Preload voices (needed for some browsers)
 if (typeof window !== 'undefined' && window.speechSynthesis) {
   window.speechSynthesis.getVoices();
